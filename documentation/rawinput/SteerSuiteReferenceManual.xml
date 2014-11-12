@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<book>
+  <bookinfo>
+    <title>SteerSuite Reference Manual</title>
+    <author>
+      <firstname>Shawn</firstname>
+      <surname>Singh</surname>
+    </author>
+    <copyright>
+      <year>2009</year>
+      <holder>Shawn Singh</holder>
+    </copyright>
+    <legalnotice>
+      <para>
+        All Rights Reserved.
+      </para>
+    </legalnotice>
+    <abstract>
+      <para>
+        This document describes the test cases, metrics, benchmark techniques, SteerSim modules, and options/controls for programs that are provided with SteerSuite.
+      </para>
+      <para>
+        There is also a
+        <ulink url="http://www.magix.ucla.edu/steersuite/UserGuide">User Guide</ulink> and a
+        <ulink url="http://www.magix.ucla.edu/steersuite/CodeReference">Code Reference</ulink>.
+        The User Guide walks through the main features of SteerSuite and how to use them, a good starting point if you are new to SteerSuite.
+        The Code Reference is doxygen-generated documentation of the SteerSuite code.
+        To find the latest version of all these documents, visit the <ulink url="http://www.magix.ucla.edu/steersuite/">SteerSuite web page</ulink>.
+      </para>
+    </abstract>
+  </bookinfo>
+
+  <chapter>
+    <title>SteerSim Reference</title>
+    <!--
+      Overview
+      Mouse and keyboard controls
+      Command line options
+      Configuration file options
+    -->
+  </chapter>
+
+  <chapter>
+    <title>SteerBench Reference</title>
+    <!--
+      Overview
+      Command line options
+    -->
+  </chapter>
+
+  <chapter>
+    <title>SteerTool Reference</title>
+    <!--
+      Overview
+      Command line options
+    -->
+  </chapter>
+
+  <chapter>
+    <title>Listing of Test Cases</title>
+    <!--
+      for each test case, list:
+         # agents, # obstacles
+         high-level description of what this test case tries to test
+    -->
+  </chapter>
+
+  <chapter>
+    <title>Listing of Benchmark Metrics</title>
+    <!--
+      for each metric, list:
+         units, how its computed
+         interpretation
+    -->
+  </chapter>
+
+  <chapter>
+    <title>Listing of Benchmark Techniques</title>
+    <!--
+      for each benchmark technique:
+         - how it computes score
+         - interpretation
+         - advantages and limitations
+    -->
+  </chapter>
+
+  <chapter>
+    <title>Listing of SteerSim modules</title>
+    <!--
+      for each module, list:
+         - overview
+         - options
+         - notes
+    -->
+  </chapter>
+
+  <chapter>
+    <title>Test Case XML Format</title>
+    <!--
+    schema
+    
+    data types declared in the schema
+    
+    goal data structure (as a proposed way to interface between steering and congition)
+    -->
+  </chapter>
+
+  <chapter>
+    <title>Rec File Format</title>
+    <!--
+    -->
+  </chapter>
+
+</book>

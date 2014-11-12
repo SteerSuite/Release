@@ -1,0 +1,1234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<book>
+
+  <!-- 
+  ####################################
+   META INFORMATION
+  ####################################   
+  -->
+  <bookinfo>
+    <title>SteerSuite User Guide</title>
+    <author>
+      <firstname>Shawn</firstname>
+      <surname>Singh</surname>
+    </author>
+    <copyright>
+      <year>2009</year>
+      <holder>Shawn Singh</holder>
+    </copyright>
+    <legalnotice>
+      <para>
+        All Rights Reserved.
+      </para>
+    </legalnotice>
+    <abstract>
+      <para>
+        This document walks through the main features of SteerSuite and how to use them.
+        If you are new to SteerSuite, this is a good place to start.  If you are already familiar
+        with SteerSuite, it is still useful to quickly look up how to do common SteerSuite tasks.
+        This guide assumes you have some knowledge of C++ and have an interest in steering behaviors, but no prior knowledge of steering behaviors is required.
+      </para>
+      <para>
+        In addition to this User Guide, there is also a
+        <ulink url="http://www.magix.ucla.edu/steersuite/ReferenceManual">Reference Manual</ulink> and a
+        <ulink url="http://www.magix.ucla.edu/steersuite/CodeReference">Code Reference</ulink>.
+        The SteerSuite Reference Manual describes the test cases, metrics, benchmark techniques, modules, and options/controls for programs that are provided with SteerSuite.
+        The Code Reference is doxygen-generated documentation of the SteerSuite code.
+        To find the latest version of all these documents, visit the <ulink url="http://www.magix.ucla.edu/steersuite/">SteerSuite web page</ulink>.
+      </para>
+      <para>
+        Enjoy!
+      </para>
+      <formalpara>
+        <title>Quick pointers to the relevant documentation.</title>
+        <para>
+          The following list is for those who want to quickly jump to the relevant documentation:
+        </para>
+        <itemizedlist>
+          <listitem>
+            To understand how to compile SteerSuite, refer to <xref linkend="prerequisites" /> and <xref linkend="building-steersuite" />.
+          </listitem>
+          <listitem>
+            To learn how to use <command>steersim</command>, refer to <xref linkend="first-look-steersim" /> and <xref linkend="three-common-tasks" />.
+          </listitem>
+          <listitem>
+            To learn how to compile your code to use SteerLib, refer to <xref linkend="linking-steerlib" />.
+          </listitem>
+          <listitem>
+            If you are having problems using SteerSuite, some troubleshooting tips are listed in <xref linkend="troubleshooting-tips" />.
+          </listitem>
+          <listitem>
+            Chapters 4 and 5 are currently incomplete, but the <ulink url="http://www.magix.ucla.edu/steersuite/CodeReference">Code Reference</ulink>
+            is fairly complete (including full descriptions and cross references), and is an ideal place to learn more about a specific feature in SteerLib.
+          </listitem>
+        </itemizedlist>
+    </formalpara>
+    </abstract>
+  </bookinfo>
+
+  
+  <!-- 
+  ####################################
+   INTRODUCTION CHAPTER
+  ####################################   
+  -->
+
+  <chapter id="introduction">
+    <title>Introduction</title>
+    <section id="what-is-steersuite">
+      <title>What is SteerSuite?</title>
+      <para>
+        SteerSuite is a suite of tools, code, and test cases for developing and evaluating steering behaviors. It provides an easy but powerful
+        framework to develop your own AI, evaluate behaviors, share results with the community, and more. The main components are:
+        <itemizedlist>
+          <listitem>
+            <formalpara>
+              <title>SteerLib:</title>
+              <para>
+                A C++ library that provides much of the infrastructure used by typical AI and steering algorithms, allowing developers and researchers to focus on steering AI.
+              </para>
+            <itemizedlist>
+              <listitem>
+                Includes a modular simulation engine, spatial database functionality, planning functionality, classes to help read/write simulation recordings and test cases, and much more.
+              </listitem>
+            </itemizedlist>
+            </formalpara>
+          </listitem>
+          <listitem>
+            <formalpara>
+              <title>Test Cases:</title>
+              <para>
+                A set of broad and challenging test cases to help debug and test your own steering algorithms, and a simple but functional XML format for creating your own test cases.
+              </para>
+            </formalpara>
+          </listitem>
+          <listitem>
+            <formalpara>
+              <title>SteerSim:</title>
+              <para>
+                Visualizes real-time or pre-recorded simulations of steering agents. Provides several built-in modules to configure the simulations and analyze the results, and an easy-to-use plugin architecture to make extensions.
+              </para>
+            </formalpara>
+          </listitem>
+          <listitem>
+            <formalpara>
+              <title>SteerBench:</title>
+              <para>
+                Benchmarks and scores simulations using a variety of benchmark techniques.
+              </para>
+            </formalpara>
+          </listitem>
+        </itemizedlist>
+      </para>
+    </section>
+    <section id="what-can-we-do-with-steersuite">
+      <title>What can be done with SteerSuite?</title>
+      <para>
+        Some of the common tasks that are easily accomplished with SteerSuite include:
+        <itemizedlist>
+          <listitem>
+            Run steering simulations, stand-alone or in your own programs.
+          </listitem>
+          <listitem>
+            Record and playback steering behaviors and share results.
+          </listitem>
+          <listitem>
+            Benchmark steering behaviors and share results.
+          </listitem>
+          <listitem>
+            Develop and test your own AI on challenging test cases.
+          </listitem>
+          <listitem>
+            Visualize and animate results using the modular simulation engine with OpenGL.
+          </listitem>
+          <listitem>
+            Use the simulation engine for other, non-steering related purposes, for example, higher-level AI, or physical simulations for animation.
+          </listitem>
+        </itemizedlist>
+      </para>
+    </section>
+    <section id="features">
+      <title>SteerSuite Features</title>
+      <para>
+        Current features include:
+        <itemizedlist>
+          <listitem>
+            Works on Windows XP, Windows Vista, Linux, Solaris, and Mac OS X.
+          </listitem>
+          <listitem>
+            More than 40 test cases, specified in XML, to challenge your steering AI.
+          </listitem>
+          <listitem>
+            An XML schema for test cases, to easily make and share custom test cases.
+          </listitem>
+          <listitem>
+            A modular simulation engine that can be used your own programs.
+          </listitem>
+          <listitem>
+            Several existing modules for playing back recordings ("rec files"), benchmarking, example AI, and more.
+          </listitem>
+          <listitem>
+            Infrastructure and functionality to develop your own AI:
+            <itemizedlist>
+              <listitem>
+                Planning
+              </listitem>
+              <listitem>
+                State machine management
+              </listitem>
+              <listitem>
+                A spatial database that suppots ray tracing, nearest neighbor queries, and path planning
+              </listitem>
+              <listitem>
+                Geometry, shapes, and drawing functionality
+              </listitem>
+              <listitem>
+                Performance profiling
+              </listitem>
+              <listitem>
+                Flexible, easy-to-use plug-in architecture to use your AI with the simulation engine
+              </listitem>
+            </itemizedlist>
+          </listitem>
+          <listitem>
+            A test case reader to make it easy to load test cases in your own programs.
+          </listitem>
+          <listitem>
+            A "rec file" reader and writer to make it easy to create/playback recordings of the AI in your own programs.
+          </listitem>
+          <listitem>
+            Several benchmark techniques and many metrics to score and quantify steering behaviors.
+          </listitem>
+          <listitem>
+            SteerSim, a stand-alone program that provides command-line, openGL, and Qt user interfaces.
+          </listitem>
+          <listitem>
+            Several examples of steering AI, including our own steering algorithms.
+          </listitem>
+        </itemizedlist>
+      </para>
+    </section>
+    <section id="why-steersuite">
+      <title>Why SteerSuite?</title>
+      <para>
+        When it was first started, SteerSuite was originally created to facilitate more rigorous evaluation of steering AI, and to facilitate sharing results.  So far there has been no widely accepted conventions
+        for how to present results and evaluation of a steering algorithm.  To address this, SteerSuite includes a broad and very challenging set of openly specified test cases,
+        intended to be examined and improved by the community.  Furthermore, SteerSuite provides a way of creating recordings of steering behaviors so that developers can more
+        easily share their results with others.
+      </para>
+      <para>
+        With this goal, an interesting question arises: <emphasis>how can we objectively evaluate steering behaviors?</emphasis>  This question does not yet have a solid answer,
+        and it may never have one, but SteerSuite tries to address this question by providing several ways to benchmark and evaluate steering behaviors.  In addition, SteerSuite
+        makes it easy for others to experiment with their own benchmarking ideas as well.
+      </para>
+      <para>
+        Additionally, there are very few steering frameworks with available source code, especially ones intended for use by the community. Perhaps the most popular
+        steering software has been <ulink url="http://opensteer.sourceforge.net/">OpenSteer</ulink>, by Craig Reynolds.  SteerSuite aims to provide similar functionality,
+        so that developers have an environment to quickly and easily prototype steering ideas without re-inventing the entire infrastructure needed.
+      </para>
+    </section>
+    <section id="credits">
+      <title>Credits and Contact Information</title>
+      <para>
+        Email usernames are given in parentheses.  To email us, append "@cs.ucla.edu" to the username.
+      </para>
+      <para>
+        SteerSuite created and architected by Shawn Singh.
+      </para>
+      <para>
+        Primary Developers:
+        <itemizedlist>
+          <listitem>
+            Shawn Singh  (shawnsin)
+          </listitem>
+          <listitem>
+            Mubbasir Kapadia (mubbasir)
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        Research Team:
+        <itemizedlist>
+          <listitem>
+            Shawn Singh  (shawnsin)
+          </listitem>
+          <listitem>
+            Mubbasir Kapadia (mubbasir)
+          </listitem>
+          <listitem>
+            Brian Allen (vector)
+          </listitem>
+          <listitem>
+            Billy Hewlett
+          </listitem>
+          <listitem>
+            Prof. Petros Faloutsos (pfal)
+          </listitem>
+          <listitem>
+            Prof. Glenn Reinman (reinman)
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        Contributors:
+        <itemizedlist>
+          <listitem>Brian Hou</listitem>
+          <listitem>Tingyu Thomas Lin</listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        We greatly appreaciate the generous time, thoughts, feedback, and help that we received from the following people:
+      </para>
+      <para>
+        Sung Hee Lee, Gabriele Nataneli, Craig Reynolds, Prof. Demetri Terzopoulos.
+      </para>
+    </section>
+  </chapter>
+
+
+  <!-- 
+  ####################################
+   GETTING STARTED CHAPTER
+  ####################################   
+  -->
+
+  <chapter id="getting-started">
+    <title>Getting Started</title>
+    <section id="prerequisites">
+      <title>Prerequisites</title>
+      <para>
+        SteerSuite source code can be downloaded from the <ulink url="http://www.magix.ucla.edu/steersuite/">SteerSuite web page</ulink>.
+      </para>
+      <para>
+        In most cases, there are no dependencies to download/install before using SteerSuite.  Most of the SteerSuite dependencies are already
+        widely available on most platforms.  GLFW, TinyXML, and an implementation of the Mersenne Twister algorithm are already provided (legally) with the
+        SteerSuite download under their own licenses, and integrated into the SteerSuite build process.
+      </para>
+      <formalpara>
+        <title>Unix platforms</title>
+        <para>
+          For Unix platforms (including Mac OS X), the build process uses <command>bash</command>, <command>gmake</command>, and <command>g++</command>.
+          These tools are already available on most systems.
+          If necessary, other shells, make programs, and compilers can be used after modfying the build script and makefiles accordingly.
+        </para>
+      </formalpara>
+      <para>
+        SteerSuite has been tested on <command>g++</command> versions 3.4 and 4.3.  There is a good chance that earlier/later versions of <command>g++</command> will also work.
+      </para>
+      <formalpara>
+        <title>Mac OS X</title>
+        <para>
+          For Max OS X, the build process requires OS X version 10.5 or greater.  This is because we use the <command>g++</command> rpath setting that is not supported prior to OS X 10.5.  Unofficially,
+          earlier versions of OS X should work by adding the directory where SteerLib (<filename>libsteer.so</filename>) exists into the <computeroutput>LD_LIBRARY_PATH</computeroutput> environment variable, but
+          this is currently untested.
+        </para>
+      </formalpara>
+      <formalpara>
+        <title>Windows platforms</title>
+        <para>
+          For Windows, the build process uses Visual Studio 2008.  It is suggested that users also download and
+          install <command>Cygwin</command> to provide a unix-like command-line environment.  This documentation
+          is written assuming you are using Unix or Cygwin.  If you prefer to use a different command prompt, such
+          as Windows built-in command shell, you will need to modify the command-line examples described in this
+          documentation accordingly.
+        </para>
+      </formalpara>
+      <formalpara>
+        <title>Graphical user interfaces</title>
+        <para>
+          In addition to a command-line interface, there are two graphical interfaces (GUIs) provided for <command>steersim</command>.
+          <itemizedlist>
+            <listitem>
+              The first GUI uses GLFW.  GLFW is already included with the SteerSuite download, under its own license.  It provides a
+              fast, simple OpenGL window, and supports keyboard and mouse interaction.  More information about GLFW, including the original
+              code and latest updates, can be found at the <ulink url="http://glfw.sourceforge.net/">GLFW home page</ulink>.
+            </listitem>
+            <listitem>
+              The second GUI uses Qt.  It is more heavyweight, but will provide far more functionality in future versions.  For now, using
+              the Qt GUI requires users to download, install, and re-compile Qt.  When re-compiling Qt, make sure to compile it as a shared
+              library, for the <computeroutput>win32-msvc2008</computeroutput> platform, with the OpenGL module enabled.  SteerSuite is
+              currently being developed with Qt 4.5, but there is a good chance that earlier/later versions of Qt will also work.
+            </listitem>
+          </itemizedlist>
+          Both user interfaces are optional. GLFW is enabled by default, and Qt is disabled by default.
+        </para>
+      </formalpara>
+    </section>
+    <section id="building-steersuite">
+      <title>Building SteerSuite</title>
+      <section>
+        <title>Compiling for Unix Platforms</title>
+        <para>
+          SteerSuite provides a simple script, <command>buildall</command>, to compile all components on Unix platforms.  Essentially this script sets some
+          temporary environment variables and uses <command>gmake</command> to build each component.  To compile SteerSuite, enter
+          the <filename>build/</filename> directory and run:
+          <screen>./buildall &lt;platform&gt;</screen>
+          The possible target platforms can be listed by running the <command>buildall</command> script with no arguments.  The possible platforms
+          include: <computeroutput>linux</computeroutput>, <computeroutput>osx</computeroutput>, <computeroutput>solaris</computeroutput>,
+          and <computeroutput>simics</computeroutput>.
+          <note>
+            Make sure you are in the <filename>build/</filename> directory.  The <command>buildall</command> script will not run properly if it
+            is executed from a different location.
+          </note>
+        </para>
+        <para>
+          All components should compile without errors or warnings.  If you compiled SteerSuite with the default options, there will be several new directories:
+          <filename>build/bin/</filename> contains the executable binaries, <filename>build/lib/</filename> contains the SteerLib shared library, and
+          <filename>build/modules/ </filename> contains any external plugins used by SteerSim (but not built-in plugins).
+        </para>
+        <formalpara>
+          <title>Customizing compile-time options</title>
+          <para>
+            You may want to modify build options, in particular to enable the Qt user interface, or to "install" SteerSuite to a more permanent location on your system.
+            To do this, modify the variables at the top of the <command>buildall</command> script.  Each option is explained by comments in the script.
+          </para>
+        </formalpara>
+      </section>
+      <section>
+        <title>Compiling for Windows Platforms</title>
+        <para>
+          SteerSuite provides Visual Studio 2008 solution and project files.  The top-level solution file is located in the <filename>build/win32/</filename>
+          directory.  Open this solution file with Visual Studio 2008, choose whether you want to compile in Debug mode or Release mode, and select
+          <menuchoice>
+            <shortcut>
+              <keycap>F7</keycap>
+            </shortcut>
+            <guimenu>Build</guimenu>
+            <guimenuitem>Build Solution</guimenuitem>
+          </menuchoice>.
+          All components should compile successfully without warnings.  After compiling, all binaries (including SteerLib shared library and SteerSim plugins) will be
+          located in <filename>build/win32/Debug/</filename> or <filename>build/win32/Release/</filename>.
+        </para>
+        <note>
+          You will need to manually change to Release mode when you first open the SteerSuite solution.  Visual Studio uses Debug mode by default,
+          and the preference between Debug or Release seems to be stored in the automatically generated user options file that we cannot control.
+          Unless you plan on debugging, it is strongly recommended that you choose Release mode for better performance.
+        </note>
+        <formalpara>
+          <title>Customizing compile-time options</title>
+          <para>
+            You may want to modify build options, in particular to enable the Qt user interface.  To do this, modify the XML options in
+            <filename>SteerSuiteBuildOptions.vsprops</filename>, which is found in the <filename>build/win32/</filename> directory.   After modifying this file, you will need to close and restart
+            Visual Studio before the changes take effect.
+          </para>
+        </formalpara>
+      </section>
+    </section>
+    <section id="first-look-steersim">
+      <title>Introduction to SteerSim</title>
+      <para>
+        <command>steersim</command> is a modular framework for running simulations, usually with a GUI to visualize the simulation.  It consists of a core simulation
+        engine, which loads any number of modules to do the real work.  The functionality of modules can be almost anything, from providing
+        more elaborate visualizations to post-analysis of agent behaviors.  Some of the modules provided with SteerSuite include:
+        <itemizedlist>
+          <listitem>
+            The <computeroutput>testCasePlayer</computeroutput> module simulates a test case.  The user specifies the test case to simulate
+            and the module that will provide steering AI agents, and the <computeroutput>testCasePlayer</computeroutput> will load everything and run the simulation.
+          </listitem>
+          <listitem>
+            The <computeroutput>recFilePlayer</computeroutput> module loads and replays an existing recording of a simulation.
+          </listitem>
+          <listitem>
+            The <computeroutput>simpleAI</computeroutput> module is an example plugin module.  It provides very simple AI agents just as a code example for those interested
+            in creating their own steering AI plugin.  Modules like this one, with steering AI, are usually used by the <computeroutput>testCasePlayer</computeroutput> module.
+          </listitem>
+          <listitem>
+            The <computeroutput>pprAI</computeroutput> module is another example plugin module that provides more intelligent steering agents.
+          </listitem>
+          <listitem>
+            The <computeroutput>steerBench</computeroutput> and <computeroutput>metricsCollector</computeroutput> modules run an online
+            benchmarking process, while the simulation takes place.  In some cases this can be more useful than the <command>steerbench</command>
+            command-line utility, for example, if storing the recording would be impractical or if you want to observe metrics of an agent's
+            behaviors in real-time for debugging.
+          </listitem>
+        </itemizedlist>
+        Refer to the Reference Manual for a complete list of modules and more detailed descriptions.
+      </para>
+      <section>
+        <title>Running SteerSim the First Time</title>
+        <para>
+          From a Unix or Cygwin command line prompt, go to the directory where you compiled the executables (most likely,
+          <filename>build/bin/</filename> on Unix, or <filename>build/win32/Release</filename> on Windows) and run:
+          <screen>./steersim -testcase simple-1.xml</screen>
+          <command>steersim</command> will try to find the test case <filename>simple-1.xml</filename> in the default search path and the current directory.
+          If the test case is in a different location, you can specify the full path to the test case, or you can use the
+          <computeroutput>-testCaseSearchPath</computeroutput> option to specify the directory where test cases can be found.
+          If you receive an error that looks similar to:
+          <screen>ERROR: exception caught in main:
+Could not find test case simple-1.xml.</screen>
+          then <command>steersim</command> could not find the test case in the path you specified, so double-check that you entered the correct path.
+        </para>
+        <para>
+          If it worked successfully, a window should appear, showing a grid and the initial conditions of the <filename>simple-1.xml</filename> test case.
+          Any agents should appear black and green, which is the color of the default "dummy" agents.  These agents have no steering AI, and will not do anything even
+          if the simulation is actually running.  To use a different steering AI, refer to <xref linkend="simulating-a-test-case" />.
+        </para>
+      </section>
+      <section>
+        <title>Basic Options and GUI Controls</title>
+        <para>
+          Here are some of the default mouse and keyboard controls for <command>steersim</command>:
+        </para>
+        <itemizedlist>
+          <listitem>
+            <keycap>ESC</keycap> quits the simulation.
+          </listitem>
+          <listitem>
+            <keycap>Spacebar</keycap> pauses and unpauses the simulation.
+          </listitem>
+          <listitem>
+            <keycap>Ctrl-left-click</keycap> enables camera rotation as you drag the mouse around.
+          </listitem>
+          <listitem>
+            <keycap>Ctrl-right-click</keycap> enables camera zoom as you drag the mouse up and down
+          </listitem>
+          <listitem>
+            <keycap>Ctrl-middle-click</keycap> enables camera translation as you drag the mouse around.
+          </listitem>
+        </itemizedlist>
+        <para>
+          Here are some of the command-line options for <command>steersim</command>:
+        </para>
+        <itemizedlist>
+          <listitem>
+            <computeroutput>-commandline</computeroutput> specifies to run <command>steersim</command> without a GUI, useful if used in an automated script or a architecture simulator.
+          </listitem>
+          <listitem>
+            <computeroutput>-qt</computeroutput> specifies to run <command>steersim</command> with a more advanced GUI using Qt.  To use this option, you must have compiled SteerSuite with Qt support.
+          </listitem>
+          <listitem>
+            <computeroutput>-numframes &lt;n&gt;</computeroutput> tells the engine to simulate only <computeroutput>n</computeroutput> frames.
+          </listitem>
+          <listitem>
+            <computeroutput>-testcase &lt;testCaseName&gt;</computeroutput> loads the <computeroutput>testCasePlayerModule</computeroutput> with the specified test case.
+          </listitem>
+          <listitem>
+            <computeroutput>-testcasesearchpath &lt;directory&gt;</computeroutput> specifies the directory to search for test cases.
+          </listitem>
+          <listitem>
+            <computeroutput>-ai &lt;moduleName&gt;</computeroutput> tells the <computeroutput>testCasePlayer</computeroutput> module to use the <computeroutput>moduleName</computeroutput> to create AI agents.
+          </listitem>
+          <listitem>
+            <computeroutput>-module &lt;moduleName&gt;</computeroutput> tells the engine to load the module <computeroutput>moduleName</computeroutput>.  See the sections below for more details.
+          </listitem>
+          <listitem>
+            <computeroutput>-modulesearchpath &lt;directory&gt;</computeroutput> specifies the directory to search for modules.
+          </listitem>
+          <listitem>
+            <computeroutput>-generateconfig &lt;filename&gt;</computeroutput> dumps an XML configuration file to <computeroutput>filename</computeroutput>.
+          </listitem>
+          <listitem>
+            <computeroutput>-config &lt;filename&gt;</computeroutput> tells <command>steersim</command> to load options from the specified XML configuration file.
+          </listitem>
+        </itemizedlist>
+        <para>
+          For a complete list of controls and options, refer to the Reference Manual.
+        </para>
+        <note>
+          There are three main sources of options: (1) command line, (2) configuration file, (3) hard-coded defaults for options that are not specified.
+          Options from all three sources are merged.  If an option is specified on the command line, it will override the same option
+          specified in the configuration file.
+        </note>
+      </section>
+      <section>
+        <title>Optional Configuration File</title>
+        <para>
+          <command>steersim</command> has many more options than the few that can be specified through the command line.  To customize these options, you will need to provide steersim
+          with a configuration file.
+          At first you may not have a configuration file.  You can generate a configuration file using the <computeroutput>-generateconfig</computeroutput> command-line
+          option.  For example, to create a config file named <filename>myConfig.xml</filename>, run:
+          <screen>./steersim -generateconfig myConfig.xml</screen>
+          This will create an XML file containing a categorized list of all options, with comments explaining each option.  Edit this
+          file with your favorite text or XML editor to fit your preferences.
+        </para>
+        <para>
+          Then, to use this configuration file with steersim, use the <computeroutput>-config</computeroutput> option.  For example:
+          <screen>./steersim -config myConfig.xml</screen>
+        </para>
+      </section>
+      <section>
+        <title>SteerSim Modules</title>
+        <para>
+          Anything useful in <command>steersim</command> is done through modules.  Modules can be directly built into <command>steersim</command> or plugins that are
+          dynamically loaded at runtime.  Built-in modules will not have a <filename>.o</filename> or <filename>.dll</filename> library file associated with it.  
+          <command>steersim</command> can list all modules that it finds by using the <computeroutput>-listmodules</computeroutput> option, as follows:
+          <screen>./steersim -listmodules</screen>
+          The engine treats all modules in the same way, regardless of being built-in or plugin.
+        </para>
+        <para>
+          Eventually you will want to control what modules are loaded, and give options to each module.  This can be done in two main ways.  The first way is to
+          edit an XML configuration file, as described in the previous section, to specify which modules should be loaded on startup.  Also in the configuration file,
+          you can specify options to modules, whether they are designated to be loaded on startup or not.  The second way is to specify a module and its options
+          from the command line.  This is done using the <computeroutput>-module</computeroutput> option, followed by a single contiguous string containing the module name
+          and an (optional) comma-separated list of options:
+          <screen>./steersim -module moduleName,option1=value1,option2=value2</screen>
+          Several examples of this syntax are given in the next chapter.
+        </para>
+        <para>
+          The module name is case-sensitive.  Behind the scenes, if the engine knows this module name, it will instantiate the built-in module directly.  Otherwise, the engine
+          will try to find a dynamic library of the same name, automatically managing library name extensions, and searching in the modules directories that it knows about.
+        </para>
+        <para>
+          For a complete list of the modules, module options, and command-line options in <command>steersim</command>, refer to the Reference Manual.
+        </para>
+      </section>
+    </section>
+  </chapter>
+
+
+
+  <!-- 
+  ####################################
+   THREE COMMON TASKS CHAPTER
+  ####################################   
+  -->
+
+  <chapter id="three-common-tasks">
+    <title>SteerSim and SteerBench: Three Common Tasks</title>
+    <para>
+      There are three tasks that you are very likely to encounter when using SteerSuite:  (1) testing steering AI using test cases, 
+      (2) recording and replaying those simulations, and (3) benchmarking recordings.  This chapter explains how to perform these three tasks.
+    </para>
+    <section id="simulating-a-test-case">
+      <title>Simulating a Test Case using SteerSim</title>
+      <para>
+        Test cases define a variety of challenging scenarios for agent steering, and are very useful for developing, debugging, evaluating your own
+        steering algorithms.  The basic command line to simulate a test case using a specific steering AI module is:
+        <screen>./steersim -testcase &lt;test-case-path&gt; -ai &lt;moduleName&gt;</screen>
+      </para>
+      <para>
+        <computeroutput>&lt;test-case-path&gt;</computeroutput> refers to any SteerSuite XML test case.  There are many test cases
+        already provided with SteerSuite in the <filename>testcases/</filename> directory, ranging from simple single-agent scenarios to
+        large-scale extremely challenging crowd scenarios.
+      </para>
+      <para>
+        <computeroutput>&lt;moduleName&gt;</computeroutput> refers to any <command>steersim</command> module that provides steering AI.  SteerSuite
+        provides some steering modules you can experiment with:
+        <itemizedlist>
+          <listitem>
+            <computeroutput>dummyAI</computeroutput> does absolutely nothing, which is useful for seeing the initial
+            conditions of a test case.
+          </listitem>
+          <listitem>
+            <computeroutput>simpleAI</computeroutput> is a very basic demo of agents that ignore other agents and obstacles.
+          </listitem>
+          <listitem>
+            <computeroutput>pprAI</computeroutput> (will be available soon) is a more complete implementation of a steering agent, which users can use as a starting point for
+            their own experiments and implementations.
+          </listitem>
+        </itemizedlist>        
+      </para>
+      <section>
+        <title>Specifying the Module Directly</title>
+        <para>
+          Internally, the <computeroutput>-testcase</computeroutput> and <computeroutput>-ai</computeroutput> options indirectly tell the engine to load the 
+          <computeroutput>testCasePlayer</computeroutput> module.  The engine recognizes these options and knows to pass the <computeroutput>&lt;test-case-path&gt;</computeroutput>
+          and <computeroutput>&lt;moduleName&gt;</computeroutput> as options to the <computeroutput>testCasePlayer</computeroutput> module.  This is exactly equivalent to
+          explicitly specifying the module and its options directly on the command line:
+          <screen>./steersim -module testCasePlayer,testcase=&lt;test-case-path&gt;,ai=&lt;modulename&gt;</screen>
+          By specifying the module and its options directly, it is possible to specify more options to the <computeroutput>testCasePlayer</computeroutput> module.
+          You can also specify these same options from an XML configuration file, (see <xref linkend="first-look-steersim" />).  To see all options that can be specified
+          to the <computeroutput>testCasePlayer</computeroutput> module, refer to the Reference Manual.
+        </para>
+      </section>
+      <section>
+        <title>A Common Mistake</title>
+        <para>
+          It is common to make the following mistake:
+          <screen>steersim -testcase ../../testcases/simple-1.xml -module simpleAI  # This command will NOT use the simpleAI module!</screen>
+          This tells <command>steersim</command> to load the <computeroutput>testCasePlayer</computeroutput> and <computeroutput>simpleAI</computeroutput>
+          modules, using the <filename>simple-1.xml</filename>.  However, this does <emphasis>not</emphasis> tell the <computeroutput>testCasePlayer</computeroutput> module
+          to <emphasis>use</emphasis> the <computeroutput>simpleAI</computeroutput> module for the AI.  The correct command line should use the <computeroutput>-ai</computeroutput> option to specify
+          the AI module:
+          <screen>steersim -testcase ../../testcases/simple-1.xml -ai simpleAI</screen>
+        </para>
+      </section>
+      <section>
+        <title>Using Test Cases with Your Own Algorithm</title>
+        <para>
+          Eventually you may want to test your own steering algorithm on the SteerSuite test cases.  To do this, there are two main options: (1) use SteerLib to
+          read test cases into your own steering code, or (2) develop your steering AI as a plugin for SteerSim.  Refer to <xref linkend="reading-test-case" />
+          and <xref linkend="creating-plugins" /> for more information.
+        </para>
+      </section>
+    </section>
+
+    <section id="recording-and-replaying">
+      <title>Recording and Replaying a Simulation using SteerSim</title>
+      <para>
+        The <command>steersim</command> simulations can also be recorded to file.  These recordings, of course, can be then be replayed at a later
+        time.  We found it useful to nickname these recordings "<firstterm>rec files</firstterm>."  Rec files are intended to be an easy way
+        to archive and share results, even when someone does not want to share their source code.
+      </para>
+      <para>
+        To make a recording, use the <computeroutput>-storesimulation</computeroutput> option as follows:
+        <screen>./steersim -testcase &lt;test-case-path&gt; -storesimulation simple.rec</screen>
+        This command stores the AI simulation into the file <filename>simple.rec</filename>.  The <filename>.rec</filename> extension is not required, but it
+        is the preferred extension for rec files.
+      </para>
+      <para>
+        To replay the rec file, use the <computeroutput>-replay</computeroutput> option.  This option cannot be used at the same time as the
+        <computeroutput>-testcase</computeroutput> option.
+        <screen>./steersim -replay simple.rec</screen>
+        While replaying a simulation, you can use the left and right arrow keys to shuttle back and forth along the timeline of the simulation.  If the simulation plays too
+        fast or slow, you can also use <keycap>+</keycap> (without pressing shift) or <keycap>-</keycap> keys to speed up or slow down the simulation, respectively.
+      </para>
+      <section>
+        <title>Specifying the Modules Directly</title>
+        <para>
+          Similar to the test case options described above, the <computeroutput>-storesimulation</computeroutput> and <computeroutput>-replay</computeroutput>
+          are actually shortcuts for loading and specifying options to the appropriate modules.  It is possible to specify more options by explicitly loading the
+          <computeroutput>simulationRecorder</computeroutput> and <computeroutput>recFilePlayer</computeroutput> modules. For example to store a simulation:
+          <screen>./steersim -testcase &lt;test-case-path&gt; -module simulationRecorder,file=simple.rec</screen>
+          and to replay a simulation:
+          <screen>./steersim -module recFilePlayer,file=simple.rec</screen>
+        </para>
+        <para>
+          When an existing recording is being replayed, it actually creates agents that can be manipulated and analyzed just like other steering AI modules.  Look carefully
+          at the following example:
+          <screen>./steersim -module recFilePlayer,file=simple.rec,retime=1.5 -storesimulation simple-fast.rec -commandline -numframes 60</screen>
+          This example <emphasis>simulates</emphasis> 60 frames, and each frame of the simulation it advances 1.5 frames in the playback.  This means
+          it will replay 90 frames of <filename>simple.rec</filename>, 50 percent faster.  It then stores 60 frames of simulation into <filename>simple-fast.rec</filename>.
+          In other words, this example essentially transcodes a recording into a faster recording.
+        </para>
+      </section>
+    </section>
+    <section id="benchmarking">
+      <title>Benchmarking a Recording using SteerBench</title>
+      <para>
+        One of the goals of SteerSuite is to help users evaluate and benchmark steering behaviors.  In addition to visually inspecting the results of many test cases, users
+        can see benchmark scores of their simulations.  Recordings can be benchmarked using the <command>steerbench</command> utility.  <command>steerbench</command>, in
+        turn, uses functionality provided by SteerLib, which includes
+        computing many metrics of the simulation, and several <firstterm>benchmark techniques</firstterm> that compute a simple score.  To benchmark a recording,
+        <command>steerbench</command> can be invoked from a command line as follows:
+        <screen>./steerbench simple.rec</screen>
+        This command will run the default benchmark technique on <filename>simple.rec</filename>.  A specific benchmark technique can be chosen using
+        the <computeroutput>-technique</computeroutput> option.  The following example benchmarks the agents recorded in <filename>simple.rec</filename>,
+        based on the <computeroutput>composite01</computeroutput> scoring technique:
+        <screen>./steerbench -technique composite01 simple.rec</screen>
+        The <computeroutput>composite01</computeroutput> technique was the original benchmark technique created for SteerBench.
+        See the Reference Manual for a complete list of options for <command>steerbench</command> and for in-depth explanations of the various metrics
+        and benchmark techniques.
+      </para>
+      <section>
+        <title>Interpreting Benchmark Scores</title>
+        <important>
+          Scores from different benchmark techniques usually have very different interpretations.  Sometimes a single benchmark score does not have an interpretation
+          by itself, it may need to be <emphasis>compared</emphasis> to other scores.  The safest interpretation is to compare scores only if they use the same benchmark
+          technique and the same initial conditions (i.e., the same test case).  Other ways of interpreting the score, for example comparing scores across different
+          test cases or interpreting a single score by itself, may or may not be valid depending on the benchmark technique.
+        </important>
+      </section>
+      <section>
+        <title>Online benchmarking</title>
+        <para>
+          SteerBench can also be used while a simulation is running in <command>steersim</command>, using the <computeroutput>steerBench</computeroutput> module.  The
+          following command tests the <computeroutput>simpleAI</computeroutput> steering agents on the <filename>curves.xml</filename> test case, and computing a benchmark
+          score at the same time using the <computeroutput>composite01</computeroutput> benchmark technique:
+          <screen>./steersim -testcase curves.xml -ai simpleAI -module steerBench,technique=composite01</screen>
+          Online benchmarking can be useful to avoid the extra step of recording the simulation.
+        </para>
+      </section>
+    </section>
+  </chapter>
+
+
+  <!-- 
+  ####################################
+   PROGRAMMING WITH STEERLIB CHAPTER
+  ####################################   
+  -->
+
+  <chapter id="programming-with-steerlib">
+    <title>Programming with SteerLib</title>
+    <para>
+      The previous chapter described how to use <command>steersim</command> and <command>steerbench</command> to simulate and analyze steering behaviors.  The real fun
+      begins when you want to develop and simulate your own steering algorithms.  You can test your algorithm with the SteerSuite test cases, make recordings of 
+      your AI to share with others, benchmark your AI, experiment with your own benchmarking and debugging techniques, or even write SteerSim plugins.
+      SteerLib is a C++ library that provides easy-to-use functionality to accomplish these tasks.
+    </para>
+    <section id="linking-steerlib">
+      <title>Including and Linking SteerLib</title>
+      <para>
+        Integrating SteerLib into your own code is straightforward, just follow the steps given below.  However, there is one catch: SteerLib
+        is a shared library, but by default it is not "installed" into standard system locations where libraries are expected to be found.
+        Therefore there is one extra step so that your program can find SteerLib at run-time.
+      </para>
+      <para>
+        For <command>g++</command> on Unix platforms:
+        <orderedlist>
+          <listitem>
+            <formalpara>
+              <title>Include <filename>SteerLib.h</filename>:</title>
+              <para>
+                Remember to <computeroutput>#include "SteerLib.h"</computeroutput> in any source file that uses SteerLib.
+              </para>
+            </formalpara>
+          </listitem>
+          <listitem>
+            <formalpara>
+              <title>Specify the include path of SteerLib:</title>
+              <para>
+                Use the <computeroutput>-I</computeroutput> option of <command>g++</command>.  The include path should point to the
+                <filename>steerlib/include/</filename> directory in SteerSuite.  For example, if SteerSuite is located in <filename>/tmp/steersuite/</filename>,
+                then use:
+                <screen>g++ -I/tmp/steersuite/steerlib/include/  (all your other options...)</screen>
+              </para>
+            </formalpara>
+          </listitem>
+          <listitem>
+            <formalpara>
+              <title>Specify the library path:</title>
+              <para>
+                Use the <computeroutput>-L</computeroutput> option to specify the path where <filename>libsteer.so</filename> is located.  By
+                default, this is the <filename>build/lib/</filename> directory in SteerSuite.
+              </para>
+            </formalpara>
+          </listitem>
+          <listitem>
+            <formalpara>
+              <title>Specify the library to link:</title>
+              <para>
+                Use the <computeroutput>-l</computeroutput> option (that's a lowercase 'L').  For example, if
+                SteerSuite is located in <filename>/tmp/steersuite/</filename>, then use:
+                <screen>g++ (all your other options...)  -L/tmp/steersuite/build/bin/ -lsteer</screen>
+              </para>
+            </formalpara>
+          </listitem>
+          <listitem>
+            <formalpara>
+              <title>Specify an rpath:</title>
+              <para>
+                As mentioned above, SteerLib is a shared library.  This means that your program needs to be able to find the SteerLib library at run-time, not just at
+                compile-time.  To do this, specify an <computeroutput>-rpath</computeroutput> option (for Linux and OS X) or a <computeroutput>-R</computeroutput> option (for Solaris).
+                This option tells the executable to add a directory to the list of locations to search when looking for <filename>libsteer.so</filename> at run-time.  Refer to the
+                <command>g++</command> documentation of your platform to learn how to use the rpath option.
+              </para>
+            </formalpara>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        For Visual Studio 2008 on Windows platforms:
+        <orderedlist>
+          <listitem>
+            <formalpara>
+              <title>Include <filename>SteerLib.h</filename>:</title>
+              <para>
+                Remember to <computeroutput>#include "SteerLib.h"</computeroutput> in any source file that uses SteerLib.
+              </para>
+            </formalpara>
+          </listitem>
+          <listitem>
+            <formalpara>
+              <title>Specify the include path of SteerLib:</title>
+              <para>
+                In the
+                <menuchoice>
+                  <guimenu>Project Properties</guimenu>
+                  <guimenuitem>C/C++</guimenuitem>
+                  <guimenuitem>General</guimenuitem>
+                </menuchoice>
+                menu, add the SteerLib path in the option "Additional Include Directories".  The path is <filename>&quot;&lt;steersuite-directory&gt;steerlib\include&quot;</filename>.
+                <emphasis>You may need to put quotes around the path, if the path name has spaces in it.</emphasis>
+              </para>
+            </formalpara>
+          </listitem>
+          <listitem>
+            <formalpara>
+              <title>Specify the library to link:</title>
+              <para>
+                In the
+                <menuchoice>
+                  <guimenu>Project Properties</guimenu>
+                  <guimenuitem>Linker</guimenuitem>
+                  <guimenuitem>Input</guimenuitem>
+                </menuchoice>
+                menu, add <filename>&quot;&lt;path-to-steerlib&gt;\steerlib.lib&quot;</filename> to the "Additional Dependencies".  By default, the steerlib path will be the
+                <filename>Debug</filename> or <filename>Release</filename> directory where all of SteerSuite was compiled.  For example, if SteerSuite was located in
+                <filename>C:\steersuite\</filename>, then the path would be <filename>C:\steersuite\build\win32\Release\</filename>.
+                <emphasis>You may need to put quotes around the path, if the path name has spaces in it.</emphasis>
+              </para>
+            </formalpara>
+          </listitem>
+          <listitem>
+            <formalpara>
+              <title>Copy <filename>steerlib.dll</filename>:</title>
+              <para>
+                Copy <filename>steerlib.dll</filename> to the same directory as your program's executables.  To our knowledge (we have not verified this, however) Windows searches
+                the executable's directory for its dll dependencies before it searches the standard system directories.
+              </para>
+            </formalpara>
+          </listitem>
+        </orderedlist>
+      </para>
+    </section>
+    <section id="error-handling">
+      <title>Error Handling in SteerLib</title>
+      <para>
+        Errors in SteerLib are handled by throwing C++ exceptions.  If you need to refresh your memory on C++ exceptions, refer to
+        <ulink url="http://www.cplusplus.com/doc/tutorial/exceptions/">this introduction</ulink> and
+        <ulink url="http://www.parashift.com/c++-faq-lite/exceptions.html">this FAQ</ulink>.
+      </para>
+      <para>
+        It is strongly recommended that you catch these exceptions, and look at the associated human-readable string
+        that explains the error.  In many cases these error messages are very simple but informative, such as telling
+        you that a file cannot be found, or if there was an incorrect usage of a class.  Seeing these error messages
+        can save you hours of debugging.
+      </para>
+      <para>
+        The following is an example of catching SteerLib exceptions in the top-level main function of a program.
+      </para>
+      <example>
+        <title>Catching exceptions to handle SteerLib errors</title>
+<programlisting language="C++">int main(int argc, char** argv)
+{
+    try {
+        // put all your code here...
+    }
+    catch (std::exception &amp;e) {
+        std::cerr &lt;&lt; "\nERROR: exception caught in main:\n" &lt;&lt; e.what() &lt;&lt; "\n";
+        return 1;
+    }
+
+    return 0;
+}</programlisting>
+      </example>
+      <para>
+        The specific exception class used by SteerLib is <varname>Util::GenericException</varname>.  Refer to the Code Reference for more documentation.
+      </para>
+    </section>
+    <section id="reading-test-case">
+      <title>Reading a Test Case</title>
+      <para>
+        As mentioned before, test cases define a variety of challenging scenarios for agent steering, and are very useful for developing,
+        debugging, evaluating your own steering algorithms.  Each test case defines initial conditions of agents and obstacles, including
+        a list of goals for each agent.  To "run" a test case in your own code, you will need to load the initial conditions into your
+        own data structures, and then simulate agents that try to accomplish the given goals.
+      </para>
+      <para>
+        SteerLib makes it easy to load these initial conditions into your own code, with the <classname>SteerLib::TestCaseReader</classname> class.  Create an instance
+        of this class, and and then call the <function>readTestCaseFromFile()</function> member function (refer to the code example shown below).
+        This function parses the XML test case, expands all "agent regions" and "obstacle regions" into individual agents and obstacles, and initializes
+        initial conditions for all agents and obstacles, all automatically for you.
+      </para>
+      <para>
+        After calling <function>readTestCaseFromFile()</function>, the rest of the <classname>TestCaseReader</classname> class functions can be used
+        to get the initial conditions and meta information from the test case.  The most important functions are <function>getAgentInitialConditions()</function>
+        and <function>getObstacleInitialConditions()</function>, which allow you to copy the test case initial conditions into your own code.
+      </para>
+      <example>
+        <title>
+          Using the <classname>SteerLib::TestCaseReader</classname> class to load a test case.
+        </title>
+<programlisting language="C++">SteerLib::TestCaseReader * testCaseReader;
+std::string testCasePath = "../../../testcases/simple-1.xml";
+
+// open the test case
+testCaseReader = new SteerLib::TestCaseReader();
+testCaseReader->readTestCaseFromFile(testCasePath);
+
+
+for (unsigned int i=0; i &lt; testCaseReader->getNumObstacles(); i++) {
+  const SteerLib::ObstacleInitialConditions &amp; initialConditions = testCaseReader->getObstacleInitialConditions(i);
+  // use data inside of initialConditions to initialize your obstacle
+  // make sure you *copy* the data, don't refer to it, since you may want to delete the testCaseReader.
+}
+
+
+for (unsigned int i=0; i &lt; testCaseReader->getNumAgents(); i++) {
+  const SteerLib::AgentInitialConditions &amp; initialConditions = testCaseReader->getAgentInitialConditions(i);
+  // use data inside of initialConditions to initialize your agents
+  // make sure you *copy* the data, don't refer to it, since you may want to delete the testCaseReader.
+}
+
+delete testCaseReader;</programlisting>
+      </example>
+      <para>
+        The data structure returned by <function>getAgentInitialConditions</function> is a fully initialized <classname>AgentInitialConditions</classname> object.
+        This object contains the initial position, orientation, radius, and speed of the agent, and an ordered list of goals that the agent should try to accomplish.  When
+        you get a reference to this object for a particular agent by calling <function>getAgentInitialConditions()</function>, you can translate this information
+        as needed and incorporate it into your own agents.  In most cases, this "translation" is simply copying the data into your own data structures.  Similarly, the
+        <classname>ObstacleInitialConditions</classname> contain the bounding box information of an obstacle.  The data provided for obstacles will likely be expanded
+        in future versions of SteerSuite.
+      </para>
+      <note>
+        The <classname>TestCaseReader</classname> can potentially take a large amount of memory, and it is recommended that you de-allocate
+        it after you are done copying the initial conditions into your own data structures.
+      </note>
+    </section>
+    <section id="reading-rec-file">
+      <title>Reading a Recording (Rec File)</title>
+      <!--
+      <para>
+        SteerLib provides functionality to read/write recordings of simulations.  The 
+        current format of these recordings stores the position and orientation of every agent at every frame in the simulation,
+        as well as information about whether the agent is "enabled", and the position of obstacles, etc.  For a full description
+        of the binary rec file format, refer to the Reference Manual.
+      </para>
+      <para>
+        SteerLib provides functionality to read/write recordings of simulations.  The 
+        current format of these recordings stores the position and orientation of every agent at every frame in the simulation,
+        as well as information about whether the agent is "enabled", and the position of obstacles, etc.  For a full description
+        of the binary rec file format, refer to the Reference Manual.
+      </para>
+      <example>
+        <title>
+          Using the <classname>SteerLib::RecFileReader</classname> class to read a rec file.
+        </title>
+<programlisting language="C++">
+</programlisting>
+      </example>
+      -->
+    </section>
+    <section id="writing-rec-file">
+      <title>Writing a Recording (Rec File)</title>
+      <!--
+      -->
+    </section>
+    <section id="spatial-database">
+      <title>The Spatial Database</title>
+      <!--
+        - SpatialDatabaseItem Interface
+        - Types of queries
+      -->
+    </section>
+    <section id="section-metrics-and-benchmarks">
+      <title>Metrics Collectors and Benchmark Techniques</title>
+      <!--
+        - agentmetrics collector
+        - simulationmetrics collector
+        - benchmarkTechnique
+      -->
+    </section>
+    <section id="util-namespace">
+      <title>The Util Namespace</title>
+      <!--
+        - Basic Geometry and graphics-related data types  (vector, point, AABB, Ray, Color)
+        - Drawing
+        - DynamicLibrary
+        - MemoryMapper
+        - Threading  (Mutex, ThreadedTaskManager)
+        - Performance profiling - counters, PerformanceProfiler, AutomaticFunctionProfiler
+        - Parsing - command line, XML
+        - 
+      -->
+    </section>
+  </chapter>
+
+
+  <!-- 
+  ####################################
+   ADVANCED FEATURES CHAPTER
+  ####################################   
+  -->
+
+  <chapter id="advanced-features">
+    <title>Advanced Features</title>
+    <section id="creating-test-cases">
+      <title>Creating a Custom Test Cases</title>
+    </section>
+    <section id="creating-benchmark-techniques">
+      <title>Creating a Benchmark Technique</title>
+    </section>
+    <section id="creating-plugins">
+      <title>Creating a SteerSim Plugin</title>
+    </section>
+    <section id="steertool">
+      <title>The SteerTool utility</title>
+      <section>
+        <title>Authenticating a Rec File</title>
+      </section>
+      <section>
+        <title>Converting Between Big-endian and Little-endian</title>
+      </section>
+      <section>
+        <title>Querying Information of a Rec File</title>
+      </section>
+    </section>
+  </chapter>
+
+
+  <!-- 
+  ####################################
+   TROUBLESHOOTING TIPS CHAPTER
+  ####################################   
+  -->
+
+  <chapter id="troubleshooting-tips">
+    <title>Troubleshooting tips when using SteerSuite</title>
+    <section id="troubleshooting-executing">
+      <title>Problems Running SteerSim</title>
+      <formalpara>
+        <title>My AI module does not get loaded by the <computeroutput>testCasePlayer</computeroutput> even though I specified it in the command line:</title>
+        <para>
+          Did you use the <computeroutput>-module</computeroutput> option?   You probably meant
+          to use the <computeroutput>-ai</computeroutput> option.  These two options are almost
+          equivalent; the difference is that <computeroutput>-ai</computeroutput> also tells
+          the <computeroutput>testCasePlayer</computeroutput> module to use your AI.
+        </para>
+      </formalpara>
+      <formalpara>
+        <title>I generated a config file, but changing the options seems to have no effect:</title>
+        <para>
+          There are two things to check. (1) <command>steersim</command> will not automatically find and load your config file.  Are you
+          using the <computeroutput>-config</computeroutput> option, to load the config file?
+          (2) Also, if you are specifying a command-line option, remember that it overrides the
+          same config-file option.
+        </para>
+      </formalpara>
+    </section>
+    <section id="troubleshooting-compiling">
+      <title>Problems Compiling with SteerLib</title>
+      <formalpara>
+        <title>I get too many "not found" or "unresolved symbol" errors when compiling my module:</title>
+        <para>
+          Did you remember to include <filename>SteerLib.h</filename>?
+          <filename>SteerLib.h</filename> simply includes all the
+          other <filename>.h</filename> files in SteerLib, so you will also need to make sure that
+          you give your compiler the proper include path that points to your
+          <filename>SteerLib/include</filename> directory.
+        </para>
+      </formalpara>
+      <formalpara>
+        <title>I get too many linker errors when compiling my module:</title>
+        <para>
+          Did you specifically tell your compiler to link to SteerLib?  If you did, then are you
+          sure the compiler knows where to find that library?
+        </para>
+      </formalpara>
+      <formalpara>
+        <title>I get an openGL linker error when compiling my module:</title>
+        <para>
+          If you used any of the inline functions in DrawLib, you will also need to
+          link to OpenGL when you compile your module.
+        </para>
+      </formalpara>
+      <formalpara>
+        <title>I get a linker error about missing "main" when compiling my module:</title>
+        <para>
+          Make sure you are compiling your module as a dynamic-link library, and not as a
+          stand-alone executable.
+        </para>
+      </formalpara>
+      <formalpara>
+        <title>SteerSim does not load my module properly.</title>
+        <para>
+          Did you compile as a dynamic library?  Did you implement <computeroutput>createModule</computeroutput>
+          and <computeroutput>destroyModule</computeroutput>?  Did you declare those functions
+          with <computeroutput>extern "C"</computeroutput>, so that they are visible through a C-style dll interface?
+          In Visual Studio, you also need to specify <computeroutput>__declspec(dllexport)</computeroutput> for those two functions,
+          so that the compiler will know to make those functions available through the dll interface.
+        </para>
+      </formalpara>
+      <formalpara>
+        <title>It seems like I have to compile twice in order for my code changes to take effect in Visual Studio:</title>
+        <para>
+          This probably means you added your project directly to SteerSuite Visual Studio solution, right?
+          That is fine, but you will need to make sure your specify that your project is dependent on SteerLib.
+          This option can be set by modifying
+          <menuchoice>
+            <guimenu>Solution Properties</guimenu>
+            <guimenuitem>Project Dependencies</guimenuitem>
+          </menuchoice>
+          options for the Visual Studio solution file.  With the proper dependencies, Visual Studio will compile and link SteerLib first, before compiling and linking your module.
+        </para>
+      </formalpara>
+      <formalpara>
+        <title>My module seems to work, but my module does not draw anything:</title>
+        <para>
+          Just in case, check the most obvious thing: is the <computeroutput>draw()</computeroutput> function empty, or does it return before drawing anything?
+          If you have copy-pasted another module from SteerSuite to make your module, you should make
+          sure that <computeroutput>ENABLE_GUI</computeroutput> is
+          defined in the project properties.   For Visual Studio users,
+          you may notice that other SteerSuite components use a macro called
+          <computeroutput>$(GUI_DEFINE)</computeroutput>.   This macro is defined in
+          the <filename>SteerSuiteBuildOptions.vsprops</filename>
+          xml file, where you can define global options for SteerSuite in Visual Studio.  You will need to
+          tell your project to use this file by modifying the
+          <menuchoice>
+            <guimenu>Project Properties</guimenu>
+            <guimenuitem>General</guimenuitem>
+            <guimenuitem>Inherited Project Property Sheets</guimenuitem>
+          </menuchoice>
+          option.
+        </para>
+      </formalpara>
+      <formalpara>
+        <title>Editing the SteerSuiteBuildOptions.vsprops file seems to have no effect:</title>
+        <para>Restart Visual Studio for those changes to take effect.</para>
+      </formalpara>
+    </section>
+  </chapter>
+
+
+  <!-- 
+  ####################################
+   APPENDIX
+  ####################################   
+  -->
+
+  <appendix id="appendix">
+    <title>The Steering Problem</title>
+    <section>
+      <title>Steering in Practice</title>
+      <para>
+        Computer-controlled autonomous characters (also called autonomous agents, autonomous pedestrians, etc.) are a vital part of a living, breathing virtual world.
+        Over the past fifteen years, the quality of these characters have improved and a standard generic process has emerged:  Animations are done using an artist's
+        hard work and/or motion capture, and the intelligence to control the rich set of animations is either pre-scripted or manually programmed with carefully tuned
+        state machines. This general approach is true in movies, games, and other virtual worlds.  These days, even facial animations, high-quality rendering,
+        rag-doll physics and more can all be done in real-time, allowing for a rich variety of behaviors.
+      </para>
+      <para>
+        One unique challenge when creating believable autonomous characters is their ability to <firstterm>steer</firstterm> through the environment,
+        including navigation and locomotion.  Historically, it was exciting enough to see characters populating a virtual environment at all, regardless of
+        their steering intelligence.  Now, however, steering is becoming an increasingly important part of autonomous characters in virtual worlds, because it is
+        the most prevalent aspect of the characters that users see.  While most other aspects of the character can be convincingly realistic because of pre-computed
+        data or pre-scripted events, steering is unique because it usually cannot rely on precomputed data like animations, but it also does not easily fit the
+        state-machine approach for modeling intelligence.  Steering has remained to be a challenge in practice, even in state of the art virtual worlds, like Grand
+        Theft Auto 4 or Sims 3.
+      </para>
+    </section>
+    <section>
+      <title>Challenges in Steering</title>
+      <para>
+        Creating a believable steering algorithm has many challenges.  The following list has just a few of these challenges, with a slight
+        focus on pedestrian steering.  We welcome any feedback, discussion, opinions, and even disagreement on this topic.  Please post such
+        thoughts to the SteerSuite discussion group.
+        <itemizedlist>
+          <listitem>
+            The space of possible steering decisions is dense, continuous, and extremely large, making it
+            impractical to try making a steering algorithm that evaluates every possible choice before making a decision.
+          </listitem>
+          <listitem>
+            Greedy/heuristic style decisions are generally not sufficient to capture the complex intelligence in human-like steering.
+          </listitem>
+          <listitem>
+            In many cases, the natural realistic thing to do is backtrack (or side-step, step backwards), essentially creating a sub-goal that does not
+            obviously help progress to the final goal.  In other words, the solution space is highly non-linear with many incorrect local minima/maxima.
+          </listitem>
+          <listitem>
+            Real humans steer in many different ways at the same time, by following a plan, by making predictions, by reacting, and by subtle unspoken communications
+            and social conventions, and it is not always clear how to combine or prioritize these aspects.
+          </listitem>
+          <listitem>
+            Agents may need to steer uniquely depending on personality, adding another layer of complexity that needs to be compatible with the steering algorithm.
+          </listitem>
+          <listitem>
+            Believable macroscopic crowd phenomena should emerge in dense, crowded environments, such as lane formation and bottleneck cooperation.
+          </listitem>
+          <listitem>
+            Steering is inherently integrated with an agent's locomotion capabilities.  This property simultaneously enhances and limits the ways agents can steer.
+          </listitem>
+        </itemizedlist>
+      </para>
+    </section>
+    <!--
+    <section>
+      <title>Research Literature on Steering</title>
+      <para>(To be filled in soon!)</para>
+    </section>
+    -->
+  </appendix>
+
+</book>

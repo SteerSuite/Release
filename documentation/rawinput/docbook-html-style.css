@@ -1,0 +1,36 @@
+.screen {
+  background-color: #e8e8e8;
+  padding: 0.25em 0.25em;
+}
+
+.programlisting {
+  background-color: #e8e8e8;
+  padding: 0.25em 0.25em;
+}
+
+.title { 
+  font-family: Arial, Sans-serif;
+}
+
+div.chapter div.titlepage h2 {
+  font-family: Arial, Sans-serif;
+  border-top-style: solid;
+  border-bottom-style: solid;
+  border-width: 2px;
+  background-color: #e0eaff;
+  padding: 0.5em 0.5em;
+}
+
+div.section div.titlepage h2 {
+  font-family: Arial, Sans-serif;
+  border-style: none;
+  padding: 0.1em 0.1em;
+}
+
+div.navheader { 
+  background-color: #e0eaff;
+}
+
+div.navfooter { 
+  background-color: #e0eaff;
+}
