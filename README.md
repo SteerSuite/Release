@@ -59,29 +59,29 @@ The documentation includes:
 
 The directory structure of this package is as follows:
 
-build/          - Unix scripts and Visual Studio 2012 solution file 
+	- build/          Unix scripts and Visual Studio 2012 solution file 
                   to compile all components of SteerSuite.
-documentation/  - raw unprocessed documentation and instructions for
+	- documentation/  raw unprocessed documentation and instructions for
                   building the documentation.
-external/       - external dependencies that are (legally) included
+	- external/       external dependencies that are (legally) included
                   for convenience, but NOT part of SteerSuite.
-pprAI/          - source directory for the PPR steering module, a
+	- pprAI/          source directory for the PPR steering module, a
                   demo steering algorithm for SteerSim.
-rvo2AI/         - source directory for the ORCA steering module, based
+	- rvo2AI/         source directory for the ORCA steering module, based
                   on the RVO2 steering algorithm library.
-socialForcesAI/ - source directory for the social foces steering module, a
+	- socialForcesAI/ source directory for the social foces steering module, a
                   implementation of the social forces steering algorithm.
-simpleAI/       - source directory for the simpleAI module, a basic
+	- simpleAI/       source directory for the simpleAI module, a basic
                   demo plugin for SteerSim.
-steerbench/     - source directory for SteerBench, a tool used to
+	- steerbench/     source directory for SteerBench, a tool used to
                   score and analyze steering AI.
-steerlib/       - source directory for SteerLib, a shared library
+	- steerlib/       - source directory for SteerLib, a shared library
                   containing most of SteerSuite's functionality.
-steersim/       - source directory for SteerSim, a modular simulation
+	- steersim/       source directory for SteerSim, a modular simulation
                   tool.
-steertool/      - source directory for SteerTool, a utility for useful
+	- steertool/      source directory for SteerTool, a utility for useful
                   miscellaneous tasks
-testcases/      - XML test cases and the XML schema describing the
+	- testcases/      XML test cases and the XML schema describing the
                   test case format.
 
 
