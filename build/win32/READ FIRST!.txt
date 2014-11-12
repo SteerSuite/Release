@@ -1,7 +1,0 @@
-One note about the "big three" folders of Debug, Release, and ReleaseAVX.
-
-- Debug is where steersuite compiles to when in Debug mode
-
-- Release is where steersuite compiles when in Release mode, all the Visual Studio bells and whistles have been set to try to compile the absolute fastest code we can.
-
-32-bit builds dump into the same folders with the same names.  Please remember not to add build products to the repository.
