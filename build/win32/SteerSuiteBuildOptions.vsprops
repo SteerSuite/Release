@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="SteerSuiteBuildOptions"
+	>
+
+  <!--
+  READ THIS BEFORE EDITING THIS FILE!
+
+  Future versions of SteerSuite will provide a configuration wizard, so you can avoid
+  dealing with these details.
+
+  1. Three pre-made configurations are provided below.  Un-comment the configuration
+     you want to use, and comment out the other two configurations.
+
+    - (default) GLFW only
+    - GLFW and QT both enabled
+    - no GUI enabled
+
+  2. Requirements for using Qt:
+
+    - you will need to modify the Qt include and linking paths in the variables below.
+    - you should have compiled Qt using the same compiler that you use for SteerSuite.
+    - Qt's Visual Studio .lib linker files are not provided with Qt, and not (yet) provided by SteerSuite, so you
+      will need to compile Qt.  Instructions to compile for Visual Studio are given below, and more informaton can
+      be found in Qt's documentation.
+    - SteerSuite was tested and built using Qt 4.5
+
+  3. For now, you must be very careful to make sure that the options are consistent, as listed below.
+     You can use one of the three configurations below to avoid dealing with these issues.
+
+    - if ENABLE_GUI is defined, then openGL32.lib and glu32.lib must be linked.
+    
+    - if ENABLE_GLFW or ENABLE_QT is defined (or both), then ENABLE_GUI must be defined.
+    
+    - if ENABLE_GUI is NOT defined, then ENABLE_GLFW and ENABLE_QT must NOT be defined, and
+      OPENGL_LINK and GLU_LINK must be empty values.
+      
+    - if ENABLE_GLFW is not defined, then GLFW_LINK must be an empty string.
+    
+    - if ENABLE_QT is not defined, then all the "QT_*_LINK" values must be empty.
+    
+    - the QT_INCLUDE_DIR should never be empty.  If it is empty, Visual Studio will cause
+      counter-intuitive errors because command-line args get misinterpreted.
+
+  4. Checklist to solve some common problems with Qt + SteerSuite:
+
+    - If you change this file, you should restart Visual Studio and run "build->clean" for changes to take effect.
+    - If you switch between Debug and Release, you may need to do a "build->clean" to avoid linker errors from
+      the generated moc_*.cpp files.
+    - If you get linker errors with Qt, check if the paths specified in this configuration file are correct.
+    - If you still get linker errors, check if you actually have Visual Studio .lib files. Check in
+      the Qt lib\ directory. Qt does not provide Visual Studio .lib files with their binary install.  You will
+      need to compile Qt yourself.
+    - If SteerSim compiles and executes, but does absolutely nothing, with no output or feedback about an error:
+      Then there is probably a run-time error trying to use the Qt libraries.  Make sure you are compiling SteerSuite and Qt
+      with the same compiler.  Most likely you will need to re-compile Qt, for the "win32-msvc2008" platform.
+      
+  5. To Compile Qt: for use with SteerSuite, you must use build Qt for the "win32-msvc2008" platform, using Visual Studio 2008:
+    (1) start a Visual Studio command prompt (which has the correct compilation environment, instead of the usual command line).
+    (2) go to the top-level directory of your qt installation
+    (3) run: "configure -debug-and-release -platform win32-msvc2008"
+    (4) run: "nmake"
+    
+  -->
+
+  
+  
+  <!-- ======================== -->
+  <!-- GLFW AND QT BOTH ENABLED -->
+  <!-- ======================== -->
+  <!--
+  <UserMacro Name="GUI_DEFINE"  Value="ENABLE_GUI" />
+  <UserMacro Name="OPENGL_LINK" Value="opengl32.lib" />
+  <UserMacro Name="GLU_LINK"    Value="glu32.lib" />
+
+  <UserMacro Name="GLFW_DEFINE" Value="ENABLE_GLFW" />
+  <UserMacro Name="GLFW_LINK"   Value="$(SolutionDir)\$(ConfigurationName)\glfw.lib" />
+  <UserMacro Name="GLFW64_LINK"   Value="$(SolutionDir)\$(Platform)\$(Configuration)\glfw.lib" />
+
+  <UserMacro Name="QT_DEFINE"            Value="ENABLE_QT" />
+  <UserMacro Name="QT_INCLUDE_DIR"       Value="C:\Qt\4.5.2\include" />
+  <UserMacro Name="QT_LIB_DIR"           Value="C:\Qt\4.5.2\lib" />
+  <UserMacro Name="QT_MOC"               Value="C:\Qt\4.5.2\bin\moc.exe" />
+  <UserMacro Name="QT_MAIN_LINK"         Value="C:\Qt\4.5.2\lib\qtmain.lib" />
+  <UserMacro Name="QT_CORE_LINK"         Value="C:\Qt\4.5.2\lib\QtCore4.lib" />
+  <UserMacro Name="QT_GUI_LINK"          Value="C:\Qt\4.5.2\lib\QtGui4.lib" />
+  <UserMacro Name="QT_OPENGL_LINK"       Value="C:\Qt\4.5.2\lib\QtOpenGL4.lib" />
+  <UserMacro Name="QT_MAIN_DEBUG_LINK"   Value="C:\Qt\4.5.2\lib\qtmaind.lib" />
+  <UserMacro Name="QT_CORE_DEBUG_LINK"   Value="C:\Qt\4.5.2\lib\QtCored4.lib" />
+  <UserMacro Name="QT_GUI_DEBUG_LINK"    Value="C:\Qt\4.5.2\lib\QtGuid4.lib" />
+  <UserMacro Name="QT_OPENGL_DEBUG_LINK" Value="C:\Qt\4.5.2\lib\QtOpenGLd4.lib" />
+  -->
+  
+  
+  <!-- ========= -->
+  <!-- GLFW ONLY -->
+  <!-- ========= -->
+  
+  <UserMacro Name="GUI_DEFINE"  Value="ENABLE_GUI" />
+  <UserMacro Name="OPENGL_LINK" Value="opengl32.lib" />
+  <UserMacro Name="GLU_LINK"    Value="glu32.lib" />
+
+  <UserMacro Name="GLFW_DEFINE" Value="ENABLE_GLFW" />
+  <UserMacro Name="GLFW_LINK"   Value="$(SolutionDir)\$(ConfigurationName)\glfw.lib" />
+  <UserMacro Name="GLFW64_LINK"   Value="$(SolutionDir)\$(Platform)\$(Configuration)\glfw.lib" />
+
+  <UserMacro Name="QT_DEFINE"            Value="" />
+  <UserMacro Name="QT_INCLUDE_DIR"       Value="C:\Qt\4.5.2\include" />
+  <UserMacro Name="QT_LIB_DIR"           Value="" />
+  <UserMacro Name="QT_MOC"               Value="" />
+  <UserMacro Name="QT_MAIN_LINK"         Value="" />
+  <UserMacro Name="QT_CORE_LINK"         Value="" />
+  <UserMacro Name="QT_GUI_LINK"          Value="" />
+  <UserMacro Name="QT_OPENGL_LINK"       Value="" />
+  <UserMacro Name="QT_MAIN_DEBUG_LINK"   Value="" />
+  <UserMacro Name="QT_CORE_DEBUG_LINK"   Value="" />
+  <UserMacro Name="QT_GUI_DEBUG_LINK"    Value="" />
+  <UserMacro Name="QT_OPENGL_DEBUG_LINK" Value="" />
+  
+
+
+  <!-- ========================= -->
+  <!-- NO GUI; COMMAND LINE ONLY -->
+  <!-- ========================= -->
+  <!--
+  <UserMacro Name="GUI_DEFINE"  Value="" />
+  <UserMacro Name="OPENGL_LINK" Value="" />
+  <UserMacro Name="GLU_LINK"    Value="" />
+
+  <UserMacro Name="GLFW_DEFINE" Value="" />
+  <UserMacro Name="GLFW_LINK"   Value="" />
+
+  <UserMacro Name="QT_DEFINE"            Value="" />
+  <UserMacro Name="QT_INCLUDE_DIR"       Value="C:\Qt\4.5.2\include" />
+  <UserMacro Name="QT_LIB_DIR"           Value="" />
+  <UserMacro Name="QT_MOC"               Value="" />
+  <UserMacro Name="QT_MAIN_LINK"         Value="" />
+  <UserMacro Name="QT_CORE_LINK"         Value="" />
+  <UserMacro Name="QT_GUI_LINK"          Value="" />
+  <UserMacro Name="QT_OPENGL_LINK"       Value="" />
+  <UserMacro Name="QT_MAIN_DEBUG_LINK"   Value="" />
+  <UserMacro Name="QT_CORE_DEBUG_LINK"   Value="" />
+  <UserMacro Name="QT_GUI_DEBUG_LINK"    Value="" />
+  <UserMacro Name="QT_OPENGL_DEBUG_LINK" Value="" />
+  -->
+  
+</VisualStudioPropertySheet>

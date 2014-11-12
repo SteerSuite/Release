@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#
+# Copyright (c) Shawn Singh, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman, Glen Berseth
+# See license.txt for complete license.
+#
+
+
+# macro call to another more specific script
+
+# Usage
+# ./buildall <os_type> [Debug]
+# Debug is optional
+
+if [ -z $2 ] # empty string
+then
+	Build_Type="Release"
+else
+	Build_Type="$2"
+fi
+./build.sh $1 all $Build_Type

@@ -1,0 +1,12 @@
+This distribution of GLFW has the following modifications:
+
+1. Examples, AmigaOS, and dos source files were removed
+2. Export definition files and makefiles for win32 were removed
+3. Most non-source files were removed
+4. Added a Visual Studio 2008 project
+5. Makefiles and compile.sh were modified to better fit our build process
+6. removed the "unbundled mode" warning for mac osx
+
+The reason for removing these components was to minimize the code size,
+while keeping the necessary source files.  The original complete GLFW
+(and good documentation) can be found at:  http://glfw.sourceforge.net/

@@ -1,0 +1,10 @@
+The distribution of tinyxml/ticpp was modified in the following ways:
+
+1. Non-source files were removed
+2. TIXML_USE_TICPP was explicitly defined in the files, so 
+   that it is not necessary to make this define in the build
+   process.
+
+
+The original tinyxml/ticpp code can be found at:
+http://code.google.com/p/ticpp/

@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="UserMacros">
+    <GUI_DEFINE>ENABLE_GUI</GUI_DEFINE>
+    <OPENGL_LINK>opengl32.lib</OPENGL_LINK>
+    <GLU_LINK>glu32.lib</GLU_LINK>
+    <GLFW_DEFINE>ENABLE_GLFW</GLFW_DEFINE>
+    <GLFW_LINK>$(SolutionDir)\$(Configuration)\glfw.lib</GLFW_LINK>
+	<GLFW64_LINK>$(SolutionDir)\$(Platform)\$(Configuration)\glfw.lib</GLFW64_LINK>
+    <QT_DEFINE />
+    <QT_INCLUDE_DIR>C:\Qt\4.5.2\include</QT_INCLUDE_DIR>
+    <QT_LIB_DIR />
+    <QT_MOC />
+    <QT_MAIN_LINK />
+    <QT_CORE_LINK />
+    <QT_GUI_LINK />
+    <QT_OPENGL_LINK />
+    <QT_MAIN_DEBUG_LINK />
+    <QT_CORE_DEBUG_LINK />
+    <QT_GUI_DEBUG_LINK />
+    <QT_OPENGL_DEBUG_LINK />
+  </PropertyGroup>
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <BuildMacro Include="GUI_DEFINE">
+      <Value>$(GUI_DEFINE)</Value>
+    </BuildMacro>
+    <BuildMacro Include="OPENGL_LINK">
+      <Value>$(OPENGL_LINK)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GLU_LINK">
+      <Value>$(GLU_LINK)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GLFW_DEFINE">
+      <Value>$(GLFW_DEFINE)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GLFW_LINK">
+      <Value>$(GLFW_LINK)</Value>
+    </BuildMacro>
+    <BuildMacro Include="QT_DEFINE">
+      <Value>$(QT_DEFINE)</Value>
+    </BuildMacro>
+    <BuildMacro Include="QT_INCLUDE_DIR">
+      <Value>$(QT_INCLUDE_DIR)</Value>
+    </BuildMacro>
+    <BuildMacro Include="QT_LIB_DIR">
+      <Value>$(QT_LIB_DIR)</Value>
+    </BuildMacro>
+    <BuildMacro Include="QT_MOC">
+      <Value>$(QT_MOC)</Value>
+    </BuildMacro>
+    <BuildMacro Include="QT_MAIN_LINK">
+      <Value>$(QT_MAIN_LINK)</Value>
+    </BuildMacro>
+    <BuildMacro Include="QT_CORE_LINK">
+      <Value>$(QT_CORE_LINK)</Value>
+    </BuildMacro>
+    <BuildMacro Include="QT_GUI_LINK">
+      <Value>$(QT_GUI_LINK)</Value>
+    </BuildMacro>
+    <BuildMacro Include="QT_OPENGL_LINK">
+      <Value>$(QT_OPENGL_LINK)</Value>
+    </BuildMacro>
+    <BuildMacro Include="QT_MAIN_DEBUG_LINK">
+      <Value>$(QT_MAIN_DEBUG_LINK)</Value>
+    </BuildMacro>
+    <BuildMacro Include="QT_CORE_DEBUG_LINK">
+      <Value>$(QT_CORE_DEBUG_LINK)</Value>
+    </BuildMacro>
+    <BuildMacro Include="QT_GUI_DEBUG_LINK">
+      <Value>$(QT_GUI_DEBUG_LINK)</Value>
+    </BuildMacro>
+    <BuildMacro Include="QT_OPENGL_DEBUG_LINK">
+      <Value>$(QT_OPENGL_DEBUG_LINK)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

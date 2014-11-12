@@ -1,0 +1,3 @@
+
+
+sudo apt-get install libxrandr-dev libsdl1.2-dev libsdl1.2debian libx11-dev libxxf86vm1 libxxf86vm-dev

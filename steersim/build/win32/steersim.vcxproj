@@ -1,0 +1,659 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseAVX|Win32">
+      <Configuration>ReleaseAVX</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseAVX|x64">
+      <Configuration>ReleaseAVX</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{4E3C1E9A-0F17-4975-ABAE-CA863DA269E9}</ProjectGuid>
+    <RootNamespace>steersim</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\build\win32\SteerSuiteBuildOptions.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\build\win32\SteerSuiteBuildOptions.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\build\win32\SteerSuiteBuildOptions.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\build\win32\SteerSuiteBuildOptions.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\build\win32\SteerSuiteBuildOptions.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\build\win32\SteerSuiteBuildOptions.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\..\..\util\include;..\..\include;..\..\..\steerlib\include;..\..\..\external;$(QT_INCLUDE_DIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(GUI_DEFINE);$(GLFW_DEFINE);$(QT_DEFINE);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <FloatingPointModel>Fast</FloatingPointModel>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>util.lib;$(OPENGL_LINK);$(GLU_LINK);$(GLFW_LINK);$(QT_MAIN_LINK);$(QT_CORE_LINK);$(QT_GUI_LINK);$(QT_OPENGL_LINK);steerlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\$(Configuration)\;$(QT_LIB_DIR);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Message>Copying Qt libraries to $(OutDir) (Only copies if Qt is enabled)</Message>
+      <Command>IF "$(QT_DEFINE)" == "ENABLE_QT" (
+IF "$(Configuration)" == "Release" (
+copy $(QT_LIB_DIR)\QtCore4.dll $(OutDir)QtCore4.dll
+copy $(QT_LIB_DIR)\QtGui4.dll $(OutDir)QtGui4.dll
+copy $(QT_LIB_DIR)\QtOpenGL4.dll $(OutDir)QtOpenGL4.dll
+) ELSE (
+copy $(QT_LIB_DIR)\QtCored4.dll $(OutDir)QtCored4.dll
+copy $(QT_LIB_DIR)\QtGuid4.dll $(OutDir)QtGuid4.dll
+copy $(QT_LIB_DIR)\QtOpenGLd4.dll $(OutDir)QtOpenGLd4.dll
+)
+)
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\..\include;..\..\..\steerlib\include;..\..\..\external;$(QT_INCLUDE_DIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(GUI_DEFINE);$(GLFW_DEFINE);$(QT_DEFINE);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <AdditionalOptions>/arch:AVX %(AdditionalOptions)</AdditionalOptions>
+      <FloatingPointModel>Fast</FloatingPointModel>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(OPENGL_LINK);$(GLU_LINK);$(GLFW_LINK);$(QT_MAIN_LINK);$(QT_CORE_LINK);$(QT_GUI_LINK);$(QT_OPENGL_LINK);steerlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\$(Configuration)\;$(QT_LIB_DIR);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Message>Copying Qt libraries to $(OutDir) (Only copies if Qt is enabled)</Message>
+      <Command>IF "$(QT_DEFINE)" == "ENABLE_QT" (
+IF "$(Configuration)" == "Release" (
+copy $(QT_LIB_DIR)\QtCore4.dll $(OutDir)QtCore4.dll
+copy $(QT_LIB_DIR)\QtGui4.dll $(OutDir)QtGui4.dll
+copy $(QT_LIB_DIR)\QtOpenGL4.dll $(OutDir)QtOpenGL4.dll
+) ELSE (
+copy $(QT_LIB_DIR)\QtCored4.dll $(OutDir)QtCored4.dll
+copy $(QT_LIB_DIR)\QtGuid4.dll $(OutDir)QtGuid4.dll
+copy $(QT_LIB_DIR)\QtOpenGLd4.dll $(OutDir)QtOpenGLd4.dll
+)
+)
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\..\..\ccAI\include;..\..\..\footstepAI\include;..\..\..\rvo2AI\include;..\..\..\util\include;..\..\..\pprAI\include;..\..\include;..\..\..\steerlib\include;..\..\..\external;..\..\..\external\qhull\src;$(QT_INCLUDE_DIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(GUI_DEFINE);$(GLFW_DEFINE);$(QT_DEFINE);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <OpenMPSupport>
+      </OpenMPSupport>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>qhullstatic.lib;util.lib;$(OPENGL_LINK);$(GLU_LINK);$(GLFW_LINK);$(QT_MAIN_LINK);$(QT_CORE_LINK);$(QT_GUI_LINK);$(QT_OPENGL_LINK);steerlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\;$(QT_LIB_DIR);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+    </Link>
+    <PostBuildEvent>
+      <Message>Copying Qt libraries to $(OutDir) (Only copies if Qt is enabled)</Message>
+      <Command>IF "$(QT_DEFINE)" == "ENABLE_QT" (
+IF "$(Configuration)" == "Release" (
+copy $(QT_LIB_DIR)\QtCore4.dll $(OutDir)QtCore4.dll
+copy $(QT_LIB_DIR)\QtGui4.dll $(OutDir)QtGui4.dll
+copy $(QT_LIB_DIR)\QtOpenGL4.dll $(OutDir)QtOpenGL4.dll
+) ELSE (
+copy $(QT_LIB_DIR)\QtCored4.dll $(OutDir)QtCored4.dll
+copy $(QT_LIB_DIR)\QtGuid4.dll $(OutDir)QtGuid4.dll
+copy $(QT_LIB_DIR)\QtOpenGLd4.dll $(OutDir)QtOpenGLd4.dll
+)
+)
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\..\include;..\..\..\steerlib\include;..\..\..\external;$(QT_INCLUDE_DIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(GUI_DEFINE);$(GLFW_DEFINE);$(QT_DEFINE);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <AdditionalOptions>/arch:AVX /favor:INTEL64 %(AdditionalOptions)</AdditionalOptions>
+      <FloatingPointModel>Fast</FloatingPointModel>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(OPENGL_LINK);$(GLU_LINK);$(GLFW_LINK);$(QT_MAIN_LINK);$(QT_CORE_LINK);$(QT_GUI_LINK);$(QT_OPENGL_LINK);steerlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\;$(QT_LIB_DIR);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+    </Link>
+    <PostBuildEvent>
+      <Message>Copying Qt libraries to $(OutDir) (Only copies if Qt is enabled)</Message>
+      <Command>IF "$(QT_DEFINE)" == "ENABLE_QT" (
+IF "$(Configuration)" == "Release" (
+copy $(QT_LIB_DIR)\QtCore4.dll $(OutDir)QtCore4.dll
+copy $(QT_LIB_DIR)\QtGui4.dll $(OutDir)QtGui4.dll
+copy $(QT_LIB_DIR)\QtOpenGL4.dll $(OutDir)QtOpenGL4.dll
+) ELSE (
+copy $(QT_LIB_DIR)\QtCored4.dll $(OutDir)QtCored4.dll
+copy $(QT_LIB_DIR)\QtGuid4.dll $(OutDir)QtGuid4.dll
+copy $(QT_LIB_DIR)\QtOpenGLd4.dll $(OutDir)QtOpenGLd4.dll
+)
+)
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\external\qhull\src\;..\..\..\rvo2AI\include;..\..\..\pprAI\include;..\..\..\util\include;..\..\include;..\..\..\steerlib\include;..\..\..\external;$(QT_INCLUDE_DIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(GUI_DEFINE);$(GLFW_DEFINE);$(QT_DEFINE);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>util.lib;$(OPENGL_LINK);$(GLU_LINK);$(GLFW_LINK);$(QT_MAIN_DEBUG_LINK);$(QT_CORE_DEBUG_LINK);$(QT_GUI_DEBUG_LINK);$(QT_OPENGL_DEBUG_LINK);steerlib.lib;AntTweakBar.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\$(Configuration)\;$(QT_LIB_DIR);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Message>Copying Qt libraries to $(OutDir) (Only copies if Qt is enabled)</Message>
+      <Command>IF "$(QT_DEFINE)" == "ENABLE_QT" (
+IF "$(Configuration)" == "Release" (
+copy $(QT_LIB_DIR)\QtCore4.dll $(OutDir)QtCore4.dll
+copy $(QT_LIB_DIR)\QtGui4.dll $(OutDir)QtGui4.dll
+copy $(QT_LIB_DIR)\QtOpenGL4.dll $(OutDir)QtOpenGL4.dll
+) ELSE (
+copy $(QT_LIB_DIR)\QtCored4.dll $(OutDir)QtCored4.dll
+copy $(QT_LIB_DIR)\QtGuid4.dll $(OutDir)QtGuid4.dll
+copy $(QT_LIB_DIR)\QtOpenGLd4.dll $(OutDir)QtOpenGLd4.dll
+)
+)
+</Command>
+    </PostBuildEvent>
+    <CustomBuild>
+      <Command>-testfile simple-1 -ai simple-1 -startPaused</Command>
+    </CustomBuild>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\util\include;..\..\include;..\..\..\steerlib\include;..\..\..\external;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(GUI_DEFINE);$(GLFW_DEFINE);$(QT_DEFINE);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>AntTweakBar64.lib;$(OPENGL_LINK);$(GLU_LINK);$(GLFW_LINK);$(QT_MAIN_DEBUG_LINK);$(QT_CORE_DEBUG_LINK);$(QT_GUI_DEBUG_LINK);$(QT_OPENGL_DEBUG_LINK);steerlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PostBuildEvent>
+      <Message>Copying Qt libraries to $(OutDir) (Only copies if Qt is enabled)</Message>
+      <Command>IF "$(QT_DEFINE)" == "ENABLE_QT" (
+IF "$(Configuration)" == "Release" (
+copy $(QT_LIB_DIR)\QtCore4.dll $(OutDir)QtCore4.dll
+copy $(QT_LIB_DIR)\QtGui4.dll $(OutDir)QtGui4.dll
+copy $(QT_LIB_DIR)\QtOpenGL4.dll $(OutDir)QtOpenGL4.dll
+) ELSE (
+copy $(QT_LIB_DIR)\QtCored4.dll $(OutDir)QtCored4.dll
+copy $(QT_LIB_DIR)\QtGuid4.dll $(OutDir)QtGuid4.dll
+copy $(QT_LIB_DIR)\QtOpenGLd4.dll $(OutDir)QtOpenGLd4.dll
+)
+)
+</Command>
+    </PostBuildEvent>
+    <CustomBuild>
+      <Command>-testfile simple-1 -ai simple-1 -startPaused</Command>
+    </CustomBuild>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\CommandLineEngineDriver.cpp" />
+    <ClCompile Include="..\..\src\GLFWEngineDriver.cpp" />
+    <ClCompile Include="..\..\src\Main.cpp" />
+    <ClCompile Include="..\..\src\QtEngineDriver.cpp" />
+    <ClCompile Include="..\..\src\ClockWidget.cpp" />
+    <ClCompile Include="..\..\src\ConsoleWidget.cpp" />
+    <ClCompile Include="..\..\src\GlobalEventFilter.cpp" />
+    <ClCompile Include="..\..\src\GLWidget.cpp" />
+    <ClCompile Include="..\..\src\ModuleManagerWidget.cpp" />
+    <ClCompile Include="..\..\src\QtEngineController.cpp" />
+    <ClCompile Include="..\..\src\RecFilePlayerWidget.cpp" />
+    <ClCompile Include="..\..\src\SimAntTweakBar.cpp" />
+    <ClCompile Include="..\..\src\TestCasePlayerWidget.cpp" />
+    <ClCompile Include="..\autogenerated\moc_ClockWidget.cpp" />
+    <ClCompile Include="..\autogenerated\moc_ConsoleWidget.cpp" />
+    <ClCompile Include="..\autogenerated\moc_GlobalEventFilter.cpp" />
+    <ClCompile Include="..\autogenerated\moc_GLWidget.cpp" />
+    <ClCompile Include="..\autogenerated\moc_ModuleManagerWidget.cpp" />
+    <ClCompile Include="..\autogenerated\moc_QtEngineController.cpp" />
+    <ClCompile Include="..\autogenerated\moc_RecFilePlayerWidget.cpp" />
+    <ClCompile Include="..\autogenerated\moc_TestCasePlayerWidget.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\core\CommandLineEngineDriver.h" />
+    <ClInclude Include="..\..\include\core\GLFWEngineDriver.h" />
+    <ClInclude Include="..\..\include\core\QtEngineDriver.h" />
+    <CustomBuild Include="..\..\include\qtgui\ClockWidget.h">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating moc_ClockWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating moc_ClockWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\ClockWidget.h  -o ..\autogenerated\moc_ClockWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_ClockWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\ClockWidget.h  -o ..\autogenerated\moc_ClockWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_ClockWidget.cpp)
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QT_MOC);..\..\include\qtgui\ClockWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QT_MOC);..\..\include\qtgui\ClockWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\autogenerated\moc_ClockWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\autogenerated\moc_ClockWidget.cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating moc_ClockWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">Generating moc_ClockWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating moc_ClockWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">Generating moc_ClockWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\ClockWidget.h  -o ..\autogenerated\moc_ClockWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_ClockWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\ClockWidget.h  -o ..\autogenerated\moc_ClockWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_ClockWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\ClockWidget.h  -o ..\autogenerated\moc_ClockWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_ClockWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\ClockWidget.h  -o ..\autogenerated\moc_ClockWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_ClockWidget.cpp)
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QT_MOC);..\..\include\qtgui\ClockWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">$(QT_MOC);..\..\include\qtgui\ClockWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QT_MOC);..\..\include\qtgui\ClockWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">$(QT_MOC);..\..\include\qtgui\ClockWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\autogenerated\moc_ClockWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">..\autogenerated\moc_ClockWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\autogenerated\moc_ClockWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">..\autogenerated\moc_ClockWidget.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\include\qtgui\ConsoleWidget.h">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating moc_ConsoleWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating moc_ConsoleWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\ConsoleWidget.h  -o ..\autogenerated\moc_ConsoleWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_ConsoleWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\ConsoleWidget.h  -o ..\autogenerated\moc_ConsoleWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_ConsoleWidget.cpp)
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QT_MOC);..\..\include\qtgui\ConsoleWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QT_MOC);..\..\include\qtgui\ConsoleWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\autogenerated\moc_ConsoleWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\autogenerated\moc_ConsoleWidget.cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating moc_ConsoleWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">Generating moc_ConsoleWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating moc_ConsoleWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">Generating moc_ConsoleWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\ConsoleWidget.h  -o ..\autogenerated\moc_ConsoleWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_ConsoleWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\ConsoleWidget.h  -o ..\autogenerated\moc_ConsoleWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_ConsoleWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\ConsoleWidget.h  -o ..\autogenerated\moc_ConsoleWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_ConsoleWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\ConsoleWidget.h  -o ..\autogenerated\moc_ConsoleWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_ConsoleWidget.cpp)
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QT_MOC);..\..\include\qtgui\ConsoleWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">$(QT_MOC);..\..\include\qtgui\ConsoleWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QT_MOC);..\..\include\qtgui\ConsoleWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">$(QT_MOC);..\..\include\qtgui\ConsoleWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\autogenerated\moc_ConsoleWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">..\autogenerated\moc_ConsoleWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\autogenerated\moc_ConsoleWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">..\autogenerated\moc_ConsoleWidget.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\include\qtgui\GlobalEventFilter.h">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating moc_GlobalEventFilter.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating moc_GlobalEventFilter.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\GlobalEventFilter.h  -o ..\autogenerated\moc_GlobalEventFilter.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_GlobalEventFilter.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\GlobalEventFilter.h  -o ..\autogenerated\moc_GlobalEventFilter.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_GlobalEventFilter.cpp)
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QT_MOC);..\..\include\qtgui\GlobalEventFilter.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QT_MOC);..\..\include\qtgui\GlobalEventFilter.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\autogenerated\moc_GlobalEventFilter.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\autogenerated\moc_GlobalEventFilter.cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating moc_GlobalEventFilter.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">Generating moc_GlobalEventFilter.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating moc_GlobalEventFilter.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">Generating moc_GlobalEventFilter.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\GlobalEventFilter.h  -o ..\autogenerated\moc_GlobalEventFilter.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_GlobalEventFilter.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\GlobalEventFilter.h  -o ..\autogenerated\moc_GlobalEventFilter.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_GlobalEventFilter.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\GlobalEventFilter.h  -o ..\autogenerated\moc_GlobalEventFilter.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_GlobalEventFilter.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\GlobalEventFilter.h  -o ..\autogenerated\moc_GlobalEventFilter.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_GlobalEventFilter.cpp)
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QT_MOC);..\..\include\qtgui\GlobalEventFilter.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">$(QT_MOC);..\..\include\qtgui\GlobalEventFilter.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QT_MOC);..\..\include\qtgui\GlobalEventFilter.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">$(QT_MOC);..\..\include\qtgui\GlobalEventFilter.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\autogenerated\moc_GlobalEventFilter.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">..\autogenerated\moc_GlobalEventFilter.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\autogenerated\moc_GlobalEventFilter.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">..\autogenerated\moc_GlobalEventFilter.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\include\qtgui\GLWidget.h">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating moc_GLWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating moc_GLWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\GLWidget.h  -o ..\autogenerated\moc_GLWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_GLWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\GLWidget.h  -o ..\autogenerated\moc_GLWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_GLWidget.cpp)
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QT_MOC);..\..\include\qtgui\GLWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QT_MOC);..\..\include\qtgui\GLWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\autogenerated\moc_GLWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\autogenerated\moc_GLWidget.cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating moc_GLWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">Generating moc_GLWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating moc_GLWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">Generating moc_GLWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\GLWidget.h  -o ..\autogenerated\moc_GLWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_GLWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\GLWidget.h  -o ..\autogenerated\moc_GLWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_GLWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\GLWidget.h  -o ..\autogenerated\moc_GLWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_GLWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\GLWidget.h  -o ..\autogenerated\moc_GLWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_GLWidget.cpp)
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QT_MOC);..\..\include\qtgui\GLWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">$(QT_MOC);..\..\include\qtgui\GLWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QT_MOC);..\..\include\qtgui\GLWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">$(QT_MOC);..\..\include\qtgui\GLWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\autogenerated\moc_GLWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">..\autogenerated\moc_GLWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\autogenerated\moc_GLWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">..\autogenerated\moc_GLWidget.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\include\qtgui\ModuleManagerWidget.h">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating moc_ModuleManagerWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating moc_ModuleManagerWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\ModuleManagerWidget.h  -o ..\autogenerated\moc_ModuleManagerWidget.cpp
+) ELSE (type NUL &gt; ..\autogenerated\moc_ModuleManagerWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\ModuleManagerWidget.h  -o ..\autogenerated\moc_ModuleManagerWidget.cpp
+) ELSE (type NUL &gt; ..\autogenerated\moc_ModuleManagerWidget.cpp)
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QT_MOC);..\..\include\qtgui\ModuleManagerWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QT_MOC);..\..\include\qtgui\ModuleManagerWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\autogenerated\moc_ModuleManagerWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\autogenerated\moc_ModuleManagerWidget.cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating moc_ModuleManagerWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">Generating moc_ModuleManagerWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating moc_ModuleManagerWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">Generating moc_ModuleManagerWidget.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\ModuleManagerWidget.h  -o ..\autogenerated\moc_ModuleManagerWidget.cpp
+) ELSE (type NUL &gt; ..\autogenerated\moc_ModuleManagerWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\ModuleManagerWidget.h  -o ..\autogenerated\moc_ModuleManagerWidget.cpp
+) ELSE (type NUL &gt; ..\autogenerated\moc_ModuleManagerWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\ModuleManagerWidget.h  -o ..\autogenerated\moc_ModuleManagerWidget.cpp
+) ELSE (type NUL &gt; ..\autogenerated\moc_ModuleManagerWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\ModuleManagerWidget.h  -o ..\autogenerated\moc_ModuleManagerWidget.cpp
+) ELSE (type NUL &gt; ..\autogenerated\moc_ModuleManagerWidget.cpp)
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QT_MOC);..\..\include\qtgui\ModuleManagerWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">$(QT_MOC);..\..\include\qtgui\ModuleManagerWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QT_MOC);..\..\include\qtgui\ModuleManagerWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">$(QT_MOC);..\..\include\qtgui\ModuleManagerWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\autogenerated\moc_ModuleManagerWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">..\autogenerated\moc_ModuleManagerWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\autogenerated\moc_ModuleManagerWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">..\autogenerated\moc_ModuleManagerWidget.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\include\qtgui\QtEngineController.h">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating moc_QtEngineController.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating moc_QtEngineController.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\QtEngineController.h  -o ..\autogenerated\moc_QtEngineController.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_QtEngineController.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\QtEngineController.h  -o ..\autogenerated\moc_QtEngineController.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_QtEngineController.cpp)
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QT_MOC);..\..\include\qtgui\QtEngineController.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QT_MOC);..\..\include\qtgui\QtEngineController.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\autogenerated\moc_QtEngineController.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\autogenerated\moc_QtEngineController.cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating moc_QtEngineController.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">Generating moc_QtEngineController.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating moc_QtEngineController.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">Generating moc_QtEngineController.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\QtEngineController.h  -o ..\autogenerated\moc_QtEngineController.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_QtEngineController.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\QtEngineController.h  -o ..\autogenerated\moc_QtEngineController.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_QtEngineController.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\QtEngineController.h  -o ..\autogenerated\moc_QtEngineController.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_QtEngineController.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\QtEngineController.h  -o ..\autogenerated\moc_QtEngineController.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_QtEngineController.cpp)
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QT_MOC);..\..\include\qtgui\QtEngineController.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">$(QT_MOC);..\..\include\qtgui\QtEngineController.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QT_MOC);..\..\include\qtgui\QtEngineController.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">$(QT_MOC);..\..\include\qtgui\QtEngineController.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\autogenerated\moc_QtEngineController.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">..\autogenerated\moc_QtEngineController.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\autogenerated\moc_QtEngineController.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">..\autogenerated\moc_QtEngineController.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\include\qtgui\RecFilePlayerWidget.h">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating moc_RecFilePlayer.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating moc_RecFilePlayer.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\RecFilePlayerWidget.h  -o ..\autogenerated\moc_RecFilePlayerWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_RecFilePlayerWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\RecFilePlayerWidget.h  -o ..\autogenerated\moc_RecFilePlayerWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_RecFilePlayerWidget.cpp)
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QT_MOC);..\..\include\qtgui\RecFilePlayerWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QT_MOC);..\..\include\qtgui\RecFilePlayerWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\autogenerated\moc_RecFilePlayerWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\autogenerated\moc_RecFilePlayerWidget.cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating moc_RecFilePlayer.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">Generating moc_RecFilePlayer.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating moc_RecFilePlayer.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">Generating moc_RecFilePlayer.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\RecFilePlayerWidget.h  -o ..\autogenerated\moc_RecFilePlayerWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_RecFilePlayerWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\RecFilePlayerWidget.h  -o ..\autogenerated\moc_RecFilePlayerWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_RecFilePlayerWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\RecFilePlayerWidget.h  -o ..\autogenerated\moc_RecFilePlayerWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_RecFilePlayerWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\RecFilePlayerWidget.h  -o ..\autogenerated\moc_RecFilePlayerWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_RecFilePlayerWidget.cpp)
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QT_MOC);..\..\include\qtgui\RecFilePlayerWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">$(QT_MOC);..\..\include\qtgui\RecFilePlayerWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QT_MOC);..\..\include\qtgui\RecFilePlayerWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">$(QT_MOC);..\..\include\qtgui\RecFilePlayerWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\autogenerated\moc_RecFilePlayerWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">..\autogenerated\moc_RecFilePlayerWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\autogenerated\moc_RecFilePlayerWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">..\autogenerated\moc_RecFilePlayerWidget.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\include\qtgui\TestCasePlayerWidget.h">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating moc_TestCasePlayer.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating moc_TestCasePlayer.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\TestCasePlayerWidget.h  -o ..\autogenerated\moc_TestCasePlayerWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_TestCasePlayerWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\TestCasePlayerWidget.h  -o ..\autogenerated\moc_TestCasePlayerWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_TestCasePlayerWidget.cpp)
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QT_MOC);..\..\include\qtgui\TestCasePlayerWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QT_MOC);..\..\include\qtgui\TestCasePlayerWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\autogenerated\moc_TestCasePlayerWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\autogenerated\moc_TestCasePlayerWidget.cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating moc_TestCasePlayer.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">Generating moc_TestCasePlayer.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating moc_TestCasePlayer.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">Generating moc_TestCasePlayer.cpp (Creates empty file if Qt is not enabled)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\TestCasePlayerWidget.h  -o ..\autogenerated\moc_TestCasePlayerWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_TestCasePlayerWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\TestCasePlayerWidget.h  -o ..\autogenerated\moc_TestCasePlayerWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_TestCasePlayerWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\TestCasePlayerWidget.h  -o ..\autogenerated\moc_TestCasePlayerWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_TestCasePlayerWidget.cpp)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">if "$(QT_DEFINE)"=="ENABLE_QT" ($(QT_MOC) -I..\..\include -I..\..\..\steerlib\include -I..\..\..\external -I$(QT_INCLUDE_DIR) -D$(GUI_DEFINE) -D$(GLFW_DEFINE) -D$(QT_DEFINE) ..\..\include\qtgui\TestCasePlayerWidget.h  -o ..\autogenerated\moc_TestCasePlayerWidget.cpp) ELSE (type NUL &gt; ..\autogenerated\moc_TestCasePlayerWidget.cpp)
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QT_MOC);..\..\include\qtgui\TestCasePlayerWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">$(QT_MOC);..\..\include\qtgui\TestCasePlayerWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QT_MOC);..\..\include\qtgui\TestCasePlayerWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">$(QT_MOC);..\..\include\qtgui\TestCasePlayerWidget.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\autogenerated\moc_TestCasePlayerWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|Win32'">..\autogenerated\moc_TestCasePlayerWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\autogenerated\moc_TestCasePlayerWidget.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseAVX|x64'">..\autogenerated\moc_TestCasePlayerWidget.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="..\..\include\core\SimAntTweakBar.h" />
+    <ClInclude Include="..\..\include\qtgui\Tooltip.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

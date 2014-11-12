@@ -1,0 +1,431 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\benchmarking">
+      <UniqueIdentifier>{7f85c5e4-e92b-4c08-ac93-50745deaa77c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\griddatabase">
+      <UniqueIdentifier>{26a01c6c-c03a-4c5b-aeff-cb3c3dd5ce70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\util">
+      <UniqueIdentifier>{78fc3415-78e5-4fba-8680-e3a479e6ec70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\recfileio">
+      <UniqueIdentifier>{a5eb1960-fafd-4ca8-8d2c-67ff6a77c9ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\testcaseio">
+      <UniqueIdentifier>{9ee0f1a4-4205-4ae5-a7dd-cbec6472d93b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\simulation">
+      <UniqueIdentifier>{7adae46d-4534-4db4-81ba-3d986795c893}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\planning">
+      <UniqueIdentifier>{dcaac872-ce75-4a30-913f-ec290c30969f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\obstacles">
+      <UniqueIdentifier>{db25e9db-e2e7-4ce2-91b5-c246912446fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\modules">
+      <UniqueIdentifier>{1472065f-9624-4c0a-82f3-c10e679455c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\testcaseio">
+      <UniqueIdentifier>{c7902129-cad7-464a-b8b2-f24720e6067e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\benchmarking">
+      <UniqueIdentifier>{fbc002f5-a515-4b8d-93c7-9e72df18e779}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\recfileio">
+      <UniqueIdentifier>{33432c23-094b-4682-9389-5c25ef9f4847}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\griddatabase">
+      <UniqueIdentifier>{02b2101a-ad12-41af-a1f1-5f92095ab726}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\interfaces">
+      <UniqueIdentifier>{e9871dcf-270a-4eba-b0ba-85f2de533b54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\util">
+      <UniqueIdentifier>{0e2fc377-9531-4081-adb6-509beaa74617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\simulation">
+      <UniqueIdentifier>{f4a0b591-8188-4693-9782-fae2f9553222}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\planning">
+      <UniqueIdentifier>{8b20106a-8bb6-4619-93d0-c7a62be75f69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\obstacles">
+      <UniqueIdentifier>{943c9e9e-4f1b-443e-bfec-3ac5d8f0c8e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\modules">
+      <UniqueIdentifier>{da30bdc0-303d-4688-a49a-a2d911d7d1d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external">
+      <UniqueIdentifier>{48340099-cd8b-4ba5-9de6-4d470f9807ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external\mersenne">
+      <UniqueIdentifier>{a07f984d-b541-4c83-98f9-72d183346926}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external\tinyxml">
+      <UniqueIdentifier>{724f7d78-b355-4cad-b1ae-67b5a3eb2c77}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\AgentMetricsCollector.cpp">
+      <Filter>Source Files\benchmarking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\BenchmarkEngine.cpp">
+      <Filter>Source Files\benchmarking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\CompositeTechnique01.cpp">
+      <Filter>Source Files\benchmarking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\CompositeTechnique02.cpp">
+      <Filter>Source Files\benchmarking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\SimulationMetricsCollector.cpp">
+      <Filter>Source Files\benchmarking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\GridDatabase2D.cpp">
+      <Filter>Source Files\griddatabase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\CommandLineParser.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\DrawLib.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\DynamicLibrary.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\HighResCounter.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\MemoryMapper.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Misc.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\PerformanceProfiler.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\StateMachine.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ThreadedTaskManager.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\XMLParser.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RecFileReader.cpp">
+      <Filter>Source Files\recfileio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RecFileWriter.cpp">
+      <Filter>Source Files\recfileio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TestCaseReader.cpp">
+      <Filter>Source Files\testcaseio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TestCaseReaderPrivate.cpp">
+      <Filter>Source Files\testcaseio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TestCaseWriter.cpp">
+      <Filter>Source Files\testcaseio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Camera.cpp">
+      <Filter>Source Files\simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Clock.cpp">
+      <Filter>Source Files\simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\SimulationEngine.cpp">
+      <Filter>Source Files\simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\SimulationOptions.cpp">
+      <Filter>Source Files\simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\SteeringCommand.cpp">
+      <Filter>Source Files\simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\BoxObstacle.cpp">
+      <Filter>Source Files\obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\CircleObstacle.cpp">
+      <Filter>Source Files\obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\OrientedBoxObstacle.cpp">
+      <Filter>Source Files\obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RecFilePlayerModule.cpp">
+      <Filter>Source Files\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\SimulationRecorderModule.cpp">
+      <Filter>Source Files\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TestCasePlayerModule.cpp">
+      <Filter>Source Files\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\tinyxml\ticpp.cpp">
+      <Filter>external\tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\tinyxml\tinystr.cpp">
+      <Filter>external\tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\tinyxml\tinyxml.cpp">
+      <Filter>external\tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\tinyxml\tinyxmlerror.cpp">
+      <Filter>external\tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\tinyxml\tinyxmlparser.cpp">
+      <Filter>external\tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\FrameSaver.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\CompositeTechniquePLE.cpp">
+      <Filter>Source Files\benchmarking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Behaviour.cpp">
+      <Filter>Source Files\testcaseio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\BehaviorParameter.cpp">
+      <Filter>Source Files\testcaseio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\OrientedWallObstacle.cpp">
+      <Filter>Source Files\obstacles</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\Globals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SimulationPlugin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SteerLib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\testcaseio\AgentInitialConditions.h">
+      <Filter>Header Files\testcaseio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\testcaseio\ObstacleInitialConditions.h">
+      <Filter>Header Files\testcaseio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\testcaseio\TestCaseIO.h">
+      <Filter>Header Files\testcaseio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\testcaseio\TestCaseIOPrivate.h">
+      <Filter>Header Files\testcaseio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\benchmarking\AccelerationEfficiencyTechnique.h">
+      <Filter>Header Files\benchmarking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\benchmarking\AgentMetricsCollector.h">
+      <Filter>Header Files\benchmarking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\benchmarking\BenchmarkEngine.h">
+      <Filter>Header Files\benchmarking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\benchmarking\BenchmarkEnginePrivate.h">
+      <Filter>Header Files\benchmarking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\benchmarking\CompositeTechnique01.h">
+      <Filter>Header Files\benchmarking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\benchmarking\CompositeTechnique02.h">
+      <Filter>Header Files\benchmarking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\benchmarking\EnergyEfficiencyTechnique.h">
+      <Filter>Header Files\benchmarking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\benchmarking\MetricsData.h">
+      <Filter>Header Files\benchmarking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\benchmarking\SimulationMetricsCollector.h">
+      <Filter>Header Files\benchmarking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\recfileio\RecFileIO.h">
+      <Filter>Header Files\recfileio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\recfileio\RecFileIOPrivate.h">
+      <Filter>Header Files\recfileio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\griddatabase\GridCell.h">
+      <Filter>Header Files\griddatabase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\griddatabase\GridDatabase2D.h">
+      <Filter>Header Files\griddatabase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\griddatabase\GridDatabase2DPrivate.h">
+      <Filter>Header Files\griddatabase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\griddatabase\GridDatabasePlanningDomain.h">
+      <Filter>Header Files\griddatabase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\interfaces\AgentInterface.h">
+      <Filter>Header Files\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\interfaces\BenchmarkTechniqueInterface.h">
+      <Filter>Header Files\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\interfaces\EngineControllerInterface.h">
+      <Filter>Header Files\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\interfaces\EngineInterface.h">
+      <Filter>Header Files\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\interfaces\ModuleInterface.h">
+      <Filter>Header Files\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\interfaces\ObstacleInterface.h">
+      <Filter>Header Files\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\interfaces\SpatialDatabaseItem.h">
+      <Filter>Header Files\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\util\Color.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\util\CommandLineParser.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\util\DrawLib.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\util\DynamicLibrary.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\util\GenericException.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\util\Geometry.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\util\HighResCounter.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\util\MemoryMapper.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\util\Misc.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\util\Mutex.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\util\PerformanceProfiler.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\util\StateMachine.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\util\ThreadedTaskManager.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\util\XMLParser.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\util\XMLParserPrivate.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\simulation\Camera.h">
+      <Filter>Header Files\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\simulation\Clock.h">
+      <Filter>Header Files\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\simulation\SimulationEngine.h">
+      <Filter>Header Files\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\simulation\SimulationOptions.h">
+      <Filter>Header Files\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\simulation\SteeringCommand.h">
+      <Filter>Header Files\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\planning\BestFirstSearchPlanner.h">
+      <Filter>Header Files\planning</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\obstacles\BoxObstacle.h">
+      <Filter>Header Files\obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\obstacles\CircleObstacle.h">
+      <Filter>Header Files\obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\obstacles\OrientedBoxObstacle.h">
+      <Filter>Header Files\obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\modules\DummyAIModule.h">
+      <Filter>Header Files\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\modules\MetricsCollectorModule.h">
+      <Filter>Header Files\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\modules\RecFilePlayerModule.h">
+      <Filter>Header Files\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\modules\SimulationRecorderModule.h">
+      <Filter>Header Files\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\modules\SteerBenchModule.h">
+      <Filter>Header Files\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\modules\SteerBugModule.h">
+      <Filter>Header Files\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\modules\TestCasePlayerModule.h">
+      <Filter>Header Files\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\mersenne\MersenneTwister.h">
+      <Filter>external\mersenne</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\tinyxml\ticpp.h">
+      <Filter>external\tinyxml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\tinyxml\ticpprc.h">
+      <Filter>external\tinyxml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\tinyxml\tinystr.h">
+      <Filter>external\tinyxml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\tinyxml\tinyxml.h">
+      <Filter>external\tinyxml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\util\FrameSaver.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\benchmarking\CompositeTechniquePLE.h">
+      <Filter>Header Files\benchmarking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\util\dmatrix.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\benchmarking\BayesianFilter.h">
+      <Filter>Header Files\benchmarking</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\testcaseio\Behaviour.h">
+      <Filter>Header Files\testcaseio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\testcaseio\BehaviourParameter.h">
+      <Filter>Header Files\testcaseio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\obstacles\OrientedWallObstacle.h">
+      <Filter>Header Files\obstacles</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#
+# Copyright (c) Glen Berseth, Shawn Singh, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+# See license.txt for complete license.
+#
+
+
+./clean.sh all
+
