@@ -506,16 +506,6 @@ if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "pprAI" ]]; then
 	popd > /dev/null
 fi
 
-if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "reactiveAI" ]]; then
-	echo "==================================="
-	echo "Building Reactive AI module"
-	echo "==================================="
-	pushd ../reactiveAI/build > /dev/null
-	$MAKE $MAKE_ARGS
-	REACTIVEAI_BUILD_RETURN_CODE=$?
-	popd > /dev/null
-fi
-
 if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "rvo2AI" ]]; then
 	echo "==================================="
 	echo "Building RVO2 AI module"
@@ -606,13 +596,6 @@ if [ $SIMPLEAI_BUILD_RETURN_CODE == 0 ]; then
     echo "copying simpleAI.o to $MODULES_DIR"
     cp ../simpleAI/build/simpleAI.o $MODULES_DIR
     SIMPLEAI_INSTALL_RETURN_CODE=$?
-fi
-
-
-if [ $REACTIVEAI_BUILD_RETURN_CODE == 0 ]; then
-    echo "copying reactiveAI.o to $MODULES_DIR"
-    cp ../reactiveAI/build/reactiveAI.o $MODULES_DIR
-    REACTIVEAI_INSTALL_RETURN_CODE=$?
 fi
 
 if [ $PPRAI_BUILD_RETURN_CODE == 0 ]; then
@@ -726,16 +709,6 @@ else
 	echo "* PPR AI built successfully, but could not be installed to $MODULES_DIR."
     else
 	echo "  PPR AI built and installed successfully."
-    fi
-fi
-
-if [ $REACTIVEAI_BUILD_RETURN_CODE != 0 ]; then
-    echo "* REACTIVE AI did not build properly."
-else
-    if [ $REACTIVEAI_INSTALL_RETURN_CODE != 0 ]; then
-	echo "* REACTIVE AI built successfully, but could not be installed to $MODULES_DIR."
-    else
-	echo "  REACTIVE AI built and installed successfully."
     fi
 fi
 
