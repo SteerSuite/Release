@@ -1,0 +1,263 @@
+<!-- 
+  Copyright (c) 2009 Shawn Singh, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+  See license.txt for complete license.
+
+  This file defines the XML schema for SteerSuite test cases.  The main tags of the syntax are:
+    - The root tag is <SteerBenchTestCase>.
+    - <suggestedCameraView> - defines a camera view that represents a good look at the scenaro.
+    - <agent> - defines the initial conditions of a single agent.
+    - <agentRegion> - defines initial conditions of many agents at once, where agents are randomly located in a region.
+    - <obstacle> - defines the initial conditions of an obstacle.
+    - <obstacleRegion> - defines the initial conditions of many obstacles that are randomly located in a region.
+-->
+
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+            targetNamespace="http://www.magix.ucla.edu/steerbench" 
+            xmlns:sb="http://www.magix.ucla.edu/steerbench"
+            elementFormDefault="qualified">
+
+  <!-- 
+  Definitions of some "primitive" types:
+   - Version is a fixed value.  Make sure your test cases have the same version number as this schema, or find the schema with the correct version number.
+   - XYZTuple is used to describe points and vectors.
+   - XYZTupleOrRandom is same as XYZTuple, with the additional possibility of it being specified as "random" instead of specific xyz values.
+   - BoundingBox is for describing spatial min/max bounds in all 3 dimensions.
+  -->
+  <xsd:simpleType name="VersionType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="1.0"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="RandomFlagType">
+    <xsd:restriction base="xsd:boolean">
+      <xsd:pattern value="true"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:group name="XYZTupleElements">
+    <xsd:sequence>
+      <xsd:element name="x" type="xsd:float"/>
+      <xsd:element name="y" type="xsd:float"/>
+      <xsd:element name="z" type="xsd:float"/>
+    </xsd:sequence>
+  </xsd:group>
+
+  <xsd:complexType name="XYZTupleType">
+    <xsd:sequence>
+      <xsd:group ref="sb:XYZTupleElements"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="XYZTupleOrRandomType">
+    <xsd:choice>
+      <xsd:element name="random" type="sb:RandomFlagType"/>
+      <xsd:group ref="sb:XYZTupleElements"/>
+    </xsd:choice>
+  </xsd:complexType>
+
+  <xsd:complexType name="BoundingBoxType">
+    <xsd:sequence>
+      <xsd:element name="xmin" type="xsd:float"/>
+      <xsd:element name="xmax" type="xsd:float"/>
+      <xsd:element name="ymin" type="xsd:float"/>
+      <xsd:element name="ymax" type="xsd:float"/>
+      <xsd:element name="zmin" type="xsd:float"/>
+      <xsd:element name="zmax" type="xsd:float"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <!--
+  Definitions of the various Goal types.
+  - GoalTypes describe a task that an agent should try to complete
+  - GoalChoices is the group of all GoalTypes
+  - GoalSequence is simply a ordered sequence of GoalChoices.
+  In this way, any number of any goals can be specified.
+  -->
+  <xsd:complexType name="GoalTypeSeekStaticTarget">
+    <xsd:all>
+      <xsd:element name="targetLocation" type="sb:XYZTupleOrRandomType"/>
+      <xsd:element name="desiredSpeed" type="xsd:float"/>
+      <xsd:element name="timeDuration" type="xsd:float"/>
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="GoalTypeFleeStaticTarget">
+    <xsd:all>
+      <xsd:element name="targetLocation" type="sb:XYZTupleOrRandomType"/>
+      <xsd:element name="desiredSpeed" type="xsd:float"/>
+      <xsd:element name="timeDuration" type="xsd:float"/>
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="GoalTypeSeekDynamicTarget">
+    <xsd:all>
+      <xsd:element name="targetName" type="xsd:string"/>
+      <xsd:element name="random" type="xsd:boolean"/>
+      <xsd:element name="desiredSpeed" type="xsd:float"/>
+      <xsd:element name="timeDuration" type="xsd:float"/>
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="GoalTypeFleeDynamicTarget">
+    <xsd:all>
+      <xsd:element name="targetName" type="xsd:string"/>
+      <xsd:element name="random" type="xsd:boolean"/>
+      <xsd:element name="desiredSpeed" type="xsd:float"/>
+      <xsd:element name="timeDuration" type="xsd:float"/>
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="GoalTypeFlowStaticDirection">
+    <xsd:all>
+      <xsd:element name="targetDirection" type="sb:XYZTupleOrRandomType"/>
+      <xsd:element name="desiredSpeed" type="xsd:float"/>
+      <xsd:element name="timeDuration" type="xsd:float"/>
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="GoalTypeFlowDynamicDirection">
+    <xsd:all>
+      <xsd:element name="type">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="FOLLOW_CROWD"/>
+            <xsd:enumeration value="BOIDS"/>
+            <xsd:enumeration value="ADVECT"/>
+            <xsd:enumeration value="OTHER"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="desiredSpeed" type="xsd:float"/>
+      <xsd:element name="timeDuration" type="xsd:float"/>
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="GoalTypeIdle">
+    <xsd:all>
+      <xsd:element name="desiredSpeed" type="xsd:float"/>
+      <xsd:element name="timeDuration" type="xsd:float"/>
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:group name="GoalChoices">
+    <xsd:choice>
+      <xsd:element name="seekStaticTarget" type="sb:GoalTypeSeekStaticTarget"/>
+      <xsd:element name="fleeStaticTarget" type="sb:GoalTypeFleeStaticTarget"/>
+      <xsd:element name="seekDynamicTarget" type="sb:GoalTypeSeekDynamicTarget"/>
+      <xsd:element name="fleeDynamicTarget" type="sb:GoalTypeFleeDynamicTarget"/>
+      <xsd:element name="flowStaticDirection" type="sb:GoalTypeFlowStaticDirection"/>
+      <xsd:element name="flowDynamicDirection" type="sb:GoalTypeFlowDynamicDirection"/>
+      <xsd:element name="idle" type="sb:GoalTypeIdle"/>
+    </xsd:choice>
+  </xsd:group>
+  
+  <xsd:complexType name="GoalSequenceType">
+    <xsd:sequence>
+      <xsd:group ref="sb:GoalChoices" minOccurs="1" maxOccurs="unbounded"/>
+    </xsd:sequence>  
+  </xsd:complexType>
+
+
+
+  <!-- 
+  Definitions for intermediate data structures.
+  -->
+  <xsd:complexType name="AgentInitialConditionsType">
+    <xsd:all>
+      <xsd:element name="position" type="sb:XYZTupleOrRandomType"/>
+      <xsd:element name="direction" type="sb:XYZTupleOrRandomType"/>
+      <xsd:element name="radius" type="xsd:float"/>
+      <xsd:element name="speed" type="xsd:float"/>
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="AgentRegionInitialConditionsType">
+    <xsd:all>
+      <xsd:element name="direction" type="sb:XYZTupleOrRandomType"/>
+      <xsd:element name="radius" type="xsd:float"/>
+      <xsd:element name="speed" type="xsd:float"/>
+    </xsd:all>
+  </xsd:complexType>
+
+  
+  
+  <!-- 
+  Definitions for the top-level data structures used to define the test case.
+   - header contains global data of the test case
+   - suggestedCameraView allows the test case to suggest to the user what camera views would be useful
+   - agent specifies a single agent in the test case
+   - agentRegion specifies a region of randomly-placed agents
+   - obstacleRegion specifies a region of randomly-placed obstacles
+   - NOTE: "obstacle", for now, is a simple bounding box, but may become a xsd:complexType in the future.
+  -->
+  <xsd:complexType name="HeaderType">
+    <xsd:all>
+      <xsd:element name="version" type="sb:VersionType"/>
+      <xsd:element name="name" type="xsd:string"/>
+      <xsd:element name="description" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="worldBounds" type="sb:BoundingBoxType"/>
+      <xsd:element name="passingCriteria" type="xsd:string" minOccurs="0"/>
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="SuggestedCameraViewType">
+    <xsd:all>
+      <xsd:element name="position" type="sb:XYZTupleType"/>
+      <xsd:element name="lookat" type="sb:XYZTupleType"/>
+      <xsd:element name="up" type="sb:XYZTupleType"/>
+      <xsd:element name="fovy" type="xsd:float" minOccurs="0"/>
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="AgentType">
+    <xsd:all>
+      <xsd:element name="name" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="initialConditions" type="sb:AgentInitialConditionsType"/>
+      <xsd:element name="goalSequence" type="sb:GoalSequenceType"/>
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="AgentRegionType">
+    <xsd:all>
+      <xsd:element name="numAgents" type="xsd:unsignedInt"/>
+      <xsd:element name="regionBounds" type="sb:BoundingBoxType"/>
+      <xsd:element name="initialConditions" type="sb:AgentRegionInitialConditionsType"/>
+      <xsd:element name="goalSequence" type="sb:GoalSequenceType"/>
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="ObstacleRegionType">
+    <xsd:all>
+      <xsd:element name="numObstacles" type="xsd:unsignedInt"/>
+      <xsd:element name="regionBounds" type="sb:BoundingBoxType"/>
+      <xsd:element name="obstacleSize" type="xsd:float"/>
+      <xsd:element name="obstacleHeight" type="xsd:float"/>
+    </xsd:all>
+  </xsd:complexType>
+
+
+  <!-- 
+  Finally, describe the top level structure, and declare the root element.
+  -->
+  <xsd:group name="TopLevelChoices">
+    <xsd:choice>
+      <xsd:element name="suggestedCameraView" type="sb:SuggestedCameraViewType"/>
+      <xsd:element name="agent" type="sb:AgentType"/>
+      <xsd:element name="agentRegion" type="sb:AgentRegionType"/>
+      <xsd:element name="obstacle" type="sb:BoundingBoxType"/>
+      <xsd:element name="obstacleRegion" type="sb:ObstacleRegionType"/>
+    </xsd:choice>
+  </xsd:group>
+
+  <xsd:complexType name="SteerBenchTestCaseType">
+    <xsd:sequence>
+      <xsd:element name="header" type="sb:HeaderType"/>
+      <xsd:group ref="sb:TopLevelChoices" minOccurs="1" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:element name="SteerBenchTestCase" type="sb:SteerBenchTestCaseType"/>
+
+</xsd:schema>

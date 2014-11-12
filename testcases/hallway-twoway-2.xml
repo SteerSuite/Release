@@ -1,0 +1,99 @@
+<!--
+  Copyright (c) 2009 Shawn Singh, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+  See license.txt for complete license.
+-->
+
+<SteerBenchTestCase xmlns="http://www.magix.ucla.edu/steerbench"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://www.magix.ucla.edu/steerbench 
+                                        TestCaseSchema.xsd">
+
+  <header>
+    <version>1.0</version>
+    <name>hallway-two-way</name>
+    <worldBounds>
+      <xmin>-100</xmin>
+      <xmax>100</xmax>
+      <ymin>0</ymin>
+      <ymax>0</ymax>
+      <zmin>-100</zmin>
+      <zmax>100</zmax>
+    </worldBounds>
+  </header>
+  
+  <suggestedCameraView>
+    <position> <x>0</x> <y>100</y> <z>-30</z> </position>
+    <lookat> <x>0</x> <y>0</y> <z>0</z> </lookat>
+    <up> <x>0</x> <y>1</y> <z>0</z> </up>
+    <fovy>45</fovy>
+  </suggestedCameraView>
+
+  <obstacle>
+    <xmin>-100</xmin>
+    <xmax>100</xmax>
+    <ymin>0</ymin>
+    <ymax>1</ymax>
+    <zmin>8.01</zmin>
+    <zmax>100</zmax>
+  </obstacle>
+
+  <obstacle>
+    <xmin>-100</xmin>
+    <xmax>100</xmax>
+    <ymin>0</ymin>
+    <ymax>1</ymax>
+    <zmin>-100</zmin>
+    <zmax>-8</zmax>
+  </obstacle>
+
+  <agentRegion>
+    <numAgents>400</numAgents>
+    <regionBounds>
+      <xmin>-97</xmin>
+      <xmax>70</xmax>
+      <ymin>0</ymin>
+      <ymax>0</ymax>
+      <zmin>-7</zmin>
+      <zmax>7</zmax>
+    </regionBounds>
+    <initialConditions>
+      <direction> <x>1</x> <y>0</y> <z>0</z> </direction>
+      <radius>0.5</radius>
+      <speed>0</speed>
+    </initialConditions>
+    <goalSequence>
+      <seekStaticTarget>
+        <targetLocation> <x>98</x> <y>0</y> <z>5</z> </targetLocation>
+        <desiredSpeed>1.3</desiredSpeed>
+        <timeDuration>1000.0</timeDuration>
+      </seekStaticTarget>
+    </goalSequence>
+
+  </agentRegion>
+
+  <agentRegion>
+    <numAgents>400</numAgents>
+    <regionBounds>
+      <xmin>-97</xmin>
+      <xmax>70</xmax>
+      <ymin>0</ymin>
+      <ymax>0</ymax>
+      <zmin>-7</zmin>
+      <zmax>7</zmax>
+    </regionBounds>
+    <initialConditions>
+      <direction> <x>-1</x> <y>0</y> <z>0</z> </direction>
+      <radius>0.5</radius>
+      <speed>0</speed>
+    </initialConditions>
+    <goalSequence>
+      <seekStaticTarget>
+        <targetLocation> <x>-98</x> <y>0</y> <z>-4</z> </targetLocation>
+        <desiredSpeed>1.3</desiredSpeed>
+        <timeDuration>1000.0</timeDuration>
+      </seekStaticTarget>
+    </goalSequence>
+
+  </agentRegion>
+
+</SteerBenchTestCase>

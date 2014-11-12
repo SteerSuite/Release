@@ -1,0 +1,200 @@
+<!--
+  Copyright (c) 2009 Shawn Singh, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+  See license.txt for complete license.
+ 
+  This example test case is commented to describe (mostly) how to customize your own test 
+  cases. Users are encouraged to create and share their own test cases.
+  
+  Test cases are XML using the "http://www.magix.ucla.edu/steerbench" namespace.  The schema
+  for this namespace is provided in SteerSuite, in the file testcases/TestCaseSchema.xsd.  Be
+  sure to validate your test case XML file against the schema to ensure there are no errors in
+  the specification.
+
+  To read test cases, use any standard XML parsing library (xerces, expat, tinyxml, etc.), or
+  even easier, use the TestCaseReader C++ class provided in SteerLib.  The TestCaseReader class 
+  hides all the XML parsing and test case initialization for you, and allows you to immediately 
+  query the initial conditions for all agents, objects, and suggested camera views individually.
+-->
+
+<SteerBenchTestCase xmlns="http://www.magix.ucla.edu/steerbench"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://www.magix.ucla.edu/steerbench 
+                                        TestCaseSchema.xsd">
+  <!-- 
+    The header tag must appear first.  Tags <description> and <passingCriteria> are optional. 
+    For now, the passing criteria for each test case are documented as a human-readable strings.
+    Eventually, <passingCriteria> will be turned into more detailed XML options for automation.
+  -->
+  <header>
+    <version>1.0</version>
+    <name>3-squeeze</name>
+    <worldBounds>
+      <xmin>-100</xmin>
+      <xmax>100</xmax>
+      <ymin>0</ymin>
+      <ymax>0</ymax>
+      <zmin>-100</zmin>
+      <zmax>100</zmax>
+    </worldBounds>
+    <description>
+      Users can add an optional description of your test case here.  It is often helpful
+      to describe (in words) the goals that each agent has, and what types of 
+      behaviors are being tested.
+    </description>
+    <passingCriteria> 
+      Some example criteria:
+      All agents must reach the goals within 10 seconds.
+      All agents must have zero collisions that last longer than 0.1 seconds, using a threshold radius of 0.4.
+      Agent A should not turn more than a total of 90 degrees.
+    </passingCriteria>
+  </header>
+
+  <!-- 
+    The user can specify zero or more "suggested camera views".  The vertical
+    field-of-view tag, <fovy>, is optional.  The purpose of suggested camera views
+    is to provide reasonable camera configurations that give a good view of the 
+    action that will take place in the test case.  This data is purely information,
+    and is not considered part of the "test case initial conditions".
+  -->
+  <suggestedCameraView>
+    <position> <x>-10</x> <y>35</y> <z>-5</z> </position>
+    <lookat> <x>0</x> <y>0</y> <z>0</z> </lookat>
+    <up> <x>0</x> <y>1</y> <z>0</z> </up>
+    <fovy>45</fovy>
+  </suggestedCameraView>
+
+
+  <!-- 
+    The test case is specified by any number of <obstacle>, <obstacleRegion>, <agent>,
+    and <agentRegion> tags.  Agents have several properties, and a sequence of goals.
+    Each goal tag has slightly different information; see the TestCaseSchema.xsd schema
+    to see all possible options for specifying goals.
+  -->
+
+  <!--
+    Single obstacles are (for now) just axis-aligned static rectangular objects.
+  -->  
+  <obstacle>
+    <xmin>-20</xmin>
+    <xmax>20</xmax>
+    <ymin>0</ymin>
+    <ymax>1</ymax>
+    <zmin>1.25</zmin>
+    <zmax>3</zmax>
+  </obstacle>
+
+  <!-- 
+    Obstacle regions can be used to specify a fixed number of randomly-placed obstacles.
+    Currently, only square obstacles of the same size are supported;  It is possible
+    that more options will be provided in the future.
+  -->
+  <obstacleRegion>
+    <numObstacles>10</numObstacles>
+    <obstacleSize>5.0</obstacleSize>
+    <obstacleHeight>0.2</obstacleHeight>
+    <regionBounds>
+      <xmin>-40</xmin>
+      <xmax>40</xmax>
+      <ymin>0</ymin>
+      <ymax>1</ymax>
+      <zmin>-70</zmin>
+      <zmax>70</zmax>
+    </regionBounds>
+  </obstacleRegion>
+  
+  <!-- 
+    For agents, <name> is optional.
+
+    The goalSequence tag accepts many different types of goals.  Only two
+    typical goals are shown here.  The agent is expected to accomplish all 
+    goals in the order they are listed, and to move on once they accomplish
+    their goal or have been trying for <timeDuration>, whichever comes first.
+    For a complete list of the types of goals and their options, see the 
+    TestCaseSchema.xsd file that describes the syntax of the test case XML 
+    document.
+    
+    <name> can be used to identify an agent when telling another agent to seek
+    a dynamic target.
+    
+    Note that there are no units enforced in the test case; however we recommend
+    using meters for distance units and seconds for time units.  In these units,
+    1.3 m/s is actually a common typical walking speed for pedestrians, and 0.5 is
+    a radius of an agent (slightly larger radius than the real physical bounds of
+    an average human.)
+  -->
+  <agent>
+    <name>Agent A</name>
+    <initialConditions>
+      <radius>0.5</radius>
+      <position> <x>-10</x> <y>0</y> <z>-0.5</z> </position>
+      <direction> <x>1</x> <y>0</y> <z>0</z> </direction>
+      <speed>0</speed>
+    </initialConditions>
+    <goalSequence>
+      <seekStaticTarget>
+        <targetLocation> <x>10</x> <y>0</y> <z>-0.5</z> </targetLocation>
+        <desiredSpeed>1.3</desiredSpeed>
+        <timeDuration>1000.0</timeDuration>
+      </seekStaticTarget>
+      <fleeDynamicTarget>
+        <targetName>Agent B</targetName>
+        <random>false</random>
+        <desiredSpeed>1.3</desiredSpeed>
+        <timeDuration>1000.0</timeDuration>
+      </fleeDynamicTarget>
+    </goalSequence>
+
+  </agent>
+
+  <agent>
+    <name>Agent B</name>
+    <initialConditions>
+      <radius>0.5</radius>
+      <position> <random>true</random> </position>
+      <direction> <x>1</x> <y>0</y> <z>0</z> </direction>
+      <speed>0</speed>
+    </initialConditions>
+    <goalSequence>
+      <seekDynamicTarget>
+        <targetName>Setting random to true overrides any targetName here.</targetName>
+        <random>true</random>
+        <desiredSpeed>1.3</desiredSpeed>
+        <timeDuration>1000.0</timeDuration>
+      </seekDynamicTarget>
+    </goalSequence>
+
+  </agent>
+
+
+  <!-- 
+    Many randomly-placed agents can be defined in an <agentRegion> element.
+    
+    Any XML tag that expects an <x> <y> <z> tuple can be made random by replacing
+    the <x>, <y>, <z> tags with the <random> tag.  In this example agent region, 
+    all agents start off with a random direction.
+  -->
+  <agentRegion>
+    <numAgents>30</numAgents>
+    <regionBounds>
+      <xmin>-100</xmin>
+      <xmax>100</xmax>
+      <ymin>0</ymin>
+      <ymax>0</ymax>
+      <zmin>-100</zmin>
+      <zmax>100</zmax>
+    </regionBounds>
+    <initialConditions>
+      <radius>0.5</radius>
+      <direction> <random>true</random> </direction>
+      <speed>0</speed>
+    </initialConditions>
+    <goalSequence>
+      <idle>
+        <desiredSpeed>1.3</desiredSpeed>
+        <timeDuration>1000.0</timeDuration>
+      </idle>
+    </goalSequence>
+
+  </agentRegion>
+  
+</SteerBenchTestCase>

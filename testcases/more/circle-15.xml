@@ -1,0 +1,305 @@
+<!-- 
+ Copyright (c) 2009 Shawn Singh, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+ See license.txt for complete license.
+  -->
+<SteerBenchTestCase xmlns="http://www.magix.ucla.edu/steerbench"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.magix.ucla.edu/steerbench
+				TestCaseSchema.xsd"><header>
+	<version>1.0</version>
+	<name>testcases/scenario1</name>
+	<worldBounds>
+		<xmin>-100.000000</xmin>
+		<xmax>-200.000000</xmax>
+		<ymin>0.000000</ymin>
+		<ymax>0.000000</ymax>
+		<zmin>-100.000000</zmin>
+		<zmax>-200.000000</zmax>
+	</worldBounds>
+</header>
+	<agent>
+	<name>agent0</name>
+<initialConditions>
+		<radius>0.500000</radius>
+		<position> <x>9.966903</x> <y>0.000000</y> <z>0.812926</z> </position>
+		<direction> <x>-0.972064</x> <y>0.000000</y> <z>0.234717</z> </direction>
+		<speed>0.000000</speed>
+	</initialConditions>
+	<goalSequence>
+		<seekStaticTarget>
+			<targetLocation> <x>-8.497753</x> <y>0.000000</y> <z>5.271450</z> </targetLocation>
+			<desiredSpeed>1.844458</desiredSpeed>
+			<timeDuration>3141249019340896200000000000000000.000000</timeDuration>
+			<targetDirection> <x>0.000000</x> <y>0.000000</y> <z>0.000000</z> </targetDirection>
+			<flowType></flowType>
+			<random>false</random>
+		</seekStaticTarget>
+	</goalSequence>
+</agent>
+	<agent>
+	<name>agent1</name>
+<initialConditions>
+		<radius>0.500000</radius>
+		<position> <x>9.263653</x> <y>0.000000</y> <z>3.766263</z> </position>
+		<direction> <x>-0.997700</x> <y>0.000000</y> <z>-0.067790</z> </direction>
+		<speed>0.000000</speed>
+	</initialConditions>
+	<goalSequence>
+		<seekStaticTarget>
+			<targetLocation> <x>-9.687965</x> <y>0.000000</y> <z>2.478574</z> </targetLocation>
+			<desiredSpeed>1.444965</desiredSpeed>
+			<timeDuration>3141249019340896200000000000000000.000000</timeDuration>
+			<targetDirection> <x>0.000000</x> <y>0.000000</y> <z>0.000000</z> </targetDirection>
+			<flowType></flowType>
+			<random>false</random>
+		</seekStaticTarget>
+	</goalSequence>
+</agent>
+	<agent>
+	<name>agent2</name>
+<initialConditions>
+		<radius>0.500000</radius>
+		<position> <x>5.779134</x> <y>0.000000</y> <z>8.160981</z> </position>
+		<direction> <x>-0.804290</x> <y>0.000000</y> <z>-0.594237</z> </direction>
+		<speed>0.000000</speed>
+	</initialConditions>
+	<goalSequence>
+		<seekStaticTarget>
+			<targetLocation> <x>-9.498605</x> <y>0.000000</y> <z>-3.126741</z> </targetLocation>
+			<desiredSpeed>2.440625</desiredSpeed>
+			<timeDuration>3141249019340896200000000000000000.000000</timeDuration>
+			<targetDirection> <x>0.000000</x> <y>0.000000</y> <z>0.000000</z> </targetDirection>
+			<flowType></flowType>
+			<random>false</random>
+		</seekStaticTarget>
+	</goalSequence>
+</agent>
+	<agent>
+	<name>agent3</name>
+<initialConditions>
+		<radius>0.500000</radius>
+		<position> <x>3.149609</x> <y>0.000000</y> <z>9.491046</z> </position>
+		<direction> <x>-0.596173</x> <y>0.000000</y> <z>-0.802856</z> </direction>
+		<speed>0.000000</speed>
+	</initialConditions>
+	<goalSequence>
+		<seekStaticTarget>
+			<targetLocation> <x>-8.174876</x> <y>0.000000</y> <z>-5.759461</z> </targetLocation>
+			<desiredSpeed>1.100960</desiredSpeed>
+			<timeDuration>3141249019340896200000000000000000.000000</timeDuration>
+			<targetDirection> <x>0.000000</x> <y>0.000000</y> <z>0.000000</z> </targetDirection>
+			<flowType></flowType>
+			<random>false</random>
+		</seekStaticTarget>
+	</goalSequence>
+</agent>
+	<agent>
+	<name>agent4</name>
+<initialConditions>
+		<radius>0.500000</radius>
+		<position> <x>-0.266232</x> <y>0.000000</y> <z>9.996455</z> </position>
+		<direction> <x>-0.287565</x> <y>0.000000</y> <z>-0.957761</z> </direction>
+		<speed>0.000000</speed>
+	</initialConditions>
+	<goalSequence>
+		<seekStaticTarget>
+			<targetLocation> <x>-5.728621</x> <y>0.000000</y> <z>-8.196518</z> </targetLocation>
+			<desiredSpeed>2.231874</desiredSpeed>
+			<timeDuration>3141249019340896200000000000000000.000000</timeDuration>
+			<targetDirection> <x>0.000000</x> <y>0.000000</y> <z>0.000000</z> </targetDirection>
+			<flowType></flowType>
+			<random>false</random>
+		</seekStaticTarget>
+	</goalSequence>
+</agent>
+	<agent>
+	<name>agent5</name>
+<initialConditions>
+		<radius>0.500000</radius>
+		<position> <x>-3.380800</x> <y>0.000000</y> <z>9.411174</z> </position>
+		<direction> <x>0.026563</x> <y>0.000000</y> <z>-0.999647</z> </direction>
+		<speed>0.000000</speed>
+	</initialConditions>
+	<goalSequence>
+		<seekStaticTarget>
+			<targetLocation> <x>-2.876228</x> <y>0.000000</y> <z>-9.577437</z> </targetLocation>
+			<desiredSpeed>2.135755</desiredSpeed>
+			<timeDuration>3141249019340896200000000000000000.000000</timeDuration>
+			<targetDirection> <x>0.000000</x> <y>0.000000</y> <z>0.000000</z> </targetDirection>
+			<flowType></flowType>
+			<random>false</random>
+		</seekStaticTarget>
+	</goalSequence>
+</agent>
+	<agent>
+	<name>agent6</name>
+<initialConditions>
+		<radius>0.500000</radius>
+		<position> <x>-7.983843</x> <y>0.000000</y> <z>6.021482</z> </position>
+		<direction> <x>0.569829</x> <y>0.000000</y> <z>-0.821764</z> </direction>
+		<speed>0.000000</speed>
+	</initialConditions>
+	<goalSequence>
+		<seekStaticTarget>
+			<targetLocation> <x>2.840231</x> <y>0.000000</y> <z>-9.588175</z> </targetLocation>
+			<desiredSpeed>2.148456</desiredSpeed>
+			<timeDuration>3141249019340896200000000000000000.000000</timeDuration>
+			<targetDirection> <x>0.000000</x> <y>0.000000</y> <z>0.000000</z> </targetDirection>
+			<flowType></flowType>
+			<random>false</random>
+		</seekStaticTarget>
+	</goalSequence>
+</agent>
+	<agent>
+	<name>agent7</name>
+<initialConditions>
+		<radius>0.500000</radius>
+		<position> <x>-9.833858</x> <y>0.000000</y> <z>1.815274</z> </position>
+		<direction> <x>0.877175</x> <y>0.000000</y> <z>-0.480171</z> </direction>
+		<speed>0.000000</speed>
+	</initialConditions>
+	<goalSequence>
+		<seekStaticTarget>
+			<targetLocation> <x>6.828357</x> <y>0.000000</y> <z>-7.305719</z> </targetLocation>
+			<desiredSpeed>1.022672</desiredSpeed>
+			<timeDuration>3141249019340896200000000000000000.000000</timeDuration>
+			<targetDirection> <x>0.000000</x> <y>0.000000</y> <z>0.000000</z> </targetDirection>
+			<flowType></flowType>
+			<random>false</random>
+		</seekStaticTarget>
+	</goalSequence>
+</agent>
+	<agent>
+	<name>agent8</name>
+<initialConditions>
+		<radius>0.500000</radius>
+		<position> <x>-9.742210</x> <y>0.000000</y> <z>-2.255958</z> </position>
+		<direction> <x>0.995885</x> <y>0.000000</y> <z>-0.090631</z> </direction>
+		<speed>0.000000</speed>
+	</initialConditions>
+	<goalSequence>
+		<seekStaticTarget>
+			<targetLocation> <x>9.174931</x> <y>0.000000</y> <z>-3.977519</z> </targetLocation>
+			<desiredSpeed>1.840792</desiredSpeed>
+			<timeDuration>3141249019340896200000000000000000.000000</timeDuration>
+			<targetDirection> <x>0.000000</x> <y>0.000000</y> <z>0.000000</z> </targetDirection>
+			<flowType></flowType>
+			<random>false</random>
+		</seekStaticTarget>
+	</goalSequence>
+</agent>
+	<agent>
+	<name>agent9</name>
+<initialConditions>
+		<radius>0.500000</radius>
+		<position> <x>-8.605231</x> <y>0.000000</y> <z>-5.094114</z> </position>
+		<direction> <x>0.976722</x> <y>0.000000</y> <z>0.214511</z> </direction>
+		<speed>0.000000</speed>
+	</initialConditions>
+	<goalSequence>
+		<seekStaticTarget>
+			<targetLocation> <x>9.947904</x> <y>0.000000</y> <z>-1.019417</z> </targetLocation>
+			<desiredSpeed>2.096992</desiredSpeed>
+			<timeDuration>3141249019340896200000000000000000.000000</timeDuration>
+			<targetDirection> <x>0.000000</x> <y>0.000000</y> <z>0.000000</z> </targetDirection>
+			<flowType></flowType>
+			<random>false</random>
+		</seekStaticTarget>
+	</goalSequence>
+</agent>
+	<agent>
+	<name>agent10</name>
+<initialConditions>
+		<radius>0.500000</radius>
+		<position> <x>-5.874812</x> <y>0.000000</y> <z>-8.092378</z> </position>
+		<direction> <x>0.811230</x> <y>0.000000</y> <z>0.584727</z> </direction>
+		<speed>0.000000</speed>
+	</initialConditions>
+	<goalSequence>
+		<seekStaticTarget>
+			<targetLocation> <x>9.534758</x> <y>0.000000</y> <z>3.014698</z> </targetLocation>
+			<desiredSpeed>2.359735</desiredSpeed>
+			<timeDuration>3141249019340896200000000000000000.000000</timeDuration>
+			<targetDirection> <x>0.000000</x> <y>0.000000</y> <z>0.000000</z> </targetDirection>
+			<flowType></flowType>
+			<random>false</random>
+		</seekStaticTarget>
+	</goalSequence>
+</agent>
+	<agent>
+	<name>agent11</name>
+<initialConditions>
+		<radius>0.500000</radius>
+		<position> <x>-0.568075</x> <y>0.000000</y> <z>-9.983851</z> </position>
+		<direction> <x>0.366410</x> <y>0.000000</y> <z>0.930453</z> </direction>
+		<speed>0.000000</speed>
+	</initialConditions>
+	<goalSequence>
+		<seekStaticTarget>
+			<targetLocation> <x>6.392003</x> <y>0.000000</y> <z>7.690403</z> </targetLocation>
+			<desiredSpeed>2.074734</desiredSpeed>
+			<timeDuration>3141249019340896200000000000000000.000000</timeDuration>
+			<targetDirection> <x>0.000000</x> <y>0.000000</y> <z>0.000000</z> </targetDirection>
+			<flowType></flowType>
+			<random>false</random>
+		</seekStaticTarget>
+	</goalSequence>
+</agent>
+	<agent>
+	<name>agent12</name>
+<initialConditions>
+		<radius>0.500000</radius>
+		<position> <x>3.530004</x> <y>0.000000</y> <z>-9.356232</z> </position>
+		<direction> <x>-0.042453</x> <y>0.000000</y> <z>0.999098</z> </direction>
+		<speed>0.000000</speed>
+	</initialConditions>
+	<goalSequence>
+		<seekStaticTarget>
+			<targetLocation> <x>2.723589</x> <y>0.000000</y> <z>9.621958</z> </targetLocation>
+			<desiredSpeed>1.179866</desiredSpeed>
+			<timeDuration>3141249019340896200000000000000000.000000</timeDuration>
+			<targetDirection> <x>0.000000</x> <y>0.000000</y> <z>0.000000</z> </targetDirection>
+			<flowType></flowType>
+			<random>false</random>
+		</seekStaticTarget>
+	</goalSequence>
+</agent>
+	<agent>
+	<name>agent13</name>
+<initialConditions>
+		<radius>0.500000</radius>
+		<position> <x>6.829866</x> <y>0.000000</y> <z>-7.304309</z> </position>
+		<direction> <x>-0.420080</x> <y>0.000000</y> <z>0.907487</z> </direction>
+		<speed>0.000000</speed>
+	</initialConditions>
+	<goalSequence>
+		<seekStaticTarget>
+			<targetLocation> <x>-1.149691</x> <y>0.000000</y> <z>9.933691</z> </targetLocation>
+			<desiredSpeed>1.468792</desiredSpeed>
+			<timeDuration>3141249019340896200000000000000000.000000</timeDuration>
+			<targetDirection> <x>0.000000</x> <y>0.000000</y> <z>0.000000</z> </targetDirection>
+			<flowType></flowType>
+			<random>false</random>
+		</seekStaticTarget>
+	</goalSequence>
+</agent>
+	<agent>
+	<name>agent14</name>
+<initialConditions>
+		<radius>0.500000</radius>
+		<position> <x>9.283381</x> <y>0.000000</y> <z>-3.717370</z> </position>
+		<direction> <x>-0.765364</x> <y>0.000000</y> <z>0.643597</z> </direction>
+		<speed>0.000000</speed>
+	</initialConditions>
+	<goalSequence>
+		<seekStaticTarget>
+			<targetLocation> <x>-5.254953</x> <y>0.000000</y> <z>8.507965</z> </targetLocation>
+			<desiredSpeed>2.129858</desiredSpeed>
+			<timeDuration>3141249019340896200000000000000000.000000</timeDuration>
+			<targetDirection> <x>0.000000</x> <y>0.000000</y> <z>0.000000</z> </targetDirection>
+			<flowType></flowType>
+			<random>false</random>
+		</seekStaticTarget>
+	</goalSequence>
+</agent>
+</SteerBenchTestCase>
