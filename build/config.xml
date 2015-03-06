@@ -1,0 +1,174 @@
+<SteerSimOptions>
+<!--
+This file contains options for SteerSim.  Edit this file to your preference, and
+then use the '-config' command line option to load these options in SteerSim.
+Options specified by the command line will override options in this configuration file.
+-->
+    <engine>
+    <!--
+    Options related to the simulation engine
+    -->
+        <!-- can be either "fixed-fast" (fixed simulation frame rate, running as fast as possible), "fixed-real-time" (fixed simulation frame rate, running in real-time), or "variable-real-time" (variable simulation frame rate in real-time). -->
+        <clockMode>fixed-fast</clockMode>
+        <!-- The fixed frames-per-second for the simulation clock.  This value is used when simulationClockMode is "fixed-fast" or "fixed-real-time". -->
+        <fixedFPS>20</fixedFPS>
+        <!-- The maximum time-step allowed when the clock is in "variable-real-time" mode.  If the proposed time-step is larger, this value will be used instead, at the expense of breaking synchronization between simulation time and real-time. -->
+        <maxVariableDt>0.2</maxVariableDt>
+        <!-- The minimum time-step allowed when the clock is in "variable-real-time" mode.  If the proposed time-step is smaller, this value will be used instead, effectively limiting the max frame rate. -->
+        <minVariableDt>0.001</minVariableDt>
+        <!-- The default directory to search for dynamic plug-in modules at runtime. -->
+        <moduleSearchPath>../../modules/</moduleSearchPath>
+        <!-- The default number of frames to simulate - 0 means run the entire simulation until all agents are disabled. -->
+        <numFrames>0</numFrames>
+        <!-- The default number of threads to run on the simulation -->
+        <numThreads>1</numThreads>
+        <!-- The default directory to search for test cases at runtime. -->
+        <testCaseSearchPath>../../../testcases/</testCaseSearchPath>
+	
+	
+	
+        <startupModules>
+        <!--
+        The list of modules to use on startup.  Modules specified by the command line will be merged with this list.
+        -->
+           <!-- <module>scenario</module> -->
+        </startupModules>
+    </engine>
+    <engineDrivers>
+    <!--
+    Options related to engine drivers
+    -->
+        <commandLine>
+        <!--
+        Options for the command-line engine driver (currently there are no options for the command-line)
+        -->
+        </commandLine>
+        <glfw>
+        <!--
+        Options for the GLFW engine driver
+        -->
+            <!-- Starts the clock paused if "true". -->
+            <startWithClockPaused>false</startWithClockPaused>
+            <!-- Position of the openGL window in x -->
+            <windowPositionX>0</windowPositionX>
+            <!-- Position of the openGL window in y -->
+            <windowPositionY>0</windowPositionY>
+            <!-- Width of the openGL window in pixels -->
+            <windowSizeX>1200</windowSizeX>
+            <!-- Height of the openGL window in pixels -->
+            <windowSizeY>800</windowSizeY>
+            <!-- Title of the openGL window -->
+            <windowTitle>SteerSim</windowTitle>
+        </glfw>
+        <qt>
+        <!--
+        Options for the Qt engine driver (config for qt not implemented yet!)
+        -->
+        </qt>
+    </engineDrivers>
+    <global>
+    <!--
+    Options related to the main execution of the steersim
+    -->
+        <!-- The name of the engine driver to use, if not specified from command line -->
+        <engineDriver>glfw</engineDriver>
+        <!-- If a filename is specified, std::cerr will be redirected to that filename.  NOTE: Only std::cerr will be redirected; low-level and C-style output will not be redirected.  Exceptions will be caught and redirected to both the new and the original std::cerr output. -->
+        <redirectCerrToFile></redirectCerrToFile>
+        <!-- If a filename is specified, std::clog will be redirected to that filename.  NOTE: Only std::clog will be redirected; low-level and C-style output will not be redirected. -->
+        <redirectClogToFile></redirectClogToFile>
+        <!-- If a filename is specified, std::cout will be redirected to that filename.  NOTE: Only std::cout will be redirected; low-level and C-style output will not be redirected. -->
+        <redirectCoutToFile></redirectCoutToFile>
+    </global>
+    <gridDatabase>
+    <!--
+    Options related to the spatial database
+    -->
+        <!-- Max number of items a grid cell can contain -->
+        <maxItemsPerGridCell>15</maxItemsPerGridCell>
+        <!-- Number of cells in the grid along the X axis -->
+        <numCellsX>200</numCellsX>
+        <!-- Number of cells in the grid along the Z axis -->
+        <numCellsZ>200</numCellsZ>
+        <!-- Total size of the grid along the X axis -->
+        <sizeX>200</sizeX>
+        <!-- Total size of the grid along the Z axis -->
+        <sizeZ>200</sizeZ>
+        <draw>false</draw>
+    </gridDatabase>
+    <gui>
+    <!--
+    Options related to the openGL visualization and interaction.  Also, make sure to look at the engine driver options for more interface-related options.
+    -->
+        <!-- The background color of the openGL visualization -->
+        <backgroundColor> <r>0.5</r> <g>0.5</g> <b>0.5</b> </backgroundColor>
+        <!-- <backgroundColor> <r>0.39</r> <g>0.58</g> <b>0.92</b> </backgroundColor> -->
+	
+	
+        <!-- The 3-D point the camera will look at -->
+        <!-- <cameraLookAt> <x>0.809224</x> <y>0</y> <z>-0.944422</z> </cameraLookAt> -->
+        <!-- Camera's physical position in the 3-D scene -->
+        <!-- <cameraPosition> <x>0.776362</x> <y>21.851</y> <z>-5.63885</z> </cameraPosition> -->
+        <!-- The vector that represnts the upright orientation for the camera -->
+        <!-- <cameraUp> <x>0</x> <y>1</y> <z>0</z> </cameraUp> -->
+		
+        <!-- The 3-D point the camera will look at -->
+        <!-- ORIGINAL <cameraLookAt> <x>0.2284</x> <y>0</y> <z>-0.8073</z> </cameraLookAt> -->
+		<cameraLookAt> <x>0.09781</x> <y>0</y> <z>0.17322</z> </cameraLookAt>
+        <!-- Camera's physical position in the 3-D scene -->
+        <!-- <cameraPosition> <x>0.228143</x> <y>20.9072</y> <z>21.08368</z> </cameraPosition> -->
+		<cameraPosition> <x>0.09803</x> <y>18.7759</y> <z>20.33521</z> </cameraPosition>
+        <!-- The vector that represnts the upright orientation for the camera -->
+        <cameraUp> <x>0</x> <y>1</y> <z>0</z> </cameraUp>
+        <!-- The vertical field of view of the camera, in degrees (CURRENTLY HAS NO EFFECT) -->
+        <cameraVerticalFieldOfView>45</cameraVerticalFieldOfView>
+        <!-- Set to "true" to be able to select agents with the mouse, "false" is recommended when using many many agents, because selection algorithm is brute-force and slow -->
+        <canUseMouseSelection>true</canUseMouseSelection>
+        <!-- Set to "true" to be able to zoom with the mouse wheel; this does not disable other possible ways to zoom the camera. -->
+        <canUseMouseWheelZoom>true</canUseMouseWheelZoom>
+        <!-- width of lines drawn in the GUI -->
+        <lineWidth>3</lineWidth>
+        <!-- Scaling factor for sensitivity of camera movement when using mouse -->
+        <mouseMovementFactor>0.001</mouseMovementFactor>
+        <!-- Scaling factor for sensitivity of camera rotation when using mouse. -->
+        <mouseRotationFactor>0.007</mouseRotationFactor>
+        <!-- Scaling factor for sensitivity of camera zoom when using mouse -->
+        <mouseZoomFactor>0.0075</mouseZoomFactor>
+        <!-- Set to "true" to remove jaggies, for smoother-looking visuals, but lower performance -->
+        <useAntialiasing>true</useAntialiasing>
+        <!-- DO NOT USE THIS VALUE.  It is only kept here for backwards compatibility. -->
+        <useShadows>true</useShadows>
+        <!-- Set to "false" for higher performance that is not synchronizeded with the display's refresh rate -->
+        <useVsync>false</useVsync>
+    </gui>
+    <keyboard>
+    <!--
+    Maps various actions to keyboard input (config for keybaord not implemented yet!)
+    -->
+    </keyboard>
+    <modules>
+    <!--
+    Module-specific options.  Any options specified on the command-line will override the options specified here.  Modules specified here will not necessarily be loaded when started; for that use the startupModules option for the engine.
+    -->
+	<!--
+        <testCasePlayer>
+            <ai>dummyAI</ai>
+            <testcase>simple-1.xml</testcase>
+        </testCasePlayer>
+	-->
+	
+        <scenario>
+            <scenarioAI>sfAI</scenarioAI>
+            <!-- <useBenchmark>1</useBenchmark> -->
+            <!-- <regions>50,1,10,2</regions> -->
+          <!-- <parameters>7+10+10+6+1+3+1</parameters> -->
+          <!-- <useBenchmark></useBenchmark> -->
+          <!-- <benchmarkLog>fileName</benchmarkLog> -->
+        </scenario>
+	
+    </modules>
+    <mouse>
+    <!--
+    Maps various actions to mouse input (config for mouse not implemented yet!)
+    -->
+    </mouse>
+</SteerSimOptions>

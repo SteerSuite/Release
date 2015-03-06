@@ -145,9 +145,6 @@ if [ -d modules/ ]; then
     if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "rvo2dAI" ]]; then
     	rm -f modules/rvo2dAI.o
     fi
-    if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "reactiveAI" ]]; then
-    	rm -f modules/reactiveAI.o
-    fi
     if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "sfAI" ]]; then
     	rm -f modules/sfAI.o
     fi
@@ -218,13 +215,6 @@ fi
 if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "pprAI" ]]; then
 	echo "Cleaning PPR AI"
 	pushd ../pprAI/build > /dev/null
-	$MAKE clean > /dev/null
-	popd > /dev/null
-fi
-
-if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "reactiveAI" ]]; then
-	echo "Cleaning Reactive AI"
-	pushd ../reactiveAI/build > /dev/null
 	$MAKE clean > /dev/null
 	popd > /dev/null
 fi

@@ -239,7 +239,7 @@ void DrawLib::drawAgentDisc(const Point & pos, const Vector & dir, float radius,
 		glColor(color);
 		glTranslate(pos);
 		glRotatef(rad,0.0f,1.0f,0.0f);
-		glScalef(radius, radius, radius);
+		glScalef(radius, radius*4.0, radius);
 
 		_drawDisplayList(_agentDisplayList);
 	}
@@ -255,7 +255,7 @@ void DrawLib::drawAgentDisc(const Point & pos, float radius, const Color& color)
 	{
 		glColor(color);
 		glTranslate(pos);
-		glScalef(radius, radius, radius);
+		glScalef(radius, radius*4.0, radius);
 
 		_drawDisplayList(_agentDotDisplayList);
 	}
