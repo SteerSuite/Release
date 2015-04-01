@@ -13,8 +13,6 @@
 #include "core/QtEngineDriver.h"
 #include "SimulationPlugin.h"
 
-#include "AntTweakBar/include/AntTweakBar.h"
-
 #include <iomanip>
 #include <cctype>
 #include <algorithm>

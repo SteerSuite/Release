@@ -99,34 +99,36 @@ fi
 echo "Cleaning lib/"
 if [ -d lib/ ]; then
 		
-	 	if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "steertool" ]]; then
+	if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "steertool" ]]; then
     	rm -f lib/libsteer.so
     fi
-	 	if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "util" ]]; then
+
+	if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "util" ]]; then
     	rm -f lib/libutil.so
     fi
+
     if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "steersim" ]]; then
     	rm -f lib/libsteersim.so
     fi
+
     if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "glfw" ]]; then
     	rm -f lib/libglfw.so
     	rm -f lib/libglfw.dylib
-    fi
-		if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "anttweakbar" ]]; then
-    	rm -f lib/libAntTweakBar.so
-    	rm -f lib/libAntTweakBar.dylib
-    fi
+	fi
+
     if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "pprAI" ]]; then
     	rm -f lib/libpprAI.so
     	rm -f lib/pprAI.o
     fi
+
     if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "rvo2dAI" ]]; then
     	rm -f lib/librvo2dAI.so
     	rm -f lib/rvo2dAI.o
     fi
+
     if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "sfAI" ]]; then
     	rm -f lib/libsfAI.so
-			rm -f lib/sfAI.o
+		rm -f lib/sfAI.o
     fi
     rmdir lib/
 fi
@@ -151,15 +153,6 @@ if [ -d modules/ ]; then
 
     rmdir modules/
 fi
-
-if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "anttweakbar" ]]; then
-	echo "Cleaning AntTweakBar"
-	pushd ../external/AntTweakBar/src > /dev/null
-   $MAKE -f MakeFile.osx clean
-   $MAKE clean
-	popd > /dev/null
-fi
-
 
 if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "glfw" ]]; then
 	echo "Cleaning GLFW"

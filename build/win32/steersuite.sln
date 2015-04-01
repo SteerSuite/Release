@@ -43,8 +43,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rvo2dAI", "..\..\rvo2AI\bui
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util", "..\..\util\build\win32\util.vcxproj", "{48C8DD57-0195-44A5-AB09-C2756165768A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AntTweakBar", "..\..\external\AntTweakBar\src\AntTweakBar.vcxproj", "{B99E1FA1-C30A-45F2-9D57-9E9C21B2DF42}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sfAI", "..\..\socialForcesAI\build\win32\sfAI.vcxproj", "{F9169E40-B72E-4A09-B85C-9EE1389225E5}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4559341E-D53D-45E5-A67C-43D7C5956636} = {4559341E-D53D-45E5-A67C-43D7C5956636}

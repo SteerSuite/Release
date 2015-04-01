@@ -19,7 +19,6 @@
 
 #include "SteerLib.h"
 #include "glfw/include/GL/glfw.h"
-#include "core/SimAntTweakBar.h"
 #include "util/FrameSaver.h"
 
 /**
@@ -105,7 +104,6 @@ protected:
 
 	SteerLib::SimulationOptions * _options;
 
-	SimAntTweakBar * _antTweakBar;
 	Util::FrameSaver * _frameSaver;
 
 

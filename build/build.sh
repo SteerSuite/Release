@@ -141,7 +141,7 @@ GLFW_LINK=""
 QT_LINK=""
 QT_INCLUDES=""
 
-ANT_TWEAK_LINK="-L../../external/AntTweakBar/lib -lAntTweakBar"
+# ANT_TWEAK_LINK="-L../../external/AntTweakBar/lib -lAntTweakBar"
 
 
 if [ "$ENABLE_GLFW_GUI" == "true" -o "$ENABLE_QT_GUI" == "true" ]; then
@@ -201,7 +201,7 @@ if [ "$BUILD_PLATFORM" == "osx" ]; then
     BUILD_SCRIPT_DEFINES="-D_OSX $GUI_DEFINES"
     STEERLIB_LFLAGS="$BASIC_LFLAGS $OSX_DYLIB_LFLAGS $OPENGL_LINK -lpthread -ldl $UTIL_LINK"
     STEERBENCH_LFLAGS="$BASIC_LFLAGS $RPATH_LFLAGS $STEERLIB_LINK $UTIL_LINK"
-    STEERSIM_LFLAGS="$BASIC_LFLAGS $RPATH_LFLAGS $OPENGL_LINK $QT_LINK $UTIL_LINK $STEERLIB_LINK $GLFW_LINK $ANT_TWEAK_LINK $PPR_LINK $ORCA_LINK $FOOTSTEP_LINK $CC_LINK "
+    STEERSIM_LFLAGS="$BASIC_LFLAGS $RPATH_LFLAGS $OPENGL_LINK $QT_LINK $UTIL_LINK $STEERLIB_LINK $GLFW_LINK $PPR_LINK $ORCA_LINK $FOOTSTEP_LINK $CC_LINK "
     STEERTOOL_LFLAGS="$BASIC_LFLAGS $RPATH_LFLAGS $STEERLIB_LINK $UTIL_LINK"
     SIMPLEAI_LFLAGS="$BASIC_LFLAGS $RPATH_LFLAGS $OSX_DYLIB_LFLAGS $STEERLIB_LINK $UTIL_LINK"
 	
@@ -218,7 +218,7 @@ elif [ "$BUILD_PLATFORM" == "linux" ]; then
 
     echo "Building SteerSuite for Linux"
     RPATH_LFLAGS="-Wl,-rpath,$LIB_DIR" # -L$MODULES_DIR"
-	ANT_TWEAK_LINK="$ANT_TWEAK_LINK -lX11 -lXxf86vm -lXext"
+	# ANT_TWEAK_LINK="$ANT_TWEAK_LINK -lX11 -lXxf86vm -lXext"
 	BASIC_CFLAGS="$BASIC_CFLAGS -ggdb -g"
 	BASIC_LFLAGS="$BASIC_LFLAGS -ggdb -g"
 	
@@ -239,7 +239,7 @@ elif [ "$BUILD_PLATFORM" == "linux" ]; then
 
     STEERLIB_INCLUDES="$BASIC_INCLUDES $UTIL_INCLUDE"
     STEERBENCH_INCLUDES="$BASIC_INCLUDES $STEERLIB_INCLUDE $UTIL_INCLUDE"
-    STEERSIM_INCLUDES="$BASIC_INCLUDES $STEERLIB_INCLUDE $QT_INCLUDES $ANT_TWEAK_LINK $UTIL_INCLUDE $PPR_INCLUDE $ORCA_INCLUDE $CC_INCLUDE"
+    STEERSIM_INCLUDES="$BASIC_INCLUDES $STEERLIB_INCLUDE $QT_INCLUDES $UTIL_INCLUDE $PPR_INCLUDE $ORCA_INCLUDE $CC_INCLUDE"
     STEERTOOL_INCLUDES="$BASIC_INCLUDES $STEERLIB_INCLUDE $UTIL_INCLUDE"
     SIMPLEAI_INCLUDES="$BASIC_INCLUDES $STEERLIB_INCLUDE $UTIL_INCLUDE"
 	
@@ -255,7 +255,7 @@ elif [ "$BUILD_PLATFORM" == "linux" ]; then
     BUILD_SCRIPT_DEFINES="-D_LINUX $GUI_DEFINES"
     STEERLIB_LFLAGS="$BASIC_LFLAGS $OPENGL_LINK -lpthread -ldl $UTIL_LINK"
     STEERBENCH_LFLAGS="$BASIC_LFLAGS $RPATH_LFLAGS $STEERLIB_LINK $UTIL_LINK"
-    STEERSIM_LFLAGS="$BASIC_LFLAGS $RPATH_LFLAGS $UTIL_LINK $GLFW_LINK $OPENGL_LINK $QT_LINK $STEERLIB_LINK $ANT_TWEAK_LINK $PPR_LINK $ORCA_LINK $CC_LINK "
+    STEERSIM_LFLAGS="$BASIC_LFLAGS $RPATH_LFLAGS $UTIL_LINK $GLFW_LINK $OPENGL_LINK $QT_LINK $STEERLIB_LINK $PPR_LINK $ORCA_LINK $CC_LINK "
     STEERTOOL_LFLAGS="$BASIC_LFLAGS $RPATH_LFLAGS $STEERLIB_LINK $UTIL_LINK"
     SIMPLEAI_LFLAGS="$BASIC_LFLAGS $RPATH_LFLAGS $UTIL_LINK"
 	
@@ -410,21 +410,6 @@ if [[ "$ENABLE_GLFW_GUI" == "true" && $BUILD_MODULE == "all" || "$ENABLE_GLFW_GU
     popd > /dev/null
 fi
 
-if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "anttweakbar" ]]; then
-    echo "==================================="
-    echo "Building AntTweakBar (external dependency)"
-    echo "==================================="
-    pushd ../external/AntTweakBar/src > /dev/null
-    if [ "$BUILD_PLATFORM" == "osx" ]; then
-        $MAKE -f MakeFile.osx
-	AntTweak_BUILD_RETURN_CODE=$?
-    else
-        $MAKE
-	AntTweak_BUILD_RETURN_CODE=$?
-    fi
-    popd > /dev/null
-fi
-
 
 if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "util" ]]; then
 	echo "==================================="
@@ -550,18 +535,6 @@ if [ "$ENABLE_GLFW_GUI" == "true" ]; then
     fi
 fi
 
-if [ $AntTweak_BUILD_RETURN_CODE == 0 ]; then
-	if [ "$BUILD_PLATFORM" == "osx" ]; then
-		echo "copying libAntTweakBar.dylib to $LIB_DIR"
-		cp ../external/AntTweakBar/lib/libAntTweakBar.dylib $LIB_DIR
-		AntTweak_INSTALL_RETURN_CODE=$?
-	else
-		echo "copying libAntTweakBar.so to $LIB_DIR"
-		cp ../external/AntTweakBar/lib/libAntTweakBar.so $LIB_DIR
-		AntTweak_INSTALL_RETURN_CODE=$?
-	fi
-fi
-
 if [ $STEERLIB_BUILD_RETURN_CODE == 0 ]; then
     echo "copying libsteer.so to $LIB_DIR"
     cp ../steerlib/build/libsteer.so $LIB_DIR
@@ -631,16 +604,6 @@ if [ "$ENABLE_GLFW_GUI" == "true" ]; then
     fi
 fi
 
-
-if [ $AntTweak_BUILD_RETURN_CODE != 0 ]; then
-    echo "* AntTweakBar did not build properly."
-else
-    if [ $AntTweak_INSTALL_RETURN_CODE != 0 ]; then
-	echo "* AntTweakBar built successfully, but could not be installed to $LIB_DIR."
-    else
-	echo "  AntTweakBar built and installed successfully."
-    fi
-fi
 
 if [ $STEERLIB_BUILD_RETURN_CODE != 0 ]; then
     echo "* SteerLib did not build properly."

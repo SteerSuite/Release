@@ -23,8 +23,6 @@
 
 #include "glfw/include/GL/glfw.h"
 
-#include "AntTweakBar/include/AntTweakBar.h"
-
 using namespace std;
 using namespace SteerLib;
 using namespace Util;
@@ -80,7 +78,6 @@ GLFWEngineDriver::GLFWEngineDriver()
 	_canUseMouseWheelZoom = true;
 
 	_options = NULL;
-	_antTweakBar= NULL;
 }
 
 
@@ -188,10 +185,6 @@ void GLFWEngineDriver::_initGLFW()
 		throw GenericException("Could not open a window using glfwOpenWindow().");
 	}
 
-	if ( !_options->globalOptions.noTweakBar )
-	{
-		this->_antTweakBar = new SimAntTweakBar( getEngine(), _options, _options->glfwEngineDriverOptions.windowSizeX, _options->glfwEngineDriverOptions.windowSizeY);
-	}
 	// specify some configuration that needs to happen after creating the window
 	glfwSetWindowTitle( _options->glfwEngineDriverOptions.windowTitle.c_str() );
 	glfwSetWindowPos( _options->glfwEngineDriverOptions.windowPositionX, _options->glfwEngineDriverOptions.windowPositionY);
@@ -394,10 +387,6 @@ void GLFWEngineDriver::_drawScene()
 
 	if (_dumpFrames)
 		writeScreenCapture();
-	if ( !_options->globalOptions.noTweakBar )
-	{
-		this->_antTweakBar->draw();
-	}
 	// double buffering, swap back and front buffers
 	glfwSwapBuffers();
 }
@@ -513,17 +502,11 @@ void GLFWEngineDriver::_findClosestAgentToMouse()
 void GLFWEngineDriver::processWindowResizedEvent(int width, int height)
 {
 	_engine->resizeGL(width, height);
-	if ( !_options->globalOptions.noTweakBar )
-	{
-		_antTweakBar->updateWindowSize(width, height);
-	}
 }
 
 
 void GLFWEngineDriver::processKeyPressEvent(int key, int action)
 {
-	TwEventKeyGLFW(key, action);
-	TwEventCharGLFW(key, action);
 	if ((key == _options->keyboardBindings.quit) && (action==GLFW_PRESS)) {
 		_done = true;
 	}
@@ -585,8 +568,6 @@ void GLFWEngineDriver::processMouseButtonEvent(int button, int action)
 {
 	bool controlKeyPressed = (  (glfwGetKey(GLFW_KEY_LCTRL)==GLFW_PRESS) || (glfwGetKey(GLFW_KEY_RCTRL)==GLFW_PRESS) );
 
-	TwEventMouseButtonGLFW(button, action);
-
 	if ((button ==  _options->mouseBindings.selectAgent) && (action == GLFW_PRESS)) {
 		if(!controlKeyPressed) {
 			if (_agentNearestToMouse != NULL) {
@@ -646,8 +627,6 @@ void GLFWEngineDriver::processMouseButtonEvent(int button, int action)
 
 void GLFWEngineDriver::processMouseMovementEvent(int x, int y)
 {
-
-	TwEventMousePosGLFW(x, y);
 	// get mouse changes
 	int deltaX = x - _mouseX;
 	int deltaY = y - _mouseY;
@@ -684,7 +663,6 @@ void GLFWEngineDriver::processMouseMovementEvent(int x, int y)
 
 void GLFWEngineDriver::processMouseWheelEvent(int pos)
 {
-	TwEventMouseWheelGLFW(pos);
 	if (_canUseMouseWheelZoom) {
 		int deltaWheel = pos - _wheelPos;
 		_wheelPos = pos;
