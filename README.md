@@ -97,7 +97,7 @@ As with any graphics library you will need to make sure you already have the
 opengl libraries on you computer. For example on Ubuntu 14.04 you will want
 to install
 ```
-freeglut3-dev build-essential libx11-dev libxmu-dev libxi-dev libgl1-mesa-glx libglu1-mesa libglu1-mesa-dev libglew1.6-dev mesa-utils
+freeglut3-dev build-essential libx11-dev libxmu-dev libxi-dev libgl1-mesa-glx libglu1-mesa libglu1-mesa-dev libglew1.6-dev mesa-utils libglew-dev
 ```
 This will install opengl and glew.  
 
