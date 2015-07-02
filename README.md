@@ -93,6 +93,14 @@ The directory structure of this package is as follows:
 Below are quick instructions for compiling with default options. For
 more complete instructions, refer to the SteerSuite User Guide.  
 
+As with any graphics library you will need to make sure you already have the
+opengl libraries on you computer. For example on Ubuntu 14.04 you will want
+to install
+```
+freeglut3-dev build-essential libx11-dev libxmu-dev libxi-dev libgl1-mesa-glx libglu1-mesa libglu1-mesa-dev libglew1.6-dev mesa-utils
+```
+This will install opengl and glew.  
+
 Windows XP/Vista/7/8 with Visual Studio 2012:
   1. Open the Visual Studio 2012 solution file, located in 
      build/win32/steersuite.sln
