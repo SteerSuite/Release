@@ -192,10 +192,6 @@ if [ "$BUILD_PLATFORM" == "osx" ]; then
 	
     PPRAI_INCLUDES="$BASIC_INCLUDES $STEERLIB_INCLUDE $UTIL_INCLUDE"
     
-    RVO2AI_INCLUDES="$BASIC_INCLUDES $STEERLIB_INCLUDE $UTIL_INCLUDE"
-    
-	SOCIAL_FORCES_INCLUDES="$BASIC_INCLUDES $STEERLIB_INCLUDE $UTIL_INCLUDE"
-    
     UTIL_INCLUDES="$BASIC_INCLUDES $STEERLIB_INCLUDE"
 
     BUILD_SCRIPT_DEFINES="-D_OSX $GUI_DEFINES"
@@ -209,10 +205,6 @@ if [ "$BUILD_PLATFORM" == "osx" ]; then
     
     UTIL_LFLAGS="$BASIC_LFLAGS $RPATH_LFLAGS $OSX_DYLIB_LFLAGS"
 
-    RVO2AI_LFLAGS="$BASIC_LFLAGS $RPATH_LFLAGS $OSX_DYLIB_LFLAGS $STEERLIB_LINK $UTIL_LINK"
-    
-	SOCIAL_FORCES_LFLAGS="$BASIC_LFLAGS $RPATH_LFLAGS $OSX_DYLIB_LFLAGS $STEERLIB_LINK $UTIL_LINK"
-    
 
 elif [ "$BUILD_PLATFORM" == "linux" ]; then
 
@@ -245,10 +237,6 @@ elif [ "$BUILD_PLATFORM" == "linux" ]; then
 	
     PPRAI_INCLUDES="$BASIC_INCLUDES $STEERLIB_INCLUDE $UTIL_INCLUDE"
     
-    RVO2AI_INCLUDES="$BASIC_INCLUDES $STEERLIB_INCLUDE $UTIL_INCLUDE"
-    
-	SOCIAL_FORCES_INCLUDES="$BASIC_INCLUDES $STEERLIB_INCLUDE $UTIL_INCLUDE"
-    
     UTIL_INCLUDES="$BASIC_INCLUDES $STEERLIB_INCLUDE"
     
 
@@ -260,10 +248,6 @@ elif [ "$BUILD_PLATFORM" == "linux" ]; then
     SIMPLEAI_LFLAGS="$BASIC_LFLAGS $RPATH_LFLAGS $UTIL_LINK"
 	
     PPRAI_LFLAGS="$BASIC_LFLAGS $RPATH_LFLAGS $UTIL_LINK"
-    
-    RVO2AI_LFLAGS="$BASIC_LFLAGS $RPATH_LFLAGS $UTIL_LINK"
-    
-	SOCIAL_FORCES_LFLAGS="$BASIC_LFLAGS $RPATH_LFLAGS $UTIL_LINK"
     
     UTIL_LFLAGS="$BASIC_LFLAGS $RPATH_LFLAGS"
         
@@ -368,8 +352,6 @@ export STEERSIM_INCLUDES
 export STEERTOOL_INCLUDES
 export SIMPLEAI_INCLUDES
 export PPRAI_INCLUDES
-export RVO2AI_INCLUDES
-export SOCIAL_FORCES_INCLUDES
 export UTIL_INCLUDES
 
 export BUILD_SCRIPT_DEFINES
@@ -379,8 +361,6 @@ export STEERSIM_LFLAGS
 export STEERTOOL_LFLAGS
 export SIMPLEAI_LFLAGS
 export PPRAI_LFLAGS
-export RVO2AI_LFLAGS
-export SOCIAL_FORCES_LFLAGS
 export UTIL_LFLAGS
 
 
@@ -556,18 +536,6 @@ if [ $PPRAI_BUILD_RETURN_CODE == 0 ]; then
     PPRAI_INSTALL_RETURN_CODE=$?
 fi
 
-if [ $RVO2AI_BUILD_RETURN_CODE == 0 ]; then
-    echo "copying rvo2dAI.o to $MODULES_DIR"
-    cp ../rvo2AI/build/rvo2dAI.o $MODULES_DIR
-    RVO2AI_INSTALL_RETURN_CODE=$?
-fi
-
-if [ $SOCIAL_FORCES_BUILD_RETURN_CODE == 0 ]; then
-    echo "copying sfAI.o to $MODULES_DIR"
-    cp ../socialForcesAI/build/sfAI.o $MODULES_DIR
-    SOCIAL_FORCES_INSTALL_RETURN_CODE=$?
-fi
-
 echo ""
 echo "Summary:"
 
@@ -651,26 +619,6 @@ else
 	echo "* PPR AI built successfully, but could not be installed to $MODULES_DIR."
     else
 	echo "  PPR AI built and installed successfully."
-    fi
-fi
-
-if [ $RVO2AI_BUILD_RETURN_CODE != 0 ]; then
-    echo "* RVO2AI did not build properly."
-else
-    if [ $RVO2AI_INSTALL_RETURN_CODE != 0 ]; then
-	echo "* RVO2AI built successfully, but could not be installed to $MODULES_DIR."
-    else
-	echo "  RVO2AI built and installed successfully."
-    fi
-fi
-
-if [ $SOCIAL_FORCES_BUILD_RETURN_CODE != 0 ]; then
-    echo "* SOCIAL_FORCES did not build properly."
-else
-    if [ $SOCIAL_FORCES_INSTALL_RETURN_CODE != 0 ]; then
-	echo "* SOCIAL_FORCES built successfully, but could not be installed to $MODULES_DIR."
-    else
-	echo "  SOCIAL_FORCES built and installed successfully."
     fi
 fi
 
