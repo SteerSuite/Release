@@ -491,27 +491,6 @@ if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "pprAI" ]]; then
 	popd > /dev/null
 fi
 
-if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "rvo2AI" ]]; then
-	echo "==================================="
-	echo "Building RVO2 AI module"
-	echo "==================================="
-	pushd ../rvo2AI/build > /dev/null
-	$MAKE $MAKE_ARGS
-	RVO2AI_BUILD_RETURN_CODE=$?
-	popd > /dev/null
-fi
-
-if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "sfAI" ]]; then
-	echo "==================================="
-	echo "Building SOCIAL FORCES module"
-	echo "==================================="
-	pushd ../socialForcesAI/build > /dev/null
-	$MAKE $MAKE_ARGS
-	SOCIAL_FORCES_BUILD_RETURN_CODE=$?
-	popd > /dev/null
-fi
-
-
 echo "==================================="
 #echo "Installing binaries"
 echo "==================================="
