@@ -140,6 +140,9 @@ Contact Information:
 
 SteerSuite web page:
   http://steersuite.eecs.yorku.ca/
+  
+Forum (Google Group):
+  https://groups.google.com/forum/#!forum/steersuite
 
 ------------------------
  COPYRIGHT AND LICENSE
