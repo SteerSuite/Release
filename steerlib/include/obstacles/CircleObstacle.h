@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_CIRCLE_OBSTACLE_H__
 #define __STEERLIB_CIRCLE_OBSTACLE_H__
@@ -15,6 +16,8 @@
 #include "interfaces/ObstacleInterface.h"
 #include "Globals.h"
 
+#define CIRCLE_SAMPLES 35
+
 namespace SteerLib {
 
 
@@ -26,6 +29,7 @@ namespace SteerLib {
 		// ObstacleInterface functionality (not all virtual functions were overridden here)
 		void draw(); // implementation in .cpp
 		const Util::AxisAlignedBox & getBounds() { return _bounds; }
+		virtual void setBounds(const Util::AxisAlignedBox & bounds) { _bounds = bounds; }
 
 		/// @name The SpatialDatabaseItem interface
 		/// @brief The CircleObstacle implementation of this interface represents a box that blocks line of sight if it is taller than 0.5 meter, and cannot be traversed.
@@ -37,6 +41,16 @@ namespace SteerLib {
 		virtual bool intersects(const Util::Ray &r, float &t) { return Util::rayIntersectsCircle2D(_centerPosition,_radius, r, t); }
 		virtual bool overlaps(const Util::Point & p, float radius) { return Util::circleOverlapsCircle2D(_centerPosition,_radius,p, radius); }
 		virtual float computePenetration(const Util::Point & p, float radius) { return Util::computeCircleCirclePenetration2D(_centerPosition, _radius, p, radius); }
+		virtual std::pair<std::vector<Util::Point>,std::vector<size_t> > getStaticGeometry();
+		virtual std::vector<Util::Point> get2DStaticGeometry()
+		{
+			return getCirclePoints();
+		}
+
+		Util::Point position() { return this->_centerPosition; }
+		float radius() { return this->_radius; }
+
+		std::vector<Util::Point> getCirclePoints();
 		//@}
 
 	protected:

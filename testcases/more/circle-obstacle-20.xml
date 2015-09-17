@@ -1,4 +1,7 @@
-<!-- 
+<!--
+  Copyright (c) 2009-2015  Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
+  See license.txt for complete license.
+--><!-- 
  Copyright (c) 2009 Shawn Singh, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
  See license.txt for complete license.
   -->
@@ -21,7 +24,7 @@
 		<xmin>-0.900000</xmin>
 		<xmax>0.900000</xmax>
 		<ymin>0.000000</ymin>
-		<ymax>0.250000</ymax>
+		<ymax>1.00000</ymax>
 		<zmin>-0.900000</zmin>
 		<zmax>0.900000</zmax>
 	</obstacle>

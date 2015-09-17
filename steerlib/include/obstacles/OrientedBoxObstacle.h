@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_ORIENTED_BOX_OBSTACLE_H__
 #define __STEERLIB_ORIENTED_BOX_OBSTACLE_H__
@@ -30,6 +31,7 @@ namespace SteerLib {
 		// ObstacleInterface functionality (not all virtual functions were overridden here)
 		void draw(); // implementation in .cpp
 		const Util::AxisAlignedBox & getBounds() { return _bounds; }
+		virtual void setBounds(const Util::AxisAlignedBox & bounds) { _bounds = bounds; }
 
 		/// @name The SpatialDatabaseItem interface
 		/// @brief The OrientedBoxObstacle implementation of this interface represents a box that blocks line of sight if it is taller than 0.5 meter, and cannot be traversed.
@@ -58,6 +60,20 @@ namespace SteerLib {
 			Util::Point pos = Util::Point(p.x - _centerPosition.x,p.y - _centerPosition.y,p.z - _centerPosition.z);
 			pos = Util::rotateInXZPlane(pos,-_thetaY);
 			return Util::computeBoxCirclePenetration2D(_dummyBounds.xmin, _dummyBounds.xmax, _dummyBounds.zmin, _dummyBounds.zmax, pos, radius); 
+		}
+		virtual std::pair<std::vector<Util::Point>,std::vector<size_t> > getStaticGeometry()
+		{
+			std::cout << "get static geometry not implemented yet" << std::endl;
+			std::vector<Util::Point> ps;
+			std::vector<size_t> vs;
+			return std::make_pair(ps, vs);
+		}
+
+		virtual std::vector<Util::Point> get2DStaticGeometry()
+		{
+			std::cout << "get static geometry not implemented yet" << std::endl;
+			std::vector<Util::Point> ps;
+			return ps;
 		}
 
 		//@}

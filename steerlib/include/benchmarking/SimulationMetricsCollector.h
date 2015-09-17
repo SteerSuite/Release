@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_SIMULATION_METRICS_COLLECTOR_H__
 #define __STEERLIB_SIMULATION_METRICS_COLLECTOR_H__
@@ -13,7 +14,7 @@
 #include <vector>
 #include "Globals.h"
 #include "benchmarking/AgentMetricsCollector.h"
-#include "griddatabase/GridDatabase2D.h"
+#include "interfaces/SpatialDataBaseInterface.h"
 #include "recfileio/RecFileIO.h"
 #include "interfaces/AgentInterface.h"
 
@@ -41,7 +42,7 @@ namespace SteerLib {
 	    ~SimulationMetricsCollector();
 	    
 		void reset();
-		void update(SteerLib::GridDatabase2D * gridDB, const std::vector<SteerLib::AgentInterface*> & updatedAgents, float currentTimeStamp, float timePassedSinceLastFrame);
+		void update(SteerLib::SpatialDataBaseInterface * gridDB, const std::vector<SteerLib::AgentInterface*> & updatedAgents, float currentTimeStamp, float timePassedSinceLastFrame);
 	    
 	    AgentMetricsCollector * getAgentCollector(unsigned int agentIndex) { return _agentCollectors[agentIndex]; }
 	    size_t getNumAgents() { return _agentCollectors.size(); }
@@ -50,8 +51,8 @@ namespace SteerLib {
 
 	protected:
 	    void _resetEnvironmentMetrics();
-	    void _updateAgentMetrics(SteerLib::GridDatabase2D * gridDB, const std::vector<SteerLib::AgentInterface*> & updatedAgents, float currentTimeStamp, float timePassedSinceLastFrame);
-	    void _updateEnvironmentMetrics(SteerLib::GridDatabase2D * gridDB, float currentTimeStamp, float timePassedSinceLastFrame);
+	    void _updateAgentMetrics(SteerLib::SpatialDataBaseInterface * gridDB, const std::vector<SteerLib::AgentInterface*> & updatedAgents, float currentTimeStamp, float timePassedSinceLastFrame);
+	    void _updateEnvironmentMetrics(SteerLib::SpatialDataBaseInterface * gridDB, float currentTimeStamp, float timePassedSinceLastFrame);
 	    
 	    std::vector<AgentMetricsCollector*> _agentCollectors;
 	    EnvironmentMetrics _environmentMetrics;

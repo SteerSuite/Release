@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __SIMPLE_AI_MODULE__
 #define __SIMPLE_AI_MODULE__
@@ -11,15 +12,14 @@
 
 
 #include "SteerLib.h"
-#include "KdTree.h"
 #include <vector>
 #include "RVO2D_Parameters.h"
 #include "Logger.h"
 
 
 // globally accessible to the AI plugin
-extern SteerLib::EngineInterface * gEngine;
-// extern SteerLib::GridDatabase2D * gSpatialDatabase;
+// extern SteerLib::EngineInterface * gEngine;
+// extern SteerLib::SpatialDataBaseInterface * gSpatialDatabase;
 
 
 
@@ -38,8 +38,8 @@ namespace RVO2DGlobals {
 	};
 
 
-	extern SteerLib::EngineInterface * gEngineInfo;
-	extern SteerLib::GridDatabase2D * gSpatialDatabase;
+	// extern SteerLib::EngineInterface * gEngineInfo;
+	// extern SteerLib::SpatialDataBaseInterface * gSpatialDatabase;
 	extern unsigned int gLongTermPlanningPhaseInterval;
 	extern unsigned int gMidTermPlanningPhaseInterval;
 	extern unsigned int gShortTermPlanningPhaseInterval;
@@ -49,6 +49,7 @@ namespace RVO2DGlobals {
 	extern bool gUseDynamicPhaseScheduling;
 	extern bool gShowStats;
 	extern bool gShowAllStats;
+	extern bool dont_plan;
 
 
 	// Adding a bunch of parameters so they can be changed via input
@@ -77,7 +78,13 @@ public:
 	
 	std::string getConflicts() { return ""; }
 	std::string getData() { return ""; }
-	LogData * getLogData() { return new LogData(); }
+	LogData * getLogData()
+	{
+		LogData * lD = new LogData();
+		lD->setLogger(this->_rvoLogger);
+		lD->setLogData(this->_logData);
+		return lD;
+	}
 	void init( const SteerLib::OptionDictionary & options, SteerLib::EngineInterface * engineInfo );
 	void finish();
 	SteerLib::AgentInterface * createAgent();
@@ -87,11 +94,13 @@ public:
 	void postprocessFrame(float timeStamp, float dt, unsigned int frameNumber);
 	std::vector<SteerLib::AgentInterface * > agents_;
 
-	KdTree * kdTree_;
 protected:
 	std::string logFilename; // = "pprAI.log";
 	bool logStats; // = false;
 	Logger * _rvoLogger;
+	std::vector<LogObject *> _logData;
+
+	SteerLib::EngineInterface * _gEngine;
 };
 
 #endif

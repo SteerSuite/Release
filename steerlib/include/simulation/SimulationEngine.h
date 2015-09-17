@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_SIMULATION_ENGINE_H__
 #define __STEERLIB_SIMULATION_ENGINE_H__
@@ -159,8 +160,10 @@ namespace SteerLib {
 		void stop();
 		//@}
 	#ifdef ENABLE_GUI
-		/// Handles keyboard input by forwarding the keyboard event to all modules.
+		/// Handles keyboard and mouse input by forwarding the keyboard event to all modules.
 		void processKeyboardInput(int key, int action);
+		void processMouseMovementEvent(int deltaX, int deltaY );
+		void processMouseButtonEvent(int button, int action);
 		/// Initializes the openGL settings for the engine.
 		void initGL();
 		/// Handles resizing if the openGL window is re-sized.
@@ -172,7 +175,8 @@ namespace SteerLib {
 		/// @name EngineInterface functionality
 		/// @brief Modules have access to these functions of the engine; these functions are documented in the SteerLib::EngineInterface documentation.
 		//@{
-		virtual SteerLib::GridDatabase2D * getSpatialDatabase() { return _spatialDatabase; }
+		virtual SteerLib::SpatialDataBaseInterface * getSpatialDatabase() { return _spatialDatabase; }
+		virtual SteerLib::PlanningDomainInterface * getPathPlanner() {return _pathPlanner;}
 		virtual const std::vector<SteerLib::AgentInterface*> & getAgents() { return _agents; }
 		virtual const std::set<SteerLib::AgentInterface*> & getSelectedAgents() { return _selectedAgents; }
 		virtual const std::set<SteerLib::ObstacleInterface*> & getObstacles() { return _obstacles; }
@@ -182,11 +186,13 @@ namespace SteerLib {
 		virtual const std::vector<SteerLib::ModuleInterface*> & getAllModules() { return _modulesInExecutionOrder; }
 		virtual SteerLib::Clock & getClock() { return _clock; }
 		virtual SteerLib::Camera & getCamera() { return _camera; }
+		virtual void isTestcaseCameraView(bool);
 		virtual SteerLib::EngineControllerInterface * getEngineController() { return _engineController; }
 		virtual std::string getModuleSearchPath() { return _options->engineOptions.moduleSearchPath; }
 		virtual std::string getTestCaseSearchPath() { return _options->engineOptions.testCaseSearchPath; }
 		virtual const OptionDictionary & getModuleOptions(const std::string & moduleName) { return _options->getModuleOptions(moduleName); }
 		virtual const SimulationOptions & getOptions() { return (*_options); }
+		virtual std::pair<std::vector<Util::Point>,std::vector<size_t> > getStaticGeometry();
 
 		virtual bool isSimulationLoaded() { return _simulationLoaded; }
 		virtual bool isSimulationRunning() { return _simulationRunning; }
@@ -201,6 +207,8 @@ namespace SteerLib {
 		virtual void unloadModule(SteerLib::ModuleInterface * moduleToDestroy, bool recursivelyUnloadDependencies );
 
 		virtual SteerLib::AgentInterface * createAgent(const SteerLib::AgentInitialConditions & initialConditions, SteerLib::ModuleInterface * owner);
+		virtual SteerLib::AgentInterface * createEmittedAgent(const SteerLib::AgentInitialConditions & initialConditions, SteerLib::ModuleInterface * owner, int emitterNum);
+		virtual void createAgentEmitter(const SteerLib::AgentInitialConditions & initialConditions, SteerLib::ModuleInterface * owner);
 		virtual void destroyAgent(SteerLib::AgentInterface * agentToDestroy);
 		virtual void destroyAllAgentsFromModule(SteerLib::ModuleInterface * owner);
 		virtual void addAgent(SteerLib::AgentInterface * newAgent, SteerLib::ModuleInterface * owner);
@@ -214,6 +222,7 @@ namespace SteerLib {
 		//virtual void destroyAllObstaclesFromModule(SteerLib::ModuleInterface * owner);
 		virtual void addObstacle(SteerLib::ObstacleInterface * newObstacle);
 		virtual void removeObstacle(SteerLib::ObstacleInterface * obstacleToRemove );
+		virtual void removeAllObstacles();
 
 
 		virtual void addCommand(const std::string & commandName, SteerLib::CommandFunctionPtr commandFunction);
@@ -275,8 +284,12 @@ namespace SteerLib {
 		/// @name Data structures to keep track of agents
 		//@{
 		std::vector<SteerLib::AgentInterface*> _agents;
+		std::vector<SteerLib::AgentInitialConditions > _agentInitialConditions;
 		std::set<SteerLib::AgentInterface*> _selectedAgents;
 		std::map<SteerLib::AgentInterface*, SteerLib::ModuleInterface*> _agentOwners;
+		std::vector<SteerLib::AgentInitialConditions> _init_agents;
+		std::vector<SteerLib::ModuleInterface*> _agents_ai;
+		std::vector<int> _spawned_agent_emitter_num;
 		//@}
 
 		/// @name Other objects managed by the engine
@@ -284,7 +297,8 @@ namespace SteerLib {
 		std::map<std::string, SteerLib::CommandFunctionPtr> _commands;
 		SteerLib::Clock _clock;
 		SteerLib::Camera _camera;
-		SteerLib::GridDatabase2D * _spatialDatabase;
+		SteerLib::SpatialDataBaseInterface * _spatialDatabase;
+		SteerLib::PlanningDomainInterface * _pathPlanner;
 		std::set<SteerLib::ObstacleInterface*> _obstacles;
 		SteerLib::EngineControllerInterface * _engineController;
 		//@}
@@ -309,6 +323,7 @@ namespace SteerLib {
 		//@{
 		SimulationEngine(const SimulationEngine & );  // not implemented, not copyable
 		SimulationEngine& operator= (const SimulationEngine & );  // not implemented, not assignable
+		bool _testcaseCameraView;
 		//@}
 
 	};

@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __SocialForces_AGENT__
 #define __SocialForces_AGENT__
@@ -46,11 +47,11 @@ public:
 	const SteerLib::AgentGoalInfo & currentGoal() const { return _goalQueue.front(); }
 	size_t id() const { return id_;}
 	const std::queue<SteerLib::AgentGoalInfo> & agentGoals() const { return _goalQueue; }
-	void addGoal(const SteerLib::AgentGoalInfo & newGoal) { throw Util::GenericException("addGoals() not implemented yet for SimpleAgent"); }
-	void clearGoals() { throw Util::GenericException("clearGoals() not implemented yet for SimpleAgent"); }
+	void addGoal(const SteerLib::AgentGoalInfo & newGoal) { throw Util::GenericException("addGoals() not implemented yet for SocialForcesAgent"); }
+	void clearGoals() { throw Util::GenericException("clearGoals() not implemented yet for SocialForcesAgent"); }
 	void setParameters(SteerLib::Behaviour behave);
 	/// @name The SteerLib::SpatialDatabaseItemInterface
-	/// @brief These functions are required so that the agent can be used by the SteerLib::GridDatabase2D spatial database;
+	/// @brief These functions are required so that the agent can be used by the SteerLib::SpatialDataBaseInterface spatial database;
 	/// The Util namespace helper functions do the job nicely for basic circular agents.
 	//@{
 	bool intersects(const Util::Ray &r, float &t) { return Util::rayIntersectsCircle2D(_position, _radius, r, t); }
@@ -59,7 +60,7 @@ public:
 	//@}
 
 	// bool collidesAtTimeWith(const Util::Point & p1, const Util::Vector & rightSide, float otherAgentRadius, float timeStamp, float footX, float footZ);
-	void insertAgentNeighbor(const SteerLib::AgentInterface * agent, float &rangeSq) {throw Util::GenericException("clearGoals() not implemented yet for SimpleAgent");}
+	// void insertAgentNeighbor(const SteerLib::AgentInterface * agent, float &rangeSq) {throw Util::GenericException("clearGoals() not implemented yet for SocialForcesAgent");}
 	// bool compareDist(SteerLib::AgentInterface * a1, SteerLib::AgentInterface * a2 );
 
 protected:
@@ -68,23 +69,13 @@ protected:
 
 	SocialForcesParameters _SocialForcesParams;
 
+	virtual SteerLib::EngineInterface * getSimulationEngine();
+
 
 	/**
 		 * \brief   Updates the three-dimensional position and three-dimensional velocity of this agent.
 		 */
 	void update(float timeStamp, float dt, unsigned int frameNumber);
-	void updateLocalTarget();
-
-	bool _enabled;
-	Util::Point _position;
-	Util::Vector _velocity;
-	Util::Vector _forward; // normalized version of velocity
-	Util::Vector _prefVelocity; // This is the velocity the agent wants to be at
-	Util::Vector _newVelocity;
-	Util::Color _color;
-	float _radius;
-
-	std::queue<SteerLib::AgentGoalInfo> _goalQueue;
 
 
 	// Stuff specific to RVO
@@ -94,16 +85,16 @@ protected:
 	size_t id_;
 	SteerLib::ModuleInterface * rvoModule;
 
+	SteerLib::EngineInterface * _gEngine;
+
 	// Used to store Waypoints between goals
 	// A waypoint is choosen every FURTHEST_LOCAL_TARGET_DISTANCE
-	std::vector<Util::Point> _waypoints;
 
 private:
-	bool runLongTermPlanning2();
-	bool runLongTermPlanning();
-	bool reachedCurrentWaypoint();
-	void updateMidTermPath();
-	bool hasLineOfSightTo(Util::Point point);
+	// bool runLongTermPlanning();
+	// bool reachedCurrentWaypoint();
+	// void updateMidTermPath();
+	// bool hasLineOfSightTo(Util::Point point);
 
 
 	void calcNextStep(float dt);
@@ -118,15 +109,10 @@ private:
 	Util::Vector calcObsNormal(SteerLib::ObstacleInterface* obs);
 
 	// For midterm planning stores the plan to the current goal
-	std::vector<Util::Point> _midTermPath;
 	// holds the location of the best local target along the midtermpath
-	Util::Point _currentLocalTarget;
 
 	friend class SocialForcesAIModule;
 
-#ifdef DRAW_HISTORIES
-	std::deque<Util::Point> __oldPositions;
-#endif
 };
 
 

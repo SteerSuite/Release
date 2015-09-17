@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_GRID_CELL_H__
 #define __STEERLIB_GRID_CELL_H__
@@ -18,7 +19,7 @@
 #include <sstream>
 
 #ifdef _WIN32
-// on win32, there is an unfortunate conflict between exporting symbols for a
+// on win32, there is an unfortunate conflit between exporting symbols for a
 // dynamic/shared library and STL code.  A good document describing the problem
 // in detail is http://www.unknownroad.com/rtfm/VisualStudio/warningC4251.html
 // the "least evil" solution is just to simply ignore this warning.
@@ -119,6 +120,17 @@ namespace SteerLib {
 
 			_gridCellMutex.unlock();
 
+		}
+
+		inline void clear()
+		{
+			_gridCellMutex.lock();
+			for (unsigned int j=0; j < _numItems; j++) {
+				_items[j] = NULL;
+			}
+			_traversalCost = 0;
+			_numItems=0;
+			_gridCellMutex.unlock();
 		}
 
 	private:

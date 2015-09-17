@@ -1,4 +1,8 @@
 //
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
+// See license.txt for complete license.
+//
+//
 // Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
@@ -249,11 +253,17 @@ void TestCaseReaderPrivate::_parseTestCaseDOM(const ticpp::Element * root)
 			else if (childTagName == "agent") {
 				_parseAgent(&(*child)); 
 			}
+			else if (childTagName == "agentEmitter") {
+				_parseAgentEmitter(&(*child)); 
+			}
 			else if (childTagName == "agentRegion") {
 				_parseAgentRegion(&(*child)); 
 			}
 			else if (childTagName == "obstacle") {
 				_parseBoxObstacle(&(*child)); 
+			}
+			else if (childTagName == "polygonObstacle") {
+				_parsePolygonObstacle(&(*child)); 
 			}
 			else if (childTagName == "orientedBoxObstacle") {
 				_parseOrientedBoxObstacle(&(*child));
@@ -383,6 +393,36 @@ void TestCaseReaderPrivate::_parseAgent(const ticpp::Element * subRoot)
 	_rawAgents.push_back(newAgent);
 }
 
+void TestCaseReaderPrivate::_parseAgentEmitter(const ticpp::Element * subRoot)
+{
+	RawAgentInfo newAgent;
+	newAgent.regionBounds = _header.worldBounds;
+	newAgent.color = Util::Color(-1,-1,-1);
+
+	ticpp::Iterator<ticpp::Element> child;
+	for (child = child.begin(subRoot); child != child.end(); child++ ) {
+
+		std::string childTagName = child->Value();
+
+		// NOTE: in the following code, '&' and '*' do not cancel each other out;
+		// its the address of the iterator's current content.
+		if (childTagName == "name") {
+			child->GetText(&newAgent.name);
+		}
+		else if (childTagName == "initialConditions") {
+			_parseInitialConditions(&(*child), newAgent);
+		}
+		else if (childTagName == "goalSequence") {
+			_parseGoalSequence(&(*child), newAgent.goals);
+		}
+		else {
+			throw GenericException("Unexpected tag <" + childTagName + "> found on line " + toString(child->Row()) + "\n");
+		}
+	}
+
+	_rawAgentEmitters.push_back(newAgent);
+}
+
 void TestCaseReaderPrivate::_parseAgentRegion(const ticpp::Element * subRoot)
 {
 	unsigned int numAgents;
@@ -430,6 +470,38 @@ void TestCaseReaderPrivate::_parseBoxObstacle(const ticpp::Element * subRoot)
 	obst->height = 0.0f;
 	obst->regionBounds = _header.worldBounds;
 	obst->size = 0.0f;
+
+	_rawObstacles.push_back(obst);
+}
+
+void TestCaseReaderPrivate::_parsePolygonObstacle(const ticpp::Element * subRoot)
+{
+	RawPolygonObstacleInfo *obst = new RawPolygonObstacleInfo;
+	obst->isObstacleRandom = false;
+	//obst.obstacleBounds = _getBoundsFromXMLElement(subRoot);
+
+	ticpp::Iterator<ticpp::Element> child;
+
+	for (child = child.begin(subRoot); child != child.end(); child++ ) {
+		std::string childTagName = child->Value();
+
+		if (childTagName == "vertex") {
+			Util::Point vertex;
+			_getXYZOrRandomFromXMLElement(&(*child), vertex, obst->isObstacleRandom);
+			obst->vertices.push_back(vertex);
+		}
+		else {
+			throw GenericException("Unexpected tag <" + childTagName + "> found on line " + toString(child->Row()) + "\n");
+		}
+	}
+
+	//obst->obstacleBounds = AxisAlignedBox(obst->position.x-obst->radius, obst->position.x+obst->radius, obst->position.y, obst->position.y+obst->height, obst->position.z-obst->radius, obst->position.z+obst->radius);
+	ObstacleInitialConditions *ic = obst->getObstacleInitialConditions();
+	ObstacleInterface *o = ic->createObstacle();
+	obst->obstacleBounds = o->getBounds();
+
+	delete o;
+	delete ic;
 
 	_rawObstacles.push_back(obst);
 }
@@ -822,7 +894,7 @@ void TestCaseReaderPrivate::_parseInitialConditions(const ticpp::Element * subRo
 
 
 
-/*void TestCaseReaderPrivate::_initObstacleInitialConditions( ObstacleInitialConditions & o, const AxisAlignedBox & bounds )
+void TestCaseReaderPrivate::_initObstacleInitialConditions( BoxObstacleInitialConditions & o, const AxisAlignedBox & bounds )
 {
 	o.xmin = bounds.xmin;
 	o.xmax = bounds.xmax;
@@ -830,7 +902,7 @@ void TestCaseReaderPrivate::_parseInitialConditions(const ticpp::Element * subRo
 	o.ymax = bounds.ymax;
 	o.zmin = bounds.zmin;
 	o.zmax = bounds.zmax;
-}*/
+}
 
 
 void TestCaseReaderPrivate::_initAgentInitialConditions( AgentInitialConditions & a, const RawAgentInfo & agent )
@@ -861,3 +933,30 @@ void TestCaseReaderPrivate::_initAgentInitialConditions( AgentInitialConditions 
 	a.goals = agent.goals;  // note, this is a STL vector being copied into another STL vector.
 }
 
+void TestCaseReaderPrivate::_initAgentEmitterInitialConditions( AgentInitialConditions & a, const RawAgentInfo & agent )
+{
+
+	// just a safety check;
+	// positions should be initialized before you reach this code.
+	// at that time you can explicitly set this to false.
+	assert(agent.isPositionRandom == false);
+
+	a.name = agent.name;
+	a.position = agent.position;
+	a.colorSet = agent.colorSet;
+	a.color = agent.color;
+
+	if (agent.isDirectionRandom) {
+		// choose a random number;
+		float randomAngle = (float)_randomNumberGenerator.rand( 2.0f * M_PI );
+		a.direction = Vector( cosf(randomAngle),  0.0f,  sinf(randomAngle) );
+	}
+	else {
+		a.direction = agent.direction;
+	}
+	a.randBox = agent.regionBounds;
+
+	a.radius = agent.radius;
+	a.speed = agent.speed;
+	a.goals = agent.goals;  // note, this is a STL vector being copied into another STL vector.
+}

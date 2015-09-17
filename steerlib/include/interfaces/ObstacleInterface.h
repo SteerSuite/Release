@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_OBSTACLE_INTERFACE_H__
 #define __STEERLIB_OBSTACLE_INTERFACE_H__
@@ -10,7 +11,7 @@
 /// @brief Declares the SteerLib::ObstacleInterface virtual interface.
 
 #include "Globals.h"
-#include "griddatabase/GridDatabase2D.h"
+#include "interfaces/SpatialDataBaseInterface.h"
 #include "util/Geometry.h"
 
 namespace SteerLib {
@@ -20,11 +21,13 @@ namespace SteerLib {
 	 */
 	class STEERLIB_API ObstacleInterface : public SteerLib::SpatialDatabaseItem {
 	public:
+		ObstacleInterface() : isConvex_(false), nextObstacle_(NULL), prevObstacle_(NULL), id_(0) {}
 		virtual ~ObstacleInterface() { }
 		virtual void init() { }
 		virtual void update(float timeStamp, float dt, unsigned int frameNumber) { }
 		virtual void draw() = 0;
 		virtual const Util::AxisAlignedBox & getBounds() = 0;
+		virtual void setBounds(const Util::AxisAlignedBox & bounds) = 0;
 
 		/// @name The SpatialDatabaseItem interface
 		/// @brief This interface is kept pure abstract.
@@ -35,6 +38,17 @@ namespace SteerLib {
 		virtual bool intersects(const Util::Ray &r, float &t) = 0;
 		virtual bool overlaps(const Util::Point & p, float radius) = 0;
 		virtual float computePenetration(const Util::Point & p, float radius) = 0;
+		virtual std::pair<std::vector<Util::Point>,std::vector<size_t> > getStaticGeometry() = 0;
+		virtual std::vector<Util::Point> get2DStaticGeometry() = 0;
+
+	public:
+		ObstacleInterface *nextObstacle_;
+		Util::Point point_;
+		ObstacleInterface *prevObstacle_;
+		Util::Vector unitDir_;
+
+		size_t id_;
+		bool isConvex_;
 		//@}
 	};
 

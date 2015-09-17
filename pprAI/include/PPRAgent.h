@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __PPR_AGENT_H__
 #define __PPR_AGENT_H__
@@ -16,8 +17,6 @@
 
 #define AGENT_PTR(agent) (dynamic_cast<AgentInterface*>(agent))
 
-// #define IGNORE_PLANNING
-
 
 //======================================================================================
 // forward declarations
@@ -28,7 +27,7 @@ class PPRAgent;
 namespace PPRGlobals {
 	// NOTE this is forward declared for an inline function defined below
 	// other declarations for this namespace belong in PPRAIModule.h
-	extern SteerLib::EngineInterface * gEngine;
+	// extern SteerLib::EngineInterface * gEngine;
 }
 
 
@@ -99,9 +98,9 @@ public:
 	const SteerLib::AgentGoalInfo & currentGoal() const { return _currentGoal; }
 	void addGoal(const SteerLib::AgentGoalInfo & newGoal);
 	size_t id() const { return _id;}
-	const std::queue<SteerLib::AgentGoalInfo> & agentGoals() const { return _landmarkQueue; }
+	const std::queue<SteerLib::AgentGoalInfo> & agentGoals() const { return _goalQueue; }
 	void clearGoals() {
-		while (!_landmarkQueue.empty()) _landmarkQueue.pop();
+		while (!_goalQueue.empty()) _goalQueue.pop();
 		_nextFrameToRunLongTermPlanningPhase = 0;
 		_nextFrameToRunMidTermPlanningPhase = 0;
 		_nextFrameToRunShortTermPlanningPhase = 0;
@@ -110,7 +109,7 @@ public:
 		_nextFrameToRunReactivePhase = 0;
 	}
 
-	void insertAgentNeighbor(const SteerLib::AgentInterface *agent, float &rangeSq) { throw Util::GenericException("insertAgentNeighbor not implemented yet for BenchmarkAgent"); }
+	// void insertAgentNeighbor(const SteerLib::AgentInterface *agent, float &rangeSq) { throw Util::GenericException("insertAgentNeighbor not implemented yet for PPRAgent"); }
 
 	bool intersects(const Util::Ray &r, float &t) { return Util::rayIntersectsCircle2D(_position, _radius, r, t); }
 	bool overlaps(const Util::Point & p, float radius) { return Util::circleOverlapsCircle2D( _position, _radius, p, radius); }
@@ -134,7 +133,8 @@ public:
 	Util::Vector localTargetDirection() { return _finalSteeringCommand.targetDirection; }
 	void setParameters(SteerLib::Behaviour behave);
 	bool isSelected() { 
-		return PPRGlobals::gEngine->isAgentSelected(this);
+		// return PPRGlobals::gEngine->isAgentSelected(this);
+		return _gEngine->isAgentSelected(this);
 	}
 
 
@@ -169,16 +169,17 @@ protected:
 	void disable();
 	void drawPlannedPath();
 
+	virtual SteerLib::EngineInterface * getSimulationEngine();
+
 	//========================
 	// private data:
 	//========================
 
 	// LONG-TERM PLANNING PHASE
-	std::vector<Util::Point> _waypoints;
 	int _currentWaypointIndex;
 
 	// MID-TERM PLANNING PHASE
-	int * _midTermPath;  // "+2" is a very terrible hack to avoid bugs.
+	std::vector<Util::Point> _midTermPath;  // "+2" is a very terrible hack to avoid bugs.
 	unsigned int _midTermPathSize;
 
 	// SHORT-TERM PLANNING PHASE
@@ -229,23 +230,15 @@ protected:
 
 
 	// GEOMETRY STATE of the agent (can potentially change per frame)
-	float _radius;
-	Util::Point _position;
-	Util::Vector _forward;
 	Util::Vector _rightSide;
-	size_t _id;
 	PPRParameters _PPRParams;
 
 	// PHYSICS STATE of the agent
-	Util::Vector _velocity;
 	float _mass;
 	float _maxSpeed;
 	float _maxForce;
 	float _currentSpeed;
 
-	// OTHER STATE
-	bool _enabled;
-	
 	// TODO THESE VALUES SHOULD BE MOVED TO PPRGlobals namespace, they are just wasting space per agent.
 	// there is one issue with _currentFrameNumber that has to be checked first, though.
 	float _currentTimeStamp;
@@ -254,12 +247,8 @@ protected:
 
 	// GOAL information
 	SteerLib::AgentGoalInfo _currentGoal;
-	std::queue<SteerLib::AgentGoalInfo> _landmarkQueue;
-#define DRAW_HISTORIES 1
 
-#ifdef DRAW_HISTORIES
-	std::deque<Util::Point> __oldPositions;
-#endif
+	SteerLib::EngineInterface * _gEngine;
 
 	// Adding a bunch of
 
@@ -278,8 +267,8 @@ protected:
 	Util::Point __hitPosFront, __hitPosRight, __hitPosLeft;
 	float __threat_min_t, __threat_max_t;
 	unsigned int __closestPathNode;
-	std::stack<unsigned int> midTermPathStack;
-	std::stack<unsigned int> longTermPath; // Should be changed to vectors
+	std::vector<Util::Point> midTermPathStack;
+	std::vector<Util::Point> longTermPath; // Should be changed to vectors
 #endif
 	friend class PPRAIModule;
 

@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 /// @file SimpleAIModule.cpp
 /// @brief Implements the SimpleAIModule plugin.
@@ -18,7 +19,7 @@
 
 // globally accessible to the simpleAI plugin
 SteerLib::EngineInterface * gEngine;
-SteerLib::GridDatabase2D * gSpatialDatabase;
+SteerLib::SpatialDataBaseInterface * gSpatialDatabase;
 
 namespace SimpleAIGlobals
 {

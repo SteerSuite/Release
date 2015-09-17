@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 /*
  * Globals.h
@@ -18,6 +19,8 @@
 #else
 #define UTIL_API
 #endif
+
+#include <vector>
 
 std::vector<std::string> inline stringSplit(const std::string &source, const char *delimiter = " ", bool keepEmpty = false)
 {

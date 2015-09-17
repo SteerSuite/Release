@@ -1,4 +1,8 @@
 //
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
+// See license.txt for complete license.
+//
+//
 // Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
@@ -14,7 +18,7 @@
 #include "util/Geometry.h"
 #include "util/Color.h"
 #include "tinyxml/ticpp.h"
-#include "griddatabase/GridDatabase2D.h"
+#include "interfaces/SpatialDataBaseInterface.h"
 #include "testcaseio/AgentInitialConditions.h"
 #include "testcaseio/ObstacleInitialConditions.h"
 #include "mersenne/MersenneTwister.h"
@@ -123,6 +127,61 @@ namespace SteerLib {
 		virtual bool intersects(const Util::Ray &r, float &t) { return Util::rayIntersectsBox2D(obstacleBounds.xmin, obstacleBounds.xmax, obstacleBounds.zmin, obstacleBounds.zmax, r, t); }
 		virtual bool overlaps(const Util::Point & p, float radius) { return Util::boxOverlapsCircle2D(obstacleBounds.xmin, obstacleBounds.xmax, obstacleBounds.zmin, obstacleBounds.zmax,p, radius); }
 		virtual float computePenetration(const Util::Point & p, float radius) { return Util::computeBoxCirclePenetration2D(obstacleBounds.xmin, obstacleBounds.xmax, obstacleBounds.zmin, obstacleBounds.zmax, p, radius); }
+		//@}
+	};
+
+	class STEERLIB_API RawPolygonObstacleInfo : public RawObstacleInfo {
+	public:
+		std::vector<Util::Point> vertices;		
+
+		virtual ObstacleInitialConditions *getObstacleInitialConditions()
+		{
+			PolygonObstacleInitialConditions *o = new PolygonObstacleInitialConditions(vertices);
+
+			// for(int i=0; i<vertices.size(); i++)
+			// 	o->_vertices.push_back(vertices[i]);
+
+			return o;
+		}
+
+		/// @name Implementation of the SpatialDatabaseItem interface
+		//@{
+		virtual bool isAgent() { return false; }
+		virtual bool blocksLineOfSight() { return false; }
+		virtual float getTraversalCost() { return 0.0f; }
+		virtual bool intersects(const Util::Ray &r, float &t) {
+			ObstacleInitialConditions *ic = getObstacleInitialConditions();
+			ObstacleInterface *o = ic->createObstacle();
+
+			bool ret = o->intersects(r, t);
+
+			delete o;
+			delete ic;
+
+			return ret;
+		}
+		virtual bool overlaps(const Util::Point & p, float radius) {
+			ObstacleInitialConditions *ic = getObstacleInitialConditions();
+			ObstacleInterface *o = ic->createObstacle();
+
+			bool ret = o->overlaps(p, radius);
+
+			delete o;
+			delete ic;
+
+			return ret;
+		}
+		virtual float computePenetration(const Util::Point & p, float radius) {
+			ObstacleInitialConditions *ic = getObstacleInitialConditions();
+			ObstacleInterface *o = ic->createObstacle();
+
+			float ret = o->computePenetration(p, radius);
+
+			delete o;
+			delete ic;
+
+			return ret;
+		}
 		//@}
 	};
 
@@ -265,10 +324,14 @@ namespace SteerLib {
 		void _parseCameraView(const ticpp::Element * subRoot);
 		/// Parses an agent element.
 		void _parseAgent(const ticpp::Element * subRoot);
+		/// Parses an agent element.
+		void _parseAgentEmitter(const ticpp::Element * subRoot);
 		/// Parses an agent region element.
 		void _parseAgentRegion(const ticpp::Element * subRoot);
 		/// Parses a box obstacle element.
 		void _parseBoxObstacle(const ticpp::Element * subRoot);
+		/// Parses a ploygon obstacle element.
+		void _parsePolygonObstacle(const ticpp::Element * subRoot);
 		/// Parses an oriented box obstacle element.
 		void _parseOrientedBoxObstacle(const ticpp::Element * subRoot);
 		/// Parses an oriented wall obstacle element.
@@ -297,8 +360,9 @@ namespace SteerLib {
 
 		/// @name Helper functions to set up initial conditions
 		//@{
-		void _initObstacleInitialConditions( SteerLib::ObstacleInitialConditions & o, const Util::AxisAlignedBox & bounds );
+		void _initObstacleInitialConditions( SteerLib::BoxObstacleInitialConditions & o, const Util::AxisAlignedBox & bounds );
 		void _initAgentInitialConditions( SteerLib::AgentInitialConditions & a, const SteerLib::RawAgentInfo & agent );
+		void _initAgentEmitterInitialConditions( SteerLib::AgentInitialConditions & a, const SteerLib::RawAgentInfo & agent );
 		//@}
 
 
@@ -310,11 +374,15 @@ namespace SteerLib {
 		std::vector<CameraView> _cameraViews;
 		/// Initial conditions of all agents
 		std::vector<AgentInitialConditions> _initializedAgents;
+		/// Initial conditions of all agent emitters
+		std::vector<AgentInitialConditions> _initializedAgentEmitters;
 		/// Initial conditions of all obstacles
 		std::vector<ObstacleInitialConditions*> _initializedObstacles;
 
 		/// Temporary data of agents while parsing the test case
 		std::vector<RawAgentInfo> _rawAgents;
+		/// Temporary data of agent emitters while parsing the test case
+		std::vector<RawAgentInfo> _rawAgentEmitters;
 		/// Temporary data of obstacles while parsing the test case
 		std::vector<RawObstacleInfo *> _rawObstacles;
 	};

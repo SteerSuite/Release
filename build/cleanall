@@ -6,5 +6,12 @@
 #
 
 
-./clean.sh all
+# ./clean.sh all
+
+pushd gmake/  > /dev/null
+	
+		make config=release clean
+		make config=debug clean
+	
+popd > /dev/null
 

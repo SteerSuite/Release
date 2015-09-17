@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 /// @file GridDatabase2D.cpp
 /// @brief Implements the SteerLib::GridDatabase2D spatial database.
@@ -46,9 +47,9 @@ GridDatabase2D::GridDatabase2D(float xmin, float xmax, float zmin, float zmax, u
 	_zCellSize = _zGridSize / ((float)numZCells);
 	_maxItemsPerCell = maxItemsPerCell;
 	_drawGrid = drawGrid;
+	// std::cout << "Creating grid database: " << this << std::endl;
 
 	_allocateDatabase();
-	_planningDomain = new GridDatabasePlanningDomain(this);
 }
 
 
@@ -71,7 +72,6 @@ GridDatabase2D::GridDatabase2D(const Point & origin2D, float xExtent, float zExt
 	_drawGrid = drawGrid;
 
 	_allocateDatabase();
-	_planningDomain = new GridDatabasePlanningDomain(this);
 }
 
 
@@ -82,7 +82,6 @@ GridDatabase2D::~GridDatabase2D()
 {
 	delete [] _basePtr;
 	delete [] _cells;
-	delete _planningDomain;
 }
 
 
@@ -107,6 +106,18 @@ void GridDatabase2DPrivate::_allocateDatabase()
 		// TODO: is it OK to make the traversal cost 0.0f ?? it would be more general.  need to double-check assumptions 
 		// of astar lib...  is traversal cost a fixed cost to add, or is it a multiplicative factor?
 		_cells[i].init( _maxItemsPerCell, _basePtr + (i*_maxItemsPerCell), 1.0f );
+	}
+}
+
+
+void GridDatabase2D::clearDatabase()
+{
+	unsigned int numTotalCells = _xNumCells*_zNumCells;
+	for (unsigned int i=0; i < numTotalCells; i++)
+	{
+		// TODO: is it OK to make the traversal cost 0.0f ?? it would be more general.  need to double-check assumptions
+		// of astar lib...  is traversal cost a fixed cost to add, or is it a multiplicative factor?
+		_cells[i].clear();
 	}
 }
 
@@ -176,6 +187,11 @@ inline bool GridDatabase2DPrivate::_clampSpatialBoundsToIndexRange(float xmin, f
 void GridDatabase2D::addObject( SpatialDatabaseItemPtr item, const AxisAlignedBox & newBounds )
 {
 	// convert the spatial bounds of the object into index bounds
+	if ( ( newBounds.xmin != newBounds.xmin ) || (newBounds.xmax != newBounds.xmax) || (newBounds.zmin != newBounds.zmin) ||
+			(newBounds.zmax != newBounds.zmax))
+	{
+		throw GenericException("Invalid agent bounds. Bounds are NaN");
+	}
 	unsigned int xMinIndex, xMaxIndex, zMinIndex, zMaxIndex;
 	if (_clampSpatialBoundsToIndexRange(newBounds.xmin, newBounds.xmax, newBounds.zmin, newBounds.zmax, xMinIndex, xMaxIndex, zMinIndex, zMaxIndex) == false) {
 		// if we get false here, the object's bounds are completely outside the database anyway.
@@ -729,7 +745,7 @@ Point GridDatabase2D::randomPositionInRegionWithoutCollisions(const AxisAlignedB
 		// check if ret collides with anything
 		set<SpatialDatabaseItemPtr> neighbors;
 		neighbors.clear();
-		float _new_radius = radius; //  + 0.2f; // Glen testing effects for footstepAI
+		float _new_radius = radius;
 		getItemsInRange(neighbors, ret.x - _new_radius, ret.x + _new_radius, ret.z - _new_radius, ret.z + _new_radius, NULL);
 
 		set<SpatialDatabaseItemPtr>::iterator neighbor;
@@ -763,6 +779,93 @@ Point GridDatabase2D::randomPositionInRegionWithoutCollisions(const AxisAlignedB
 	return ret;
 }
 
+/// Finds a random 2D point, within the specified region, that has no other objects within the requested radius, using an exising (already seeded) Mersenne Twister random number generator.
+bool GridDatabase2D::randomPositionInRegionWithoutCollisions(const Util::AxisAlignedBox & region, SpatialDatabaseItemPtr item, bool excludeAgents, MTRand & randomNumberGenerator)
+{
+	Point ret(0.0f, 0.0f, 0.0f);
+	bool notFoundYet;
+	unsigned int numTries = 0;
+	float radius = 0.0f;
+	AgentInterface * ai;
+	AgentInitialConditions aic;
+
+	if ( item->isAgent() )
+	{
+		ai = dynamic_cast<AgentInterface*>(item);
+		radius = ai->radius();
+		aic = ai->getAgentConditions(ai);
+	}
+	float xspan = region.xmax - region.xmin - 2*radius;
+	float zspan = region.zmax - region.zmin - 2*radius;
+
+	do {
+
+		ret.x = region.xmin + radius + ((float)randomNumberGenerator.rand(xspan));
+		ret.y = 0.0f;
+		ret.z = region.zmin + radius + ((float)randomNumberGenerator.rand(zspan));
+
+		aic.position = ret;
+
+
+		// assume this new point has no collisions, until we find out below
+		notFoundYet = false;
+
+		// check if ret collides with anything
+		set<SpatialDatabaseItemPtr> neighbors;
+		neighbors.clear();
+		float _new_radius = radius;
+		getItemsInRange(neighbors, ret.x - _new_radius, ret.x + _new_radius, ret.z - _new_radius, ret.z + _new_radius, NULL);
+		set<SpatialDatabaseItemPtr>::iterator neighbor;
+		for (size_t dirs=0; dirs < 10; dirs++)
+		{
+			float theta = randomNumberGenerator.rand() * M_2_PI;
+
+			double directionX = cos(theta);
+			double directionZ = sin(theta);
+			aic.direction = Util::Vector(directionX, 0.0f, directionZ);
+
+			ai->reset(aic, ai->getSimulationEngine());
+			ai->disable();
+
+			/*
+			 * increment must be after loop body or (*neighbor)->isAgent()) will be called on an
+			 * element that is beyond the set.
+			 */
+			for (neighbor = neighbors.begin(); neighbor != neighbors.end(); neighbor++)
+			{
+				if ((excludeAgents) && ((*neighbor)->isAgent()))
+				{
+					continue;
+				}
+				notFoundYet = (*neighbor)->overlaps(ret, radius) ||  ai->overlaps((*neighbor));
+				if (notFoundYet)
+				{
+					std::cout << "Try again placing agent: " << std::endl;
+					break;
+				}
+
+			}
+			if (notFoundYet)
+			{ // no intersections
+				break;
+			}
+
+		}// dirs
+
+		numTries++;
+		if (numTries > 1000)
+		{
+			cerr << "ERROR: trying too hard to find a random position in region.  The region is probably already too dense." << endl;
+			if (numTries > 10000)
+			{
+				throw GenericException("Gave up trying to find a random position in region.");
+			}
+		}
+	} while (notFoundYet);
+
+	return !notFoundYet;
+}
+
 Util::Point GridDatabase2D::randomPositionInRegion(const Util::AxisAlignedBox & region, float radius,MTRand & randomNumberGenerator)
 {
 	Point ret(0.0f, 0.0f, 0.0f);
@@ -777,175 +880,11 @@ Util::Point GridDatabase2D::randomPositionInRegion(const Util::AxisAlignedBox & 
 }
 
 
-
-bool GridDatabase2D::planPath(unsigned int startLocation, unsigned int goalLocation, std::stack<unsigned int> & outputPlan) { 
-	BestFirstSearchPlanner<GridDatabasePlanningDomain, unsigned int> gridAStarPlanner;
-	
-	
-	gridAStarPlanner.init(_planningDomain, INT_MAX);
-
-	return gridAStarPlanner.computePlan(startLocation, goalLocation, outputPlan);
-}
-
-/*
- * This planning does not always work out perfectly
- */
-bool GridDatabase2D::planPath(unsigned int startLocation, unsigned int goalLocation, std::stack<unsigned int> & outputPlan, unsigned int maxNodes) { 
-	BestFirstSearchPlanner<GridDatabasePlanningDomain, unsigned int> gridAStarPlanner;
-	
-	
-	gridAStarPlanner.init(_planningDomain, maxNodes);
-
-	return gridAStarPlanner.computePlan(startLocation, goalLocation, outputPlan);
-}
-
-bool GridDatabase2D::findPath (Util::Point &startPosition, Util::Point &endPosition, std::vector<Util::Point> & path,
-		unsigned int _maxNodesToExpandForSearch)
+void GridDatabase2D::computeAgentNeighbors(SpatialDatabaseItemPtr agent, float rangeSq) const
 {
-	// clearing path
-	path.clear ();
-
-	int startIndex = getCellIndexFromLocation(startPosition);
-	int goalIndex = getCellIndexFromLocation(endPosition);
-	std::stack<unsigned int> agentPath;
-	bool pathComplete = planPath(startIndex,goalIndex,agentPath,_maxNodesToExpandForSearch);
-
-	while (agentPath.empty() == 0)
-	{
-		unsigned int index = agentPath.top();
-		agentPath.pop();
-
-
-		/*
-		 * Removed to make optimal path calculations more accurate
-		// skipping one waypoint
-		if (agentPath.size() > 1) // there is more than 1 left
-			agentPath.pop ();
-
-		// skipping one more waypoint
-		if (agentPath.size() > 1) // there is more than 1 left
-			agentPath.pop ();
-		 */
-		Util::Point p;
-		getLocationFromIndex(index,p);
-		path.push_back(p);
-
-	}
-
-	return pathComplete;
 
 }
-
-/**
- * Eliminate all of the unnecessary nodes that are within sight of each other
- * Also known as the string pulling algorithm.
- *
- * Note: This algorithm ignores agents when tracing
- */
-bool GridDatabase2D::findSmoothPath (Util::Point &startPosition, Util::Point &endPosition, std::vector<Util::Point> & path,
-		unsigned int _maxNodesToExpandForSearch)
+void GridDatabase2D::computeObstacleNeighbors(SpatialDatabaseItemPtr agent, float rangeSq) const
 {
-	// clearing path
-	path.clear ();
-
-	int startIndex = getCellIndexFromLocation(startPosition);
-	int goalIndex = getCellIndexFromLocation(endPosition);
-	std::stack<unsigned int> agentPath;
-	std::deque<Util::Point> plannedPath;
-	Util::Point temp_p;
-
-	bool pathComplete = planPath(startIndex,goalIndex,agentPath,_maxNodesToExpandForSearch);
-	/*
-	std::cout << "path length found is " << agentPath.size() << std::endl;
-	int path_size = agentPath.size();
-	for (int i = 0 ; i < path_size ;i++)
-	{
-		getLocationFromIndex(agentPath.top(),temp_p);
-		agentPath.pop();
-		std::cout << "point location is" << temp_p << std::endl;
-	}
-	*/
-	if ( pathComplete == false )
-	{
-		return pathComplete;
-	}
-
-
-	/*
-	 * Turns the path into a list of points appending the start and end to the path for
-	 * accuracy
-	 */
-	while ( !agentPath.empty() )
-	{
-		getLocationFromIndex(agentPath.top(),temp_p);
-		plannedPath.push_back(temp_p);
-		agentPath.pop();
-	}
-
-	/*
-	 * Most likely these are in the same grid square which causes
-	 * funny business when a trace is done.
-	 */
-	plannedPath.pop_front();
-	plannedPath.push_front(startPosition);
-
-	plannedPath.pop_back();
-	plannedPath.push_back(endPosition);
-
-
-	float dummyt;
-	SpatialDatabaseItemPtr dummyObject=NULL;
-	unsigned int current_index=0;
-	Util::Point current_p;
-	Util::Point previous_p;
-	Util::Point p;
-
-
-	if ( plannedPath.empty() == 0 )
-	{
-
-		path.push_back(plannedPath.front());
-		plannedPath.pop_front();
-		// Store previous p that is used to insert when an intersection is found.
-		if ( !plannedPath.empty() )
-		{
-			previous_p = plannedPath.front();
-			plannedPath.pop_front();
-		}
-
-
-	}
-
-	Ray lineOfSightRay;
-
-	while (plannedPath.empty() == 0)
-	{
-		p = plannedPath.front();
-		plannedPath.pop_front();
-		lineOfSightRay.initWithUnitInterval(current_p, p-current_p);
-
-		// If intersection found then need to push last point where there was
-		// no intersection.
-		if ( trace(lineOfSightRay,dummyt, dummyObject,
-				dummyObject,true) )
-		{
-			path.push_back(previous_p);
-			current_p = previous_p;
-			previous_p = p;
-			// Store previous p that is used to insert when an intersection is found.
-			/*
-			if ( !agentPath.empty() )
-			{
-				gEngine->getSpatialDatabase()->getLocationFromIndex(agentPath.top(),previous_p);
-				agentPath.pop();
-			}*/
-		}
-		previous_p = p;
-
-	}
-	path.push_back(p);
-
-	return pathComplete;
 
 }
-

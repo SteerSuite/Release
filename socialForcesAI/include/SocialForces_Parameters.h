@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 /*
  * SocialForces_Parameters.h
  *
@@ -40,7 +41,7 @@
 
 #define USE_PLANNING 1
 // #define DRAW_ANNOTATIONS 1
-
+#define USE_CIRCLES 1
 // #define _DEBUG_ 1
 namespace SocialForcesGlobals {
 
@@ -58,7 +59,7 @@ namespace SocialForcesGlobals {
 
 
 	extern SteerLib::EngineInterface * gEngineInfo;
-	extern SteerLib::GridDatabase2D * gSpatialDatabase;
+	extern SteerLib::SpatialDataBaseInterface * gSpatialDatabase;
 	extern unsigned int gLongTermPlanningPhaseInterval;
 	extern unsigned int gMidTermPlanningPhaseInterval;
 	extern unsigned int gShortTermPlanningPhaseInterval;
@@ -68,6 +69,7 @@ namespace SocialForcesGlobals {
 	extern bool gUseDynamicPhaseScheduling;
 	extern bool gShowStats;
 	extern bool gShowAllStats;
+	extern bool dont_plan;
 
 
 	// Adding a bunch of parameters so they can be changed via input

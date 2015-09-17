@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __UTIL_PERFORMANCE_PROFILER_H__
 #define __UTIL_PERFORMANCE_PROFILER_H__
@@ -30,39 +31,39 @@ namespace Util {
 		/// Calls reset() indirectly.
 		PerformanceProfiler();
 		/// Resets the profiler
-		void reset();
+		virtual void reset();
 		/// Marks the beginning of a block of code you want to profile
-		inline void start() { isStopped = false; _startTick = getHighResCounterValue(); }
+		virtual inline void start() { isStopped = false; _startTick = getHighResCounterValue(); }
 		/// Marks the end of a block of code you want to profile
-		inline void stop() { _endTick = getHighResCounterValue();  _updateStatistics(); isStopped = true; }
+		virtual inline void stop() { _endTick = getHighResCounterValue();  _updateStatistics(); isStopped = true; }
 
 		/// Returns the number of times the block(s) of code being profiled is called.
-		long long getNumTimesExecuted();
+		virtual long long getNumTimesExecuted();
 		/// Returns the fastest single execution time of the block of code being profiled, measured in seconds.
-		float getMinExecutionTime();
+		virtual float getMinExecutionTime();
 		/// Returns the slowest single execution time of the block of code being profiled, measured in seconds.
-		float getMaxExecutionTime();
+		virtual float getMaxExecutionTime();
 		/// Returns the average execution time of the block of code being profiled, measured in seconds.
-		float getAverageExecutionTime();
+		virtual float getAverageExecutionTime();
 		/// Returns the total time (in seconds) spent in the block of code being profiled.
-		float getTotalTime();
+		virtual float getTotalTime();
 		// Returns the total number of ticks spent in the block of code.
-		long long getTotalTicksAccumulated();
+		virtual long long getTotalTicksAccumulated();
 		// Returns the min number of ticks for a call
-		long long getMinTicks();
+		virtual long long getMinTicks();
 		// Returns the max number of ticks for a call.
-		long long getMaxTicks();
+		virtual long long getMaxTicks();
 		// Returns the tick frequency in MHz.
-		float getTickFrequency();
+		virtual float getTickFrequency();
 
-		float getMinExecutionTimeMills();
-		float getMaxExecutionTimeMills();
-		float getAverageExecutionTimeMills();
+		virtual float getMinExecutionTimeMills();
+		virtual float getMaxExecutionTimeMills();
+		virtual float getAverageExecutionTimeMills();
 
 		/// Outputs a human-readable form of these statistics.
-		void displayStatistics(std::ostream & out);
+		virtual void displayStatistics(std::ostream & out);
 		/// Checks if the timer is started or not
-		inline bool stopped(void) { return isStopped; }
+		virtual inline bool stopped(void) { return isStopped; }
 
 	private:
 		void _updateStatistics();

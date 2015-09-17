@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 /// @file SimulationOptions.cpp
 /// @brief Implements SimulationOptions functionality, and defines defaults for options that are not specified by the user.
@@ -36,6 +37,7 @@
 #include <algorithm>
 #include "simulation/SimulationOptions.h"
 #include "util/Misc.h"
+#include "util/GenericException.h"
 
 
 #include "glfw/include/GL/glfw.h"
@@ -132,7 +134,7 @@ using namespace Util;
 #define DEFAULT_MODULE_SEARCH_PATH "./"
 #define DEFAULT_TEST_CASE_SEARCH_PATH "../../../testcases/"
 #else
-#define DEFAULT_MODULE_SEARCH_PATH "../modules/"
+#define DEFAULT_MODULE_SEARCH_PATH "../lib/"
 #define DEFAULT_TEST_CASE_SEARCH_PATH "../../testcases/"
 #endif
 
@@ -149,6 +151,11 @@ using namespace Util;
 #define DEFAULT_CLOCK_MODE "fixed-fast"
 
 //====================================
+// SPATIAL DATABASE DEFAULTS
+//====================================
+#define DEFAULT_USE_DATABASE "gridDatabase"
+
+//====================================
 // GRID DATABASE DEFAULTS
 //====================================
 #define DEFAULT_MAX_ITEMS_PER_GRID_CELL 7
@@ -157,6 +164,13 @@ using namespace Util;
 #define DEFAULT_NUM_GRID_CELLS_X 200
 #define DEFAULT_NUM_GRID_CELLS_Z 200
 #define DEFAULT_DRAW_GRID true
+
+//====================================
+// Planning Domain DEFAULTS
+//====================================
+#define DEFAULT_USE_PLANNER "gridDomain"
+#define DEFAULT_MAX_NODES_TO_EXPAND 50000
+
 
 //====================================
 // GLFW ENGINE DRIVER DEFAULTS
@@ -233,6 +247,8 @@ SimulationOptions::SimulationOptions()
 	engineOptions.maxVariableDt = DEFAULT_MAX_VARIABLE_DT;
 	engineOptions.clockMode = DEFAULT_CLOCK_MODE;
 
+	spatialDatabaseOptions.name = DEFAULT_USE_DATABASE;
+
 	// grid database options
 	gridDatabaseOptions.maxItemsPerGridCell = DEFAULT_MAX_ITEMS_PER_GRID_CELL;
 	gridDatabaseOptions.gridSizeX = DEFAULT_GRID_SIZE_X;
@@ -240,6 +256,10 @@ SimulationOptions::SimulationOptions()
 	gridDatabaseOptions.numGridCellsX = DEFAULT_NUM_GRID_CELLS_X;
 	gridDatabaseOptions.numGridCellsZ = DEFAULT_NUM_GRID_CELLS_Z;
 	gridDatabaseOptions.drawGrid = DEFAULT_DRAW_GRID;
+
+	// Planning Domain options
+	planningDomainOptions.name = DEFAULT_USE_PLANNER;
+	planningDomainOptions.maxNodesToExpand = DEFAULT_MAX_NODES_TO_EXPAND;
 
 	// GUI options
 	guiOptions.useAntialiasing = DEFAULT_ANTIALIASING;
@@ -387,6 +407,11 @@ void SimulationOptions::generateConfigFile( const std::string & filename )
 	std::cout << "Default configuration written to " << filename << ".\n";
 }
 
+/**
+ *
+ * Creating these tags defines the expected structure of the XML document
+ * Works really fast and easy.
+ */
 void SimulationOptions::_setupXMLStructure( Util::XMLParser & xmlOpts )
 {
 	XMLTag * root = xmlOpts.createRootTag("SteerSimOptions", "This file contains options for SteerSim.  Edit this file to your preference, and\nthen use the '-config' command line option to load these options in SteerSim.\nOptions specified by the command line will override options in this configuration file.");
@@ -397,7 +422,8 @@ void SimulationOptions::_setupXMLStructure( Util::XMLParser & xmlOpts )
 	XMLTag * guiTag = root->createChildTag("gui", "Options related to the openGL visualization and interaction.  Also, make sure to look at the engine driver options for more interface-related options.");
 	XMLTag * globalTag = root->createChildTag("global", "Options related to the main execution of the steersim");
 	XMLTag * engineTag = root->createChildTag("engine", "Options related to the simulation engine");
-	XMLTag * gridDatabaseTag = root->createChildTag("gridDatabase", "Options related to the spatial database");
+	XMLTag * spatialDatabaseTag = root->createChildTag("spatialDatabase", "Options related to the spatial database");
+	XMLTag * planningDomainTag = root->createChildTag("planningDomain", "Options related to the planning domain");
 	XMLTag * engineDriversTag = root->createChildTag("engineDrivers", "Options related to engine drivers");
 	root->createChildTag("modules", "Module-specific options.  Any options specified on the command-line will override the options specified here.  Modules specified here will not necessarily be loaded when started; for that use the startupModules option for the engine.", XML_DATA_TYPE_CONTAINER, NULL, &_moduleOptionsXMLParser );
 
@@ -438,6 +464,16 @@ void SimulationOptions::_setupXMLStructure( Util::XMLParser & xmlOpts )
 	engineTag->createChildTag("minVariableDt", "The minimum time-step allowed when the clock is in \"variable-real-time\" mode.  If the proposed time-step is smaller, this value will be used instead, effectively limiting the max frame rate.", XML_DATA_TYPE_FLOAT, &engineOptions.minVariableDt);
 	engineTag->createChildTag("maxVariableDt", "The maximum time-step allowed when the clock is in \"variable-real-time\" mode.  If the proposed time-step is larger, this value will be used instead, at the expense of breaking synchronization between simulation time and real-time.", XML_DATA_TYPE_FLOAT, &engineOptions.maxVariableDt);
 	engineTag->createChildTag("clockMode", "can be either \"fixed-fast\" (fixed simulation frame rate, running as fast as possible), \"fixed-real-time\" (fixed simulation frame rate, running in real-time), or \"variable-real-time\" (variable simulation frame rate in real-time).", XML_DATA_TYPE_STRING, &engineOptions.clockMode);
+
+	// spatial database stuff
+	spatialDatabaseTag->createChildTag("useDatabase", "Option to select the database type to use , ", XML_DATA_TYPE_STRING, &spatialDatabaseOptions.name);
+	XMLTag * gridDatabaseTag = spatialDatabaseTag->createChildTag("gridDatabase", "Options related to the grid database");
+	XMLTag * navmeshDatabaseTag = spatialDatabaseTag->createChildTag("navmeshDatabase", "Options related to the navmesh database");
+
+	// planning domain stuff
+	planningDomainTag->createChildTag("planner", "Options selects which planning tool to use during simulation", XML_DATA_TYPE_STRING, &planningDomainOptions.name);
+	XMLTag * planningDomainSettingsTag = planningDomainTag->createChildTag("domainSettings", "Options related to the grid database");
+	planningDomainSettingsTag->createChildTag("maxNodesToExpand", "Options informs planner to the max number of nodes to expand in search", XML_DATA_TYPE_UNSIGNED_INT, &planningDomainOptions.maxNodesToExpand);
 
 	// grid database options
 	gridDatabaseTag->createChildTag("maxItemsPerGridCell", "Max number of items a grid cell can contain", XML_DATA_TYPE_UNSIGNED_INT, &gridDatabaseOptions.maxItemsPerGridCell);
@@ -529,7 +565,8 @@ void ModuleOptionsXMLParser::startElement( Util::XMLTag * tag, const ticpp::Elem
 		ticpp::Iterator<ticpp::Element> optionIter;
 		for (optionIter = optionIter.begin(moduleRoot); optionIter != optionIter.end(); ++optionIter ) {
 			if (optionIter->FirstChildElement(false)) {
-				throw GenericException("Error while parsing XML config file: invalid extra tag inside of a module option at line "+Util::toString(optionIter->FirstChildElement(false)->Row()));
+				std::cerr << "Error while parsing XML config file: possible invalid extra tag inside of a module option at line "+Util::toString(optionIter->FirstChildElement(false)->Row()) << std::endl;
+				// throw GenericException("Error while parsing XML config file: invalid extra tag inside of a module option at line "+Util::toString(optionIter->FirstChildElement(false)->Row()));
 			}
 			std::string option = (*optionIter).Value();
 			std::string value = (*optionIter).GetText(false);
@@ -559,8 +596,10 @@ void StartupModulesXMLParser::startElement( Util::XMLTag * tag, const ticpp::Ele
 {
 	ticpp::Iterator<ticpp::Element> moduleIter;
 	for (moduleIter = moduleIter.begin(subRoot); moduleIter != moduleIter.end(); ++moduleIter ) {
+		// I don't think it is nessasary to invalidate this
 		if (moduleIter->FirstChildElement(false)) {
-			throw GenericException("Error while parsing XML config file: invalid extra tag inside of a module option at line "+Util::toString(moduleIter->FirstChildElement(false)->Row()));
+			std::cerr << "Error while parsing XML config file: possible invalid tag at line "+Util::toString(moduleIter->FirstChildElement(false)->Row()) << std::endl;
+			// throw GenericException("Error while parsing XML config file: invalid extra tag inside of a module option at line "+Util::toString(moduleIter->FirstChildElement(false)->Row()));
 		}
 		if ((*moduleIter).Value() != "module") {
 			throw GenericException("Error while parsing XML config file: invalid tag at line "+Util::toString(moduleIter->FirstChildElement(false)->Row()) + ", only <module> is allowed.");

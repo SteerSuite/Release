@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_AGENT_INITIAL_CONDITIONS_H__
 #define __STEERLIB_AGENT_INITIAL_CONDITIONS_H__
@@ -107,10 +108,23 @@ namespace SteerLib {
 		std::vector<AgentGoalInfo> goals;
 		/// The color of the agent
 		Util::Color color;
+		/// false by default set to true if testcase specifies a color for the agent
 		bool colorSet;
 		bool fromRandom;
 		Util::AxisAlignedBox randBox;
+
+		AgentInitialConditions() : colorSet(false) {} // this is apparently the best method for initilization
 	};
+
+	static inline std::ostream &operator<<(std::ostream &out, const AgentInitialConditions &ai)
+	{
+		out << "Agent Initial Conditions" << std::endl <<
+				"position: " << ai.position << "," <<
+				" direction " << ai.direction << "," <<
+				" radius " << ai.radius <<
+				" number of goals " << ai.goals.size() << ")";
+		return out;
+	}
 
 } // end namespace SteerLib
 

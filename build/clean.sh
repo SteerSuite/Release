@@ -16,67 +16,6 @@ fi
 
 # remove Visual Studio 2008 files that may exist, only used if the
 # user specified "cleanall win32"
-if [ "$1" == "win32" ]; then
-    echo "Cleaning Visual Studio 2008 files"
-    rm -rf win32/Release
-    rm -rf win32/Debug
-    rm -f win32/steersuite.suo
-    rm -f win32/steersuite.ncb
-
-    rm -rf ../steertool/build/win32/Release
-    rm -rf ../steertool/build/win32/ReleaseAVX
-    rm -rf ../steertool/build/win32/Debug
-    rm -rf ../steertool/build/win32/steertool.vcproj.*.user
-
-    rm -rf ../external/glfw/win32/Release
-    rm -rf ../external/build/win32/ReleaseAVX
-    rm -rf ../external/glfw/win32/Debug
-    rm -f ../external/glfw/win32/glfw.vcproj.*.user
-
-    rm -rf ../steerbench/build/win32/Release
-    rm -rf ../steerbench/build/win32/ReleaseAVX
-    rm -rf ../steerbench/build/win32/Debug
-    rm -f ../steerbench/build/win32/steerbench.vcproj.*.user
-
-    rm -rf ../pprAI/build/win32/Release
-    rm -rf ../pprAI/build/win32/ReleaseAVX
-    rm -rf ../pprAI/build/win32/Debug
-    rm -f ../pprAI/build/win32/pprAI.vcproj.*.user
-
-    rm -rf ../simpleAI/build/win32/Release
-    rm -rf ../simpleAI/build/win32/ReleaseAVX
-    rm -rf ../simpleAI/build/win32/Debug
-    rm -f ../simpleAI/build/win32/simpleAI.vcproj.*.user
-
-    rm -rf ../steerlib/build/win32/Release
-    rm -rf ../steerlib/build/win32/ReleaseAVX
-    rm -rf ../steerlib/build/win32/Debug
-    rm -f ../steerlib/build/win32/steerlib.vcproj.*.user
-
-    rm -rf ../steersim/build/win32/Release
-    rm -rf ../steersim/build/win32/ReleaseAVX
-    rm -rf ../steersim/build/win32/Debug
-    rm -f ../steersim/build/win32/steersim.vcproj.*.user
-
-    rm -rf ../socialForcesAI/build/win32/Release
-    rm -rf ../socialForcesAI/build/win32/ReleaseAVX
-    rm -rf ../socialForcesAI/build/win32/Debug
-    rm -f ../socialForcesAI/build/win32/sfAI.vcproj.*.user
-
-    rm -rf ../rvo2AI/build/win32/Release
-    rm -rf ../rvo2AI/build/win32/ReleaseAVX
-    rm -rf ../rvo2AI/build/win32/Debug
-    rm -f ../rvo2AI/build/win32/rvo2AI.vcproj.*.user
-    
-    rm -rf ../util/build/win32/Release
-    rm -rf ../util/build/win32/ReleaseAVX
-    rm -rf ../util/build/win32/Debug
-    rm -f ../util/build/win32/util.vcproj.*.user
-    
-    
-    
-    exit 0
-fi
 
 # This brute-force careful approach makes sure we don't delete
 # potentially precious files that the user forgot inside directory.
@@ -88,8 +27,14 @@ if [ -d bin/ ]; then
     if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "steersim" ]]; then
     	rm -f bin/steersim
     fi
+    if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "steerdemo" ]]; then
+    	rm -f bin/steerdemo
+    fi
     if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "steertool" ]]; then
     	rm -f bin/steertool
+    fi
+    if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "navmesh" ]]; then
+    	rm -f bin/navmeshBuilder
     fi
     rmdir bin/
 fi
@@ -99,129 +44,118 @@ fi
 echo "Cleaning lib/"
 if [ -d lib/ ]; then
 		
-	if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "steertool" ]]; then
+	 	if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "steertool" ]]; then
     	rm -f lib/libsteer.so
+    	rm -f lib/libsteer.dylib
     fi
-
-	if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "util" ]]; then
+	 	if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "util" ]]; then
     	rm -f lib/libutil.so
+		rm -f lib/libutil.dylib
     fi
-
     if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "steersim" ]]; then
     	rm -f lib/libsteersim.so
+		rm -f lib/libsteersim.dylib
     fi
-
     if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "glfw" ]]; then
     	rm -f lib/libglfw.so
     	rm -f lib/libglfw.dylib
-	fi
-
+    fi
+		if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "anttweakbar" ]]; then
+    	rm -f lib/libAntTweakBar.so
+    	rm -f lib/libAntTweakBar.dylib
+    fi
+    if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "qhull" ]]; then
+    	rm -f lib/libqhull.so
+    	rm -f lib/libqhull_p.so
+    	rm -f lib/libqhull.dylib
+    	rm -f lib/libqhull_p.dylib
+    fi
+    if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "navmesh" ]]; then
+    	rm -f lib/libDebugUtils.so
+    	rm -f lib/libDetour.so
+    	rm -f lib/libDetourCrowd.so
+    	rm -f lib/libRecast.so
+    	rm -f lib/libDetourTileCache.so
+    	rm -f lib/libnavmeshBuilder.so
+    	rm -f lib/libDebugUtils.dylib
+    	rm -f lib/libDetour.dylib
+    	rm -f lib/libDetourCrowd.dylib
+    	rm -f lib/libRecast.dylib
+    	rm -f lib/libDetourTileCache.dylib
+    	rm -f lib/libnavmeshBuilder.dylib
+    fi
+    if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "kdtree" ]]; then
+		rm -f lib/libkdtree.so
+		rm -f lib/libkdtree.dylib
+    fi
     if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "pprAI" ]]; then
     	rm -f lib/libpprAI.so
+    	rm -f lib/libpprAI.dylib
     	rm -f lib/pprAI.o
     fi
-
     if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "rvo2dAI" ]]; then
     	rm -f lib/librvo2dAI.so
+    	rm -f lib/librvo2dAI.dylib
     	rm -f lib/rvo2dAI.o
     fi
-
+		if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "footstepAI" ]]; then
+    	rm -f lib/libfootstepAI.so
+    	rm -f lib/libfootstepAI.dylib
+    	rm -f lib/footstepAI.o
+    fi
+    if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "ccAI" ]]; then
+    	rm -f lib/libccAI.so
+    	rm -f lib/ccAI.o
+    fi
+	if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "hidacAI" ]]; then
+    	rm -f lib/libhidacAI.so
+		rm -f lib/hidacAI.o
+    fi
     if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "sfAI" ]]; then
     	rm -f lib/libsfAI.so
-		rm -f lib/sfAI.o
+			rm -f lib/sfAI.o
     fi
+    
+    rm -f lib/libDebugUtils.a  
+    rm -f lib/libDetour.a  
+    rm -f lib/libDetourCrowd.a
+    rm -f lib/libnavmesh.so
+    rm -f lib/libRecast.a
+    rm -f lib/libsimpleAI.so
+    rm -f lib/libsteerlib.so  
+    rm -f lib/libsteersimlib.so  
+    rm -f lib/libtinyxml.so
+    rm -f lib/libacclmesh.so
+    rm -f lib/libegocentricAI.so  
+    rm -f lib/libhybridAI.so  
+    rm -f lib/libmeshdatabase.so  
+    rm -f lib/librvo3dAI.so  
+    rm -f lib/libscenario.so
+
+    rm -f lib/libDebugUtils.dylib  
+    rm -f lib/libDetour.dylib  
+    rm -f lib/libDetourCrowd.dylib
+    rm -f lib/libnavmesh.dylib
+    rm -f lib/libRecast.dylib
+    rm -f lib/libsimpleAI.dylib
+    rm -f lib/libsteerlib.dylib  
+    rm -f lib/libsteersimlib.dylib  
+    rm -f lib/libtinyxml.dylib
+    rm -f lib/libacclmesh.dylib
+    rm -f lib/libegocentricAI.dylib  
+    rm -f lib/libhybridAI.dylib  
+    rm -f lib/libmeshdatabase.dylib  
+    rm -f lib/librvo3dAI.dylib  
+    rm -f lib/libscenario.dylib
+
     rmdir lib/
 fi
 
 
 # This brute-force careful approach makes sure we don't delete
 # potentially precious files that the user forgot inside directory.
-echo "Cleaning modules/"
-if [ -d modules/ ]; then
-		if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "simpleAI" ]]; then
-    	rm -f modules/simpleAI.o
-    fi
-    if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "pprAI" ]]; then
-    	rm -f modules/pprAI.o
-    fi
-    if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "rvo2dAI" ]]; then
-    	rm -f modules/rvo2dAI.o
-    fi
-    if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "sfAI" ]]; then
-    	rm -f modules/sfAI.o
-    fi
-
-    rmdir modules/
+echo "Cleaning gmake/"
+if [ -d gmake/ ]; then
+	rm -rf gmake/
 fi
 
-if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "glfw" ]]; then
-	echo "Cleaning GLFW"
-	pushd ../external/glfw > /dev/null
-	$MAKE x11-clean > /dev/null
-	$MAKE macosx-clean > /dev/null
-	popd > /dev/null
-fi
-
-if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "steerlib" ]]; then
-	echo "Cleaning SteerLib"
-	pushd ../steerlib/build > /dev/null
-	$MAKE clean > /dev/null
-	popd > /dev/null
-fi
-
-if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "util" ]]; then
-	echo "Cleaning Util"
-	pushd ../util/build > /dev/null
-	$MAKE clean > /dev/null
-	popd > /dev/null
-fi
-
-if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "steerbench" ]]; then
-	echo "Cleaning SteerBench"
-	pushd ../steerbench/build > /dev/null
-	$MAKE clean > /dev/null
-	popd > /dev/null
-fi
-
-if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "steersim" ]]; then
-	echo "Cleaning SteerSim"
-	pushd ../steersim/build > /dev/null
-	rm -f autogenerated/moc_*.cpp
-	$MAKE clean > /dev/null
-	popd > /dev/null
-fi
-
-if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "steertool" ]]; then
-	echo "Cleaning SteerTool"
-	pushd ../steertool/build > /dev/null
-	$MAKE clean > /dev/null
-	popd > /dev/null
-fi
-
-if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "simpleAI" ]]; then
-	echo "Cleaning SimpleAI"
-	pushd ../simpleAI/build > /dev/null
-	$MAKE clean > /dev/null
-	popd > /dev/null
-fi
-
-if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "pprAI" ]]; then
-	echo "Cleaning PPR AI"
-	pushd ../pprAI/build > /dev/null
-	$MAKE clean > /dev/null
-	popd > /dev/null
-fi
-
-if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "rvo2dAI" ]]; then
-	echo "Cleaning RVO2AI"
-	pushd ../rvo2AI/build > /dev/null
-	$MAKE clean > /dev/null
-	popd > /dev/null
-fi
-
-if [[ $BUILD_MODULE == "all" || $BUILD_MODULE == "sfAI" ]]; then
-	echo "Cleaning Social Forces"
-	pushd ../socialForcesAI/build > /dev/null
-	$MAKE clean > /dev/null
-	popd > /dev/null
-fi

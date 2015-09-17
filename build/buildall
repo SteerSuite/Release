@@ -1,15 +1,14 @@
 #!/bin/bash
 
 #
-# Copyright (c) Shawn Singh, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman, Glen Berseth
+# Copyright (c) Glen Berseth, Shawn Singh, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
 # See license.txt for complete license.
 #
-
 
 # macro call to another more specific script
 
 # Usage
-# ./buildall <os_type> [Debug]
+# ./buildall <os_type> [Debug|Release]
 # Debug is optional
 
 if [ -z $2 ] # empty string
@@ -18,4 +17,14 @@ then
 else
 	Build_Type="$2"
 fi
-./build.sh $1 all $Build_Type
+
+premake4 gmake
+
+pushd gmake/  > /dev/null
+	if [ $Build_Type == "Release" ] # empty string
+	then
+		make config=release
+	else
+		make config=debug
+	fi
+popd > /dev/null

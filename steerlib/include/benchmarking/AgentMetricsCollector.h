@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_AGENT_METRICS_COLLECTOR_H__
 #define __STEERLIB_AGENT_METRICS_COLLECTOR_H__
@@ -19,7 +20,7 @@
 #include <map>
 #include <vector>
 #include "Globals.h"
-#include "griddatabase/GridDatabase2D.h"
+#include "interfaces/SpatialDataBaseInterface.h"
 #include "recfileio/RecFileIO.h"
 #include "benchmarking/MetricsData.h"
 #include "interfaces/AgentInterface.h"
@@ -63,7 +64,7 @@ namespace SteerLib {
 		/// Resets all metrics, and uses the latest status of the agent to form new initial conditions.
 		void reset();
 		/// Should be called exactly once every simulation step, after the agent has been updated in that step.
-		void update(SteerLib::GridDatabase2D * gridDB, SteerLib::AgentInterface * updatedAgent, float currentTimeStamp, float timePassedSinceLastFrame);
+		void update(SteerLib::SpatialDataBaseInterface * gridDB, SteerLib::AgentInterface * updatedAgent, float currentTimeStamp, float timePassedSinceLastFrame);
 
 	    /// @name query information for metrics
 		//@{
@@ -83,7 +84,7 @@ namespace SteerLib {
 
 	protected:
 	    void _resetMetrics();
-		void _updateCollisionStats(SteerLib::GridDatabase2D * gridDB, SteerLib::AgentInterface * updatedAgent, float currentTimeStamp);
+		void _updateCollisionStats(SteerLib::SpatialDataBaseInterface * gridDB, SteerLib::AgentInterface * updatedAgent, float currentTimeStamp);
 	    void _checkAndUpdateOneCollision(uintptr_t collisionKey, float penetration, float currentTimeStamp);
 	    void _updateAgentInformation(SteerLib::AgentInterface * updatedAgent);
 

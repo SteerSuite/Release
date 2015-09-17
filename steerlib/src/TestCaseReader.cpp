@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 /// @file TestCaseReader.cpp
 /// @brief Implements the SteerLib::TestCaseReader class.
@@ -11,6 +12,7 @@
 #include "util/Misc.h"
 #include "mersenne/MersenneTwister.h"
 #include "griddatabase/GridDatabase2D.h"
+#include "interfaces/SpatialDataBaseInterface.h"
 
 using namespace std;
 using namespace SteerLib;
@@ -55,7 +57,7 @@ void TestCaseReader::readTestCaseFromFile( const std::string & testCaseFilename 
 	//
 
 	// create a temporary grid database used for randomly placing agents
-	GridDatabase2D * testCaseDB = new GridDatabase2D(_header.worldBounds.xmin, _header.worldBounds.xmax, _header.worldBounds.zmin, _header.worldBounds.zmax, 200, 200, 10, true);
+	SpatialDataBaseInterface * testCaseDB = new GridDatabase2D(_header.worldBounds.xmin, _header.worldBounds.xmax, _header.worldBounds.zmin, _header.worldBounds.zmax, 200, 200, 10, true);
 #ifdef _DEBUG
 	std::cout << "num raw obstacles: " << _rawObstacles.size() << std::endl;
 #endif
@@ -114,28 +116,45 @@ void TestCaseReader::readTestCaseFromFile( const std::string & testCaseFilename 
 		/** Temporary commented out -- CORY  testCaseDB->addObject(&(_rawAgents[i]), agentBounds); **/
 	}
 
+	// Then add all non-random agent emitters, making sure they don't overlap anything.
+	// "non-random" is for position; random directions and goals are OK.
+	for (unsigned int i=0; i<_rawAgentEmitters.size(); i++) {
+
+		// don't process randomly placed agents on the first round
+		if (_rawAgentEmitters[i].isPositionRandom) {
+			continue;
+		}
+	
+		// init the agent emitter, and add it to a temporary database
+		AgentInitialConditions newAgentEmitter;
+		newAgentEmitter.fromRandom = false;
+		_initAgentEmitterInitialConditions(newAgentEmitter, _rawAgentEmitters[i]);
+		_initializedAgentEmitters.push_back(newAgentEmitter);
+	}
+
 	// After non-random obstacles and agents are initialized, we can then assign the random obstacles and agents.
 	// first init random obstacles
 
 	/// TODO ASAP: Fix this for circular obstacles!
 	
-	/*for (unsigned int i=0; i<_rawObstacles.size(); i++) {
-
-
-		if (!_rawObstacles[i].isObstacleRandom) {
+	for (unsigned int i=0; i<_rawObstacles.size(); i++) {
+		// TODO Need to make this support different kinds of obstacles
+		RawBoxObstacleInfo * box = dynamic_cast<RawBoxObstacleInfo *>(_rawObstacles[i]);
+		if ( (box == NULL) || !box->isObstacleRandom) {
 			continue;  // don't process non-random obstacles on the second round
 		}
 
-		Point newPosition = testCaseDB->randomPositionInRegionWithoutCollisions( _rawObstacles[i].regionBounds, _rawObstacles[i].size, false, _randomNumberGenerator);
-		float offset = _rawObstacles[i].size * 0.5f;
-		_rawObstacles[i].obstacleBounds = AxisAlignedBox(newPosition.x-offset, newPosition.x+offset, 0.0f, _rawObstacles[i].height, newPosition.z-offset, newPosition.z+offset);
+		Point newPosition = testCaseDB->randomPositionInRegionWithoutCollisions( box->regionBounds,box->size, false, _randomNumberGenerator);
+		float offset = box->size * 0.5f;
+		_rawObstacles[i]->obstacleBounds = AxisAlignedBox(newPosition.x-offset, newPosition.x+offset, 0.0f, box->height, newPosition.z-offset, newPosition.z+offset);
 
 		// init the obstacle, and add it to a temporary database
-		ObstacleInitialConditions newObstacle;
-		_initObstacleInitialConditions(newObstacle, _rawObstacles[i].obstacleBounds);
+		BoxObstacleInitialConditions * newObstacle = new BoxObstacleInitialConditions();
+		_initObstacleInitialConditions(*newObstacle, _rawObstacles[i]->obstacleBounds);
 		_initializedObstacles.push_back(newObstacle);
-		testCaseDB->addObject(&(_rawObstacles[i]), _rawObstacles[i].obstacleBounds);
-	}*/
+		testCaseDB->addObject((_rawObstacles[i]), _rawObstacles[i]->obstacleBounds);
+
+	}
 
 
 	// Finally, add all random agents.

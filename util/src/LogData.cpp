@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 /*
  * LogData.cpp
  *
@@ -21,8 +22,12 @@ LogData::LogData()
 
 LogData::~LogData()
 {
-	// TODO Auto-generated destructor stub
 	delete log;
+	for (size_t i=0; i < logData.size(); i++)
+	{
+		delete logData[i];
+	}
+	logData.clear();
 }
 
 void LogData::setLogger(Logger * log)
@@ -58,8 +63,9 @@ size_t LogData::size()
  */
 void LogData::appendLogData(LogData * logD)
 {
-	std::cout << "this->size() == logD->size(), " << this->size() << " != " << logD->size() << std::endl;
-	assert(this->size() == logD->size()); //, std::string("this->size() == logD->size(), ") + this->size() + " != " + logD->size());
+	// assert(this->size() == (logD->size()-1) && std::string("this->size() == logD->size(), ") + this->size() + " != " + (logD->size()-1));
+	assert(this->size() == (logD->size()-1) && "this->size() != logD->size(), ");
+
 	// Add fields to Logger
 	for (size_t i=0; i < logD->getLogger()->getNumberOfFields(); i++)
 	{
@@ -93,5 +99,9 @@ PLUGIN_ Logger * getLogger(LogData * log)
 PLUGIN_ unsigned long long logDataLength(LogData * log)
 {
 	return log->size();
+}
+PLUGIN_ void logDelete(LogData * log)
+{
+	delete log;
 }
 

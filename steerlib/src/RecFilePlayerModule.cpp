@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 /// @file RecFilePlayerModule.cpp
 /// @brief Implements the RecFilePlayerModule built-in module.
@@ -234,20 +235,6 @@ void ReplayAgent::draw()
 		}
 	*/
 
-#ifdef DRAW_HISTORIES
-	__oldPositions.push_back(position());
-	int points = 0;
-	float mostPoints = 100.0f;
-	while ( __oldPositions.size() > mostPoints )
-	{
-		__oldPositions.pop_front();
-	}
-	for (int q = __oldPositions.size()-1 ; q > 0 && __oldPositions.size() > 1; q--)
-	{
-		DrawLib::drawLineAlpha(__oldPositions.at(q), __oldPositions.at(q-1),gBlack, q/(float)__oldPositions.size());
-	}
-
-#endif
 #endif
 }
 

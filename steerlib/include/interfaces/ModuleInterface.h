@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_MODULE_INTERFACE_H__
 #define __STEERLIB_MODULE_INTERFACE_H__
@@ -123,6 +124,9 @@ namespace SteerLib {
 		virtual void postprocessFrame(float timeStamp, float dt, unsigned int frameNumber) { }
 		/// This function called when user interacts with the program using the keyboard, called if the engine did not already recognize the keypress.
 		virtual void processKeyboardInput(int key, int action ) { }
+		/// This function called when user interacts with the program using the mouse.
+		virtual void processMouseMovementEvent(int deltaX, int deltaY ) { }
+		virtual void processMouseButtonEvent(int button, int action) { }
 		/// Uses OpenGL to draw any module-specific information to the screen; <b>WARNING:</b> this may be called multiple times per simulation step.
 		virtual void draw() { }
 		//@}

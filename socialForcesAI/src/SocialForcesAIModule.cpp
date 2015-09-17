@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 /// @file SocialForcesAIModule.cpp
 /// @brief Implements the SocialForcesAIModule plugin.
@@ -16,14 +17,14 @@
 
 
 // globally accessible to the simpleAI plugin
-SteerLib::EngineInterface * gEngine;
-// SteerLib::GridDatabase2D * gSpatialDatabase;
+// SteerLib::EngineInterface * gEngine;
+// SteerLib::SpatialDataBaseInterface * gSpatialDatabase;
 
 namespace SocialForcesGlobals
 {
 
-	SteerLib::EngineInterface * gEngineInfo;
-	SteerLib::GridDatabase2D * gSpatialDatabase;
+	// SteerLib::EngineInterface * gEngineInfo;
+	// SteerLib::SpatialDataBaseInterface * gSpatialDatabase;
 	unsigned int gLongTermPlanningPhaseInterval;
 	unsigned int gMidTermPlanningPhaseInterval;
 	unsigned int gShortTermPlanningPhaseInterval;
@@ -33,6 +34,7 @@ namespace SocialForcesGlobals
 	bool gUseDynamicPhaseScheduling;
 	bool gShowStats;
 	bool gShowAllStats;
+	bool dont_plan;
 
 
 	// Adding a bunch of parameters so they can be changed via input
@@ -68,8 +70,9 @@ PLUGIN_API void destroyModule( SteerLib::ModuleInterface*  module )
 
 void SocialForcesAIModule::init( const SteerLib::OptionDictionary & options, SteerLib::EngineInterface * engineInfo )
 {
-	gEngine = engineInfo;
-	gSpatialDatabase = engineInfo->getSpatialDatabase();
+	// gEngine = engineInfo;
+	// gSpatialDatabase = engineInfo->getSpatialDatabase();
+	_gEngine = engineInfo;		
 	_data = "";
 
 	gUseDynamicPhaseScheduling = false;
@@ -77,6 +80,7 @@ void SocialForcesAIModule::init( const SteerLib::OptionDictionary & options, Ste
 	logStats = false;
 	gShowAllStats = false;
 	logFilename = "sfAI.log";
+	dont_plan = false;
 
 	sf_acceleration = ACCELERATION;
 	sf_personal_space_threshold = PERSONAL_SPACE_THRESHOLD;
@@ -167,14 +171,15 @@ void SocialForcesAIModule::init( const SteerLib::OptionDictionary & options, Ste
 		{
 			gShowAllStats = Util::getBoolFromString(value.str());
 		}
+		else if ((*optionIter).first == "dont_plan")
+		{
+			dont_plan = Util::getBoolFromString(value.str());
+		}
 		else
 		{
 			// throw Util::GenericException("unrecognized option \"" + Util::toString((*optionIter).first) + "\" given to PPR AI module.");
 		}
 	}
-
-	if( logStats )
-	{
 
 		_rvoLogger = LogManager::getInstance()->createLogger(logFilename,LoggerType::BASIC_WRITE);
 
@@ -188,6 +193,8 @@ void SocialForcesAIModule::init( const SteerLib::OptionDictionary & options, Ste
 		_rvoLogger->addDataField("total_time_of_all_calls", DataType::Float);
 		_rvoLogger->addDataField("tick_frequency", DataType::Float);
 
+	if( logStats )
+		{
 		// LETS TRY TO WRITE THE LABELS OF EACH FIELD
 		std::stringstream labelStream;
 		unsigned int i;
@@ -195,6 +202,7 @@ void SocialForcesAIModule::init( const SteerLib::OptionDictionary & options, Ste
 			labelStream << _rvoLogger->getFieldName(i) << " ";
 		labelStream << _rvoLogger->getFieldName(i);
 		_data = labelStream.str() + "\n";
+
 		_rvoLogger->writeData(labelStream.str());
 
 	}
@@ -260,6 +268,7 @@ SteerLib::AgentInterface * SocialForcesAIModule::createAgent()
 	agent->rvoModule = this;
 	agent->id_ = agents_.size();
 	agents_.push_back(agent);
+	agent->_gEngine = this->_gEngine;
 	return agent;
 }
 
@@ -314,8 +323,6 @@ void SocialForcesAIModule::cleanupSimulation()
 {
 	agents_.clear();
 
-	if ( logStats )
-	{
 		LogObject rvoLogObject;
 
 		rvoLogObject.addLogData(gPhaseProfilers->aiProfiler.getNumTimesExecuted());
@@ -341,6 +348,9 @@ void SocialForcesAIModule::cleanupSimulation()
 		gPhaseProfilers->predictivePhaseProfiler.reset();
 		gPhaseProfilers->reactivePhaseProfiler.reset();
 		gPhaseProfilers->steeringPhaseProfiler.reset();
+	if ( logStats )
+	{
+		_rvoLogger->writeLogObject(rvoLogObject);
 	}
 
 }

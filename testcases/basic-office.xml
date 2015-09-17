@@ -1,4 +1,7 @@
 <!--
+  Copyright (c) 2009-2015  Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
+  See license.txt for complete license.
+--><!--
   Copyright (c) 2009 Shawn Singh, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
   See license.txt for complete license.
 -->
@@ -40,7 +43,7 @@
     <xmax>-30.5</xmax>
     <ymin>0</ymin>
     <ymax>1</ymax>
-    <zmin>1.2</zmin>
+    <zmin>1.8</zmin>
     <zmax>24</zmax>
   </obstacle>
 
@@ -50,7 +53,7 @@
     <ymin>0</ymin>
     <ymax>1</ymax>
     <zmin>-24</zmin>
-    <zmax>-1.2</zmax>
+    <zmax>-1.8</zmax>
   </obstacle>
 
   <obstacle>
@@ -77,7 +80,7 @@
     <ymin>0</ymin>
     <ymax>1</ymax>
     <zmin>-24</zmin>
-    <zmax>-1.2</zmax>
+    <zmax>-1.8</zmax>
   </obstacle>
 
   <obstacle>
@@ -85,7 +88,7 @@
     <xmax>31.5</xmax>
     <ymin>0</ymin>
     <ymax>1</ymax>
-    <zmin>1.2</zmin>
+    <zmin>1.8</zmin>
     <zmax>24</zmax>
   </obstacle>
 
@@ -118,7 +121,7 @@
   </obstacle>
   
   <obstacle>
-    <xmin>11.5</xmin>
+    <xmin>12.5</xmin>
     <xmax>21.5</xmax>
     <ymin>0</ymin>
     <ymax>1</ymax>
@@ -171,7 +174,7 @@
   
   <obstacle>
     <xmin>-21.5</xmin>
-    <xmax>-11.5</xmax>
+    <xmax>-12.5</xmax>
     <ymin>0</ymin>
     <ymax>1</ymax>
     <zmin>3</zmin>
@@ -231,7 +234,7 @@
   </obstacle>
   
   <obstacle>
-    <xmin>11.5</xmin>
+    <xmin>12.5</xmin>
     <xmax>21.5</xmax>
     <ymin>0</ymin>
     <ymax>1</ymax>
@@ -284,7 +287,7 @@
   
   <obstacle>
     <xmin>-21.5</xmin>
-    <xmax>-11.5</xmax>
+    <xmax>-12.5</xmax>
     <ymin>0</ymin>
     <ymax>1</ymax>
     <zmin>-4</zmin>

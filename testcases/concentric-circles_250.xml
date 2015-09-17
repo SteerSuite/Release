@@ -1,4 +1,7 @@
-<?xml version="1.0" ?>
+<!--
+  Copyright (c) 2009-2015  Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
+  See license.txt for complete license.
+--><?xml version="1.0" ?>
 <SteerBenchTestCase xmlns="http://www.magix.ucla.edu/steerbench" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.magix.ucla.edu/steerbench                                          TestCaseSchema.xsd">
 	
 

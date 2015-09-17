@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 /// @file TestCasePlayerModule.cpp
 /// @brief Implements the TestCasePlayerModule built-in module.
@@ -9,6 +10,7 @@
 #include "modules/TestCasePlayerModule.h"
 #include "testcaseio/TestCaseIO.h"
 #include "util/Misc.h"
+#include "util/GenericException.h"
 
 using namespace SteerLib;
 
@@ -112,6 +114,20 @@ void TestCasePlayerModule::initializeSimulation() {
 	for (unsigned int i=0; i < testCaseReader->getNumAgents(); i++) {
 		const SteerLib::AgentInitialConditions & ic = testCaseReader->getAgentInitialConditions(i);
 		_engine->createAgent( ic, _aiModule );
+	}
+
+	//Create the agents
+	for (unsigned int i=0; i < testCaseReader->getNumAgentEmitters(); i++) {
+		const SteerLib::AgentInitialConditions & ic = testCaseReader->getAgentEmitterInitialConditions(i);
+		_engine->createAgentEmitter( ic, _aiModule );
+	}
+
+	//Setting CameraView if defined
+	if(testCaseReader->getNumCameraViews() > 0)
+	{
+		_engine->isTestcaseCameraView(true);
+		_engine->getCamera().reset();
+		_engine->getCamera().setView(testCaseReader->getCameraView(0));
 	}
 
 	delete testCaseReader;

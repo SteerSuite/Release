@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __PPR_AI_MODULE_H__
 #define __PPR_AI_MODULE_H__
@@ -33,8 +34,8 @@ namespace PPRGlobals {
 	};
 
 
-	extern SteerLib::EngineInterface * gEngine;
-	extern SteerLib::GridDatabase2D * gSpatialDatabase;
+	// extern SteerLib::EngineInterface * gEngine;
+	// extern SteerLib::SpatialDataBaseInterface * gSpatialDatabase;
 	extern unsigned int gLongTermPlanningPhaseInterval;
 	extern unsigned int gMidTermPlanningPhaseInterval;
 	extern unsigned int gShortTermPlanningPhaseInterval;
@@ -44,7 +45,7 @@ namespace PPRGlobals {
 	extern bool gUseDynamicPhaseScheduling;
 	extern bool gShowStats;
 	extern bool gShowAllStats;
-
+	extern bool dont_plan;
 
 	// Adding a bunch of parameters so they can be changed via input
 	extern float ped_max_speed;
@@ -114,6 +115,8 @@ private:
 	bool logToFie;
 	std::string logFilename;
 	Logger * _pprLogger;
+
+	SteerLib::EngineInterface * _gEngine;
 
 };
 

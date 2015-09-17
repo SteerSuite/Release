@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 #include "LogObject.h"
 #include <cassert>
 #include "PluginAPI.h"
@@ -24,7 +25,7 @@ std::istream& operator>>(std::istream& input, LogObject& logObject)
 	unsigned int numRecords = 0;
 	input >> numRecords;
 
-	std::cout << "num records in istream " << numRecords << "\n";
+	// std::cout << "num records in istream " << numRecords << "\n";
 
 	for (unsigned int i=0; i < numRecords; i++)
 	{

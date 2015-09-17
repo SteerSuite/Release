@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 /// @file CompositeTechnique02.cpp
 /// @brief Implements SteerLib::CompositeBenchmarkTechnique02, an extension of SteerLib::CompositeTechnique01 that tries to capture "second-order" effort efficiency.

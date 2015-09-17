@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __UTIL_GEOMETRY_H__
 #define __UTIL_GEOMETRY_H__
@@ -84,6 +85,7 @@ namespace Util {
 		float lengthSquared() const { return x*x + y*y + z*z; }
 		/// Computes the magnitude of the vector.
 		float length() const { return sqrtf(x*x + y*y + z*z); }
+		float norm() const { return length(); }
 		/// Negates a vector.
 		Vector operator-() const { return Vector(-x, -y, -z); }
 		//@}
@@ -118,6 +120,7 @@ namespace Util {
 		bool operator!=(const Vector &vec) const { return ((x != vec.x) || (y != vec.y) || (z != vec.z)); }
 		/// Returns true if all elements are not equal to the same scalar value.
 		bool operator!=(const float c) const { return ((x != c) && (y != c) && (z != c)); }
+
 		//@}
 		/*
 		Point point()
@@ -271,6 +274,7 @@ namespace Util {
 	static inline Point operator*(float c, const Point &pt) { return Point(c*pt.x, c*pt.y, c*pt.z); }
 	/// Vector normalization; beware it is costly, using both a division and a square-root operation.
 	static inline Vector normalize(const Vector &vec) { float lengthInv = 1.0f / sqrtf(vec.x*vec.x + vec.y*vec.y + vec.z*vec.z);  return Vector(lengthInv * vec.x, lengthInv * vec.y, lengthInv * vec.z); }
+	static inline Point normalize(const Point &vec) { float lengthInv = 1.0f / sqrtf(vec.x*vec.x + vec.y*vec.y + vec.z*vec.z);  return Point(lengthInv * vec.x, lengthInv * vec.y, lengthInv * vec.z); }
 	/// Returns the dot product of two vectors.
 	static inline float dot(const Vector &vec1, const Vector &vec2) { return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z; }
 	// Don't ask.... (Glen)
@@ -316,6 +320,12 @@ namespace Util {
 		return vec;
 	}
 
+	/// converts degrees to radians
+	static inline double radians(double angle)
+	{
+		return angle*M_PI_OVER_180;
+	}
+
 
 
 
@@ -351,7 +361,7 @@ namespace Util {
 	
 	/// Returns true if the ray intersects the box, and sets the t parameter if they intersect.
 	static inline bool rayIntersectsBox2D(float xmin, float xmax, float zmin, float zmax, const Ray &r, float &t)
-	{
+	{// ray.dir does not NEED to be normalized
 		float txnear, txfar, tznear, tzfar, invRayDirx, invRayDirz;
 		float mint = r.mint;
 		float maxt = r.maxt;
@@ -620,6 +630,31 @@ namespace Util {
 	    float norm = weights[0] + weights[1] + weights[2];
 
 	    return weights/norm;
+	}
+
+	/**
+	 * \brief      Computes the squared distance from a line segment with the
+	 *             specified endpoints to a specified point.
+	 * \param      a               The first endpoint of the line segment.
+	 * \param      b               The second endpoint of the line segment.
+	 * \param      c               The point to which the squared distance is to
+	 *                             be calculated.
+	 * \return     The squared distance from the line segment to the point.
+	 */
+	inline float distSqPointLineSegment(const Util::Point &a, const Util::Point &b,
+										const Util::Point &c)
+	{
+		const float r = ((c - a) * (b - a)) / (b - a).lengthSquared();
+
+		if (r < 0.0f) {
+			return (c - a).lengthSquared();
+		}
+		else if (r > 1.0f) {
+			return (c - b).lengthSquared();
+		}
+		else {
+			return (c - (a + r * (b - a))).lengthSquared();
+		}
 	}
 
 } // end namespace Util

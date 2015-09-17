@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_GRID_DATABASE_H__
 #define __STEERLIB_GRID_DATABASE_H__
@@ -16,6 +17,7 @@
 #include "Globals.h"
 #include "griddatabase/GridDatabase2DPrivate.h"
 #include "interfaces/SpatialDatabaseItem.h"
+#include "interfaces/SpatialDataBaseInterface.h"
 
 // #define _DEBUG1
 
@@ -80,7 +82,7 @@ namespace SteerLib {
 	 *    works with proper semantics, but may not perform well if too many things get leftover.
 	 *
 	 */
-	class STEERLIB_API GridDatabase2D : public GridDatabase2DPrivate {
+	class STEERLIB_API GridDatabase2D : public SpatialDataBaseInterface, public GridDatabase2DPrivate  {
 	public:
 		/// @name Constructors and destructors
 		//@{
@@ -131,6 +133,8 @@ namespace SteerLib {
 		void removeObject( SpatialDatabaseItemPtr item, const Util::AxisAlignedBox &oldBounds );
 		/// Updates an existing object in the database.  <b>It is the user's responsibility to make sure oldBounds is correct.</b>
 		void updateObject( SpatialDatabaseItemPtr item, const Util::AxisAlignedBox & oldBounds, const Util::AxisAlignedBox & newBounds );
+		///
+		virtual void clearDatabase();
 		//@}
 
 		/// @name Traversability queries
@@ -151,6 +155,8 @@ namespace SteerLib {
 		void getItemsInRange(std::set<SpatialDatabaseItemPtr> & neighborList, float xmin, float xmax, float zmin, float zmax, SpatialDatabaseItemPtr exclude);
 		/// Returns an STL set of objects found in the specified range of GridCells.
 		void getItemsInRange(std::set<SpatialDatabaseItemPtr> & neighborList, unsigned int xMinIndex, unsigned int xMaxIndex, unsigned int zMinIndex, unsigned int zMaxIndex, SpatialDatabaseItemPtr exclude);
+		void computeAgentNeighbors(SpatialDatabaseItemPtr agent, float rangeSq) const ;
+		void computeObstacleNeighbors(SpatialDatabaseItemPtr agent, float rangeSq) const ;
 		/// Returns an STL set of objects in the specified range, culling agent objects to a hemisphere centered around the facingDirection.
 		void getItemsInVisualField(std::set<SpatialDatabaseItemPtr> & neighborList, float xmin, float xmax, float zmin, float zmax, SpatialDatabaseItemPtr exclude, const Util::Point & position, const Util::Vector & facingDirection, float radiusSquared);
 		//@}
@@ -189,14 +195,22 @@ namespace SteerLib {
 		/// Finds a random 2D point, within the specified region, that has no other objects within the requested radius, using an exising (already seeded) Mersenne Twister random number generator.
 		Util::Point randomPositionInRegionWithoutCollisions(const Util::AxisAlignedBox & region, float radius, bool excludeAgents, MTRand & randomNumberGenerator);
 
+		/// Finds a random 2D point, within the specified region, that has no other objects within the requested radius, using an exising (already seeded) Mersenne Twister random number generator.
+		virtual bool randomPositionInRegionWithoutCollisions(const Util::AxisAlignedBox & region, SpatialDatabaseItemPtr item, bool excludeAgents, MTRand & randomNumberGenerator);
+
 		/// Finds a random 2D point, within the specified region, using an exising (already seeded) Mersenne Twister random number generator.
 		Util::Point randomPositionInRegion(const Util::AxisAlignedBox & region, float radius,MTRand & randomNumberGenerator);
 
 		/// Uses openGL and DrawLib to visualize the grid.
 		void draw();
+
+		/// Gets the location of this agent, really used to get the y-location
+		virtual Util::Point getLocation(SpatialDatabaseItemPtr exclude1) { return Util::Point(0.0,0.0,0.0); }
+		/// Get Normal for item, This get the normal for an item, used to determine the orientation of the item
+		virtual Util::Vector getUpVector(SpatialDatabaseItemPtr exclude1) { return Util::Vector(0.0, 1.0, 0.0); }
 		//@}
 
-	};
+	}; // end class GridDatabase2D
 
 
 

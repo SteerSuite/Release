@@ -1,17 +1,21 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 #include "Logger.h"
 #include <cassert>
 #include <sstream>
 #include "PluginAPI.h"
+#include <limits>
+// #include <stdio>
 
 
 Logger::Logger (const std::string & fileName, LogMode logMode)
 {
 	_fileName = fileName;
-
+	typedef std::numeric_limits< double > dbl;
+	std::cout.precision(dbl::digits10+1);
 	// open file pointer 
 	if ( logMode == LogMode::Write)
 		_fileStream.open(fileName.c_str(),std::ios::out);
@@ -57,25 +61,25 @@ size_t Logger::getNumberOfFields () const
 
 void Logger::writeLogObject ( const LogObject & logObject )
 {
-	std::cout << "Records in LogObject " << logObject.getRecordSize() << std::endl;
+	// std::cout << "Records in LogObject " << logObject.getRecordSize() << std::endl;
 	for (unsigned int i=0; i < logObject.getRecordSize(); i++)
 	{
 		switch ( getFieldDataType(i) )
 		{
 		case DataType::Float:
-			_fileStream << logObject.getLogData(i).floatData << " ";
+			_fileStream << std::fixed << logObject.getLogData(i).floatData << " ";
 			break;
 		case DataType::Integer:
-			_fileStream << logObject.getLogData(i).integerData << " ";
+			_fileStream << std::fixed << logObject.getLogData(i).integerData << " ";
 			break;
 		case DataType::LongLong:
 			// std::cout << "Writing LongLongData " << logObject.getLogData(i).longlongData << std::endl;
-			_fileStream << logObject.getLogData(i).longlongData << " ";
+			_fileStream <<  std::fixed << logObject.getLogData(i).longlongData << " ";
 			break;
 		case DataType::String:
 			// std::cout << "writing out some char data: " << logObject.getLogData(i).charstring << std::endl;
 
-			_fileStream << logObject.getLogData(i).string << " ";
+			_fileStream << std::fixed << logObject.getLogData(i).string << " ";
 			break;
 		default:
 			std::cerr << "Unspecified data type for log object \n";
@@ -96,7 +100,7 @@ void Logger::writeLogObjectPretty ( const LogObject & logObject )
 		switch ( getFieldDataType(i) )
 		{
 		case DataType::Float:
-			valueHolder << logObject.getLogData(i).floatData;
+			valueHolder <<  std::fixed << logObject.getLogData(i).floatData;
 			_fileStream << valueHolder.str() << calcBufferSpace(_fieldNames.at(i), valueHolder.str()) <<  " ";
 			break;
 		case DataType::Integer:
@@ -104,12 +108,12 @@ void Logger::writeLogObjectPretty ( const LogObject & logObject )
 			_fileStream << logObject.getLogData(i).integerData << calcBufferSpace(_fieldNames.at(i), valueHolder.str()) << " ";
 			break;
 		case DataType::LongLong:
-			valueHolder << logObject.getLogData(i).longlongData;
+			valueHolder <<  std::fixed <<logObject.getLogData(i).longlongData;
 			_fileStream << logObject.getLogData(i).longlongData << calcBufferSpace(_fieldNames.at(i), valueHolder.str()) << " ";
 			break;
 		case DataType::String:
 			// std::cout << "writing out some char data: " << logObject.getLogData(i).charstring << std::endl;
-			valueHolder << logObject.getLogData(i).string;
+			valueHolder << std::fixed << logObject.getLogData(i).string;
 			_fileStream << logObject.getLogData(i).string << calcBufferSpace(_fieldNames.at(i), valueHolder.str()) << " ";
 			break;
 		default:
@@ -133,18 +137,18 @@ std::string Logger::logObjectToString ( const LogObject & logObject )
 		switch ( getFieldDataType(i) )
 		{
 		case DataType::Float:
-			ss << logObject.getLogData(i).floatData << " ";
+			ss << std::fixed << logObject.getLogData(i).floatData << " ";
 			break;
 		case DataType::Integer:
-			ss << logObject.getLogData(i).integerData << " ";
+			ss << std::fixed << logObject.getLogData(i).integerData << " ";
 			break;
 		case DataType::LongLong:
-			ss << logObject.getLogData(i).longlongData << " ";
+			ss <<  std::fixed << logObject.getLogData(i).longlongData << " ";
 			break;
 		case DataType::String:
 			// std::cout << "writing out some char data: " << logObject.getLogData(i).charstring << std::endl;
 
-			ss << logObject.getLogData(i).string << " ";
+			ss <<  std::fixed << logObject.getLogData(i).string << " ";
 			break;
 		default:
 			std::cerr << "Unspecified data type for log object \n";
@@ -180,7 +184,7 @@ void Logger::readNextLogObject ( LogObject & logObject)
 	unsigned int numRecords = 0;
 	_fileStream >> numRecords;
 
-	std::cout << "num records in istream " << numRecords << "\n";
+	// std::cout << "num records in istream " << numRecords << "\n";
 
 	for (unsigned int i=0; i < numRecords; i++)
 	{
@@ -244,7 +248,7 @@ std::string Logger::getMetaData ()
 
 void Logger::readMetaData ()
 {
-	std::cout << "logger read meta data  \n";
+	// std::cout << "logger read meta data  \n";
 
 	unsigned int numberOfFields; 
 	_fileStream >> numberOfFields; 
@@ -285,7 +289,7 @@ PLUGIN_ const char * printLogData(Logger * log, LogObject * logObj)
 	{
 		labelStream << log->getFieldName(i) << ",";
 	}
-	labelStream << log->getFieldName(i) << std::endl;
+	labelStream << log->getFieldName(i) << "\n";
 
 	for (i =0; i < logObj->getRecordSize() - 1; i++)
 	{

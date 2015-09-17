@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 
 #include "SteerLib.h"
@@ -74,7 +75,7 @@ PPRAgent::PPRAgent()
 
 
 	// std::cout << "next waypoint dist = " << _PPRParams.ped_next_waypoint_distance << std::endl;
-	_midTermPath = new int[_PPRParams.ped_next_waypoint_distance+2];
+	_midTermPath.clear();//  = new int[_PPRParams.ped_next_waypoint_distance+2];
 	_enabled = false;
 	_id=0;
 }
@@ -88,10 +89,14 @@ PPRAgent::~PPRAgent()
 {
 	if (_enabled) {
 		Util::AxisAlignedBox bounds(_position.x-_radius, _position.x+_radius, 0.0f, 0.0f, _position.z-_radius, _position.z+_radius);
-		gSpatialDatabase->removeObject( this, bounds);
+		getSimulationEngine()->getSpatialDatabase()->removeObject( this, bounds);
 	}
 }
 
+SteerLib::EngineInterface * PPRAgent::getSimulationEngine()
+{
+	return _gEngine;
+}
 
 void PPRAgent::setParameters(Behaviour behave)
 {
@@ -104,6 +109,16 @@ void PPRAgent::setParameters(Behaviour behave)
 //
 void PPRAgent::reset(const SteerLib::AgentInitialConditions & initialConditions, SteerLib::EngineInterface * engineInfo)
 {
+	//USMAN: Setting agent disk color if given in the config file otherwise default
+	if ( initialConditions.colorSet == true )
+	{
+		this->_color = initialConditions.color;		
+	}
+	else
+	{
+		this->_color = Util::gDarkGreen;
+	}
+	//USMAN: End Setting.
 
 	// _enabled = true;
 	AxisAlignedBox oldBounds(_position.x-_radius, _position.x+_radius, 0.0f, 0.0f, _position.z-_radius, _position.z+_radius);
@@ -115,10 +130,10 @@ void PPRAgent::reset(const SteerLib::AgentInitialConditions & initialConditions,
 
 
 	if (!_enabled) {
-		gSpatialDatabase->addObject( dynamic_cast<SpatialDatabaseItemPtr>(this), newBounds);
+		getSimulationEngine()->getSpatialDatabase()->addObject( dynamic_cast<SpatialDatabaseItemPtr>(this), newBounds);
 	}
 	else {
-		gSpatialDatabase->updateObject( dynamic_cast<SpatialDatabaseItemPtr>(this), oldBounds, newBounds);
+		getSimulationEngine()->getSpatialDatabase()->updateObject( dynamic_cast<SpatialDatabaseItemPtr>(this), oldBounds, newBounds);
 	}
 	_enabled = true;
 
@@ -134,11 +149,11 @@ void PPRAgent::reset(const SteerLib::AgentInitialConditions & initialConditions,
 
 
 	assert(_forward.length()!=0.0f);
-	assert(_landmarkQueue.size() != 0);
+	assert(_goalQueue.size() != 0);
 	assert(_radius != 0.0f);
 
 	// this assertion does not work with the new AgentGoalInfo struct; probably beacuse there is no == operator
-	// assert(_landmarkQueue.front() == _currentGoal);
+	// assert(_goalQueue.front() == _currentGoal);
 
 
 	//
@@ -219,9 +234,6 @@ void PPRAgent::reset(const SteerLib::AgentInitialConditions & initialConditions,
 	__closestPathNode = 0;
 #endif
 
-#ifdef DRAW_HISTORIES
-	__oldPositions = std::deque<Util::Point>();
-#endif
 	if (_currentGoal.desiredSpeed > _maxSpeed) {
 		// std::cerr << "WARNING: initial desired speed (" << _currentGoal.desiredSpeed << " m/s) is larger than the max speed (" << _maxSpeed << " m/s) of our agent." << std::endl;
 	}
@@ -238,13 +250,15 @@ void PPRAgent::addGoal(const SteerLib::AgentGoalInfo & newGoal) {
 			newGoal.goalType != GOAL_TYPE_AXIS_ALIGNED_BOX_GOAL) {
 		throw Util::GenericException("Currently the PPR agent does not support goal types other than GOAL_TYPE_SEEK_STATIC_TARGET and GOAL_TYPE_AXIS_ALIGNED_BOX_GOAL.");
 	}
-	_landmarkQueue.push(newGoal); 
-	if (_landmarkQueue.size()==1) {
+	_goalQueue.push(newGoal);
+	if (_goalQueue.size()==1) {
 		_currentGoal = newGoal;
 		if (_currentGoal.targetIsRandom) {
 
-			Util::AxisAlignedBox aab = Util::AxisAlignedBox(-100.0f, 100.0f, 0.0f, 0.0f, -100.0f, 100.0f);
-			_currentGoal.targetLocation = gSpatialDatabase->randomPositionInRegionWithoutCollisions(aab, 1.0f, true);
+			SteerLib::AgentGoalInfo _goal;
+			_goal.targetLocation = getSimulationEngine()->getSpatialDatabase()->randomPositionWithoutCollisions(1.0f, true);
+			_goalQueue.push(_goal);
+			_currentGoal.targetLocation = _goal.targetLocation;
 		}
 	}
 }
@@ -351,15 +365,15 @@ void PPRAgent::updateAI(float timeStamp, float dt, unsigned int frameNumber)
 void PPRAgent::runCognitivePhase()
 {
 	// pop off the previous goal
-	_landmarkQueue.pop();
+	_goalQueue.pop();
 
-	if (_landmarkQueue.empty()) {
+	if (_goalQueue.empty()) {
 		// nowhere left to steer, this pedestrian is done.
 		disable();
 		return;
 	}
 	else {
-		_currentGoal = _landmarkQueue.front();
+		_currentGoal = _goalQueue.front();
 	}
 
 	// if the goal is something other than "seek static target", PPR does not support it at the moment.
@@ -370,7 +384,7 @@ void PPRAgent::runCognitivePhase()
 	// if the goal asks for a random target, then randomly assign the target location
 	if (_currentGoal.targetIsRandom) {
 		AxisAlignedBox aab = AxisAlignedBox(-100.0f, 100.0f, 0.0f, 0.0f, -100.0f, 100.0f);
-		_currentGoal.targetLocation = gSpatialDatabase->randomPositionInRegionWithoutCollisions(aab, 1.0f, true);
+		_currentGoal.targetLocation = getSimulationEngine()->getSpatialDatabase()->randomPositionInRegionWithoutCollisions(aab, 1.0f, true);
 	}
 }
 
@@ -382,12 +396,13 @@ void PPRAgent::runLongTermPlanningPhase()
 {
 #ifndef USE_ANNOTATIONS
 	// if not using annotations, then declare things local here.
-	std::stack<unsigned int> longTermPath;
+	std::vector<Util::Point> longTermPath;
 #endif
 
-#ifdef IGNORE_PLANNING
-	return;
-#endif
+	if ( dont_plan )
+	{
+		return;
+	}
 
 	if (!_enabled) return;
 
@@ -402,13 +417,13 @@ void PPRAgent::runLongTermPlanningPhase()
 
 	//==========================================================================
 
-	int myIndexPosition = gSpatialDatabase->getCellIndexFromLocation(_position);
-	int goalIndex = gSpatialDatabase->getCellIndexFromLocation(_currentGoal.targetLocation);
+	int myIndexPosition = getSimulationEngine()->getSpatialDatabase()->getCellIndexFromLocation(_position);
+	int goalIndex = getSimulationEngine()->getSpatialDatabase()->getCellIndexFromLocation(_currentGoal.targetLocation);
 
 	if (myIndexPosition != -1) {
 
 		// run the main a-star search here
-		gSpatialDatabase->planPath(myIndexPosition, goalIndex, longTermPath);
+		_gEngine->getPathPlanner()->findPath(_position, _currentGoal.targetLocation, longTermPath, 50000);
 
 
 		// set up the waypoints along this path.
@@ -417,25 +432,17 @@ void PPRAgent::runLongTermPlanningPhase()
 		if (longTermPath.size() > 2) {
 
 			// repeatedly pop the path stack, adding waypoints every so often, until the stack is empty.
-			while ( ! longTermPath.empty()) {
-				unsigned int mostRecentNode = 0;
-				for (unsigned int i=0; i < _PPRParams.ped_next_waypoint_distance; i++) {
-					if ( ! longTermPath.empty()) {
-						mostRecentNode = longTermPath.top();
-						longTermPath.pop();
-					}
-					else {
-						// this is the common case... we reach the end of the path while popping
-						// so we need to add the very last target location as the last waypoint.
-						_waypoints.push_back(_currentGoal.targetLocation);
-					}
+			for (size_t p=0; p < longTermPath.size(); p++)
+			{
+				if ( 0 == (p % _PPRParams.ped_next_waypoint_distance) )
+				{
+					_waypoints.push_back(longTermPath.at(p));
 				}
 
 				// every time we successfully popped that many nodes in the path, we can add the next one as a waypoint.
-				Point waypoint;
-				gSpatialDatabase->getLocationFromIndex(mostRecentNode,waypoint);
-				_waypoints.push_back(waypoint);
+				// _waypoints.push_back(waypoint);
 			}
+			_waypoints.push_back(_currentGoal.targetLocation);
 
 			/*
 			 
@@ -446,7 +453,7 @@ void PPRAgent::runLongTermPlanningPhase()
 			// remember the astar lib produces "backwards" paths that start at [pathLengh-1] and end at [0].
 			int nextWaypointIndex = ((int)longTermAStar.getPath().size())-1 - _PPRParams.ped_next_waypoint_distance;
 			while (nextWaypointIndex > 0) {
-				Point waypoint;
+				Util::Point waypoint;
 				gSpatialDatabase->getLocationFromIndex(longTermAStar.getPath()[nextWaypointIndex],waypoint);
 				_waypoints.push_back(waypoint);
 				nextWaypointIndex -= _PPRParams.ped_next_waypoint_distance;
@@ -478,14 +485,11 @@ void PPRAgent::runLongTermPlanningPhase()
 void PPRAgent::runMidTermPlanningPhase()
 {
 
-#ifndef USE_ANNOTATIONS
-	// if not using annotations, then declare things local here.
-	std::stack<unsigned int> midTermPathStack;
-#endif
-
-#ifdef IGNORE_PLANNING
-	return;
-#endif
+	std::vector<Util::Point> midTermPath;
+	if ( dont_plan )
+	{
+		return;
+	}
 
 	if (!_enabled) return;
 
@@ -507,13 +511,19 @@ void PPRAgent::runMidTermPlanningPhase()
 	}
 
 	// compute a local a-star from your current location to the waypoint.
-	int myIndexPosition = gSpatialDatabase->getCellIndexFromLocation(_position.x, _position.z);
-	int waypointIndexPosition = gSpatialDatabase->getCellIndexFromLocation(_waypoints[_currentWaypointIndex].x, _waypoints[_currentWaypointIndex].z);
+	int myIndexPosition = getSimulationEngine()->getSpatialDatabase()->getCellIndexFromLocation(_position.x, _position.z);
+	int waypointIndexPosition = getSimulationEngine()->getSpatialDatabase()->getCellIndexFromLocation(_waypoints[_currentWaypointIndex].x, _waypoints[_currentWaypointIndex].z);
 
-	gSpatialDatabase->planPath(myIndexPosition, waypointIndexPosition,midTermPathStack);
+	_gEngine->getPathPlanner()->findPath(_position, _waypoints[_currentWaypointIndex],midTermPath, 50000);
 
 	// copy the local AStar path to your array
-	_midTermPathSize = (int)midTermPathStack.size();
+	_midTermPathSize = (int)midTermPath.size();
+
+	// std::cout << "_waypoints.size() = " << _waypoints.size() << ", _currentWaypointIndex: " <<
+		// 		_currentWaypointIndex << " and _midTermPathSize: " << _midTermPathSize<< std::endl;
+
+	// std::cout << "_waypoints.size() = " << _waypoints.size() << ", _currentWaypointIndex: " <<
+		// 		_currentWaypointIndex << " and _midTermPathSize: " << _midTermPathSize<< std::endl;
 
 	// std::cout << "_waypoints.size() = " << _waypoints.size() << ", _currentWaypointIndex: " <<
 		// 		_currentWaypointIndex << " and _midTermPathSize: " << _midTermPathSize<< std::endl;
@@ -522,25 +532,26 @@ void PPRAgent::runMidTermPlanningPhase()
 	//
 	// TODO, something is not quite right with this sanity check, it needs to be debugged.
 	//
-	if (_midTermPathSize > _PPRParams.ped_next_waypoint_distance + 3) {
+	/*
+	if (_midTermPathSize > _PPRParams.ped_next_waypoint_distance) {
 		// the plus 1 is because a-star counts the agent's immediate location, but we do not.
-		std::cerr << "ERROR!!!  _midTermPathSize is larger than expected: should be less than or equal to " << _PPRParams.ped_next_waypoint_distance+3 << ", but it actually is " << _midTermPathSize << "\n";
+		std::cerr << "ERROR!!!  _midTermPathSize is larger than expected: should be less than or equal to " << _PPRParams.ped_next_waypoint_distance << ", but it actually is " << _midTermPathSize << "\n";
 		std::cerr << "agent name is:" << this->position() << std::endl;
 		assert(false);
-	}
+	}*/
 
 	// TODO, this "pop" is awfully wasteful and unnecessary
 	// we could just keep the stack itself, and call it midTermPath,
 	// and remove the fixed array.
 	// The only reason not to do this is that it makes 
 	// drawing annotations more costly (i.e. cannot peer into a stack).
+	_midTermPath.clear();
 	for (unsigned int i=0; i<_midTermPathSize; i++) {
 		//_midTermPath[i] = (midTermAStar.getPath())[i];
-		_midTermPath[i] = midTermPathStack.top();
-		midTermPathStack.pop();
+		_midTermPath.push_back(midTermPath.at(i));
 	}
 
-	assert(midTermPathStack.empty());
+	// assert(midTermPathStack.empty());
 
 	// TODO: should we reset the localTarget here??
 }
@@ -553,16 +564,16 @@ void PPRAgent::runShortTermPlanningPhase()
 {
 	unsigned int closestPathNode;
 	if (!_enabled) return;
-
-#ifdef IGNORE_PLANNING
-	// if we want to ignore planning, then just decide to steer towards the final target.
-	// possibly update the landmark target if we arrived at it.
-	if (reachedCurrentGoal()) {
-		runCognitivePhase();
+	if ( dont_plan )
+	{
+		// if we want to ignore planning, then just decide to steer towards the final target.
+		// possibly update the landmark target if we arrived at it.
+		if (reachedCurrentGoal()) {
+			runCognitivePhase();
+		}
+		_localTargetLocation = _currentGoal.targetLocation;
+		return;
 	}
-	_localTargetLocation = _currentGoal.targetLocation;
-	return;
-#endif
 
 
 	// std::cout << "ran short term planning local target" << _localTargetLocation << std::endl;
@@ -576,7 +587,7 @@ void PPRAgent::runShortTermPlanningPhase()
 
 
 	AutomaticFunctionProfiler profileThisFunction( &PPRGlobals::gPhaseProfilers->shortTermPhaseProfiler );
-	int myIndexPosition = gSpatialDatabase->getCellIndexFromLocation(_position.x, _position.z);
+	int myIndexPosition = getSimulationEngine()->getSpatialDatabase()->getCellIndexFromLocation(_position.x, _position.z);
 
 
 	closestPathNode = 0;
@@ -592,8 +603,8 @@ void PPRAgent::runShortTermPlanningPhase()
 	std::cout << "about to for (unsigned int i=0; i<_midTermPathSize; i++)\n";
 #endif
 		for (unsigned int i=0; i<_midTermPathSize; i++) {
-			Point tempTargetLocation;
-			gSpatialDatabase->getLocationFromIndex( _midTermPath[i], tempTargetLocation);
+			Util::Point tempTargetLocation;
+			tempTargetLocation = _midTermPath[i];
 			Vector temp = tempTargetLocation-_position;
 			float distSquared = temp.lengthSquared();
 			if (distSquared < minDistSquared) {
@@ -611,20 +622,20 @@ void PPRAgent::runShortTermPlanningPhase()
 			SpatialDatabaseItemPtr dummyObject=NULL;
 			unsigned int localTargetIndex = closestPathNode;
 			unsigned int furthestTargetIndex = min(_midTermPathSize-1, closestPathNode + _PPRParams.ped_furthest_local_target_distance);
-			unsigned int localTargetCellID = _midTermPath[localTargetIndex];
-			gSpatialDatabase->getLocationFromIndex( localTargetCellID, _localTargetLocation );
+			// unsigned int localTargetCellID = _midTermPath[localTargetIndex];
+			_localTargetLocation = _midTermPath[localTargetIndex];
 			Ray lineOfSightTest1, lineOfSightTest2;
 			lineOfSightTest1.initWithUnitInterval(_position + _radius*_rightSide, _localTargetLocation - (_position + _radius*_rightSide));
 			lineOfSightTest2.initWithUnitInterval(_position - _radius*_rightSide, _localTargetLocation - (_position - _radius*_rightSide));
 			while ( (localTargetIndex <= furthestTargetIndex)
-				&& (!gSpatialDatabase->trace(lineOfSightTest1,dummyt, dummyObject, dynamic_cast<SpatialDatabaseItemPtr>(this),true))
-				&& (!gSpatialDatabase->trace(lineOfSightTest2,dummyt, dummyObject, dynamic_cast<SpatialDatabaseItemPtr>(this),true)))
+				&& (!getSimulationEngine()->getSpatialDatabase()->trace(lineOfSightTest1,dummyt, dummyObject, dynamic_cast<SpatialDatabaseItemPtr>(this),true))
+				&& (!getSimulationEngine()->getSpatialDatabase()->trace(lineOfSightTest2,dummyt, dummyObject, dynamic_cast<SpatialDatabaseItemPtr>(this),true)))
 			{
-				localTargetIndex++;
-				localTargetCellID = _midTermPath[localTargetIndex];
-				gSpatialDatabase->getLocationFromIndex( localTargetCellID, _localTargetLocation );
+				// localTargetCellID = _midTermPath[localTargetIndex];
+				 _localTargetLocation = _midTermPath[localTargetIndex];
 				lineOfSightTest1.initWithUnitInterval(_position + _radius*_rightSide, _localTargetLocation - (_position + _radius*_rightSide));
 				lineOfSightTest2.initWithUnitInterval(_position - _radius*_rightSide, _localTargetLocation - (_position - _radius*_rightSide));
+				localTargetIndex++;
 			}
 			// std::cout << "midterm path size " << _midTermPathSize << " local target set to waypoint at index" << _localTargetLocation << std::endl;
 			/* this was causing int wrap around to 4294967295 (integer underflow)
@@ -637,8 +648,8 @@ void PPRAgent::runShortTermPlanningPhase()
 			if (localTargetIndex >= closestPathNode)
 			{
 				// if localTargetIndex is valid
-				localTargetCellID = _midTermPath[localTargetIndex];
-				gSpatialDatabase->getLocationFromIndex( localTargetCellID, _localTargetLocation );
+				// localTargetCellID = _midTermPath[localTargetIndex];
+				 _localTargetLocation = _midTermPath[localTargetIndex];;
 				if ((_localTargetLocation - _waypoints[_currentWaypointIndex]).length() < 2.0f * _PPRParams.ped_reached_target_distance_threshold)
 				{
 					_localTargetLocation = _waypoints[_currentWaypointIndex];
@@ -649,8 +660,8 @@ void PPRAgent::runShortTermPlanningPhase()
 			}
 			else {
 				// if localTargetIndex is pointing backwards, then just aim for 2 nodes ahead of the current closestPathNode.
-				localTargetCellID = _midTermPath[closestPathNode+2];
-				gSpatialDatabase->getLocationFromIndex( localTargetCellID, _localTargetLocation );
+				// localTargetCellID = _midTermPath[closestPathNode+2];
+				 _localTargetLocation = _midTermPath[localTargetIndex];
 			}
 		}
 		else
@@ -683,7 +694,7 @@ void PPRAgent::runShortTermPlanningPhase()
 		else if (closestPathNode == _midTermPathSize-1) {
 			// this case is reached when you're very close to your goal, and the planned path is very short.
 			// in this case, just point towards the closest node.
-			gSpatialDatabase->getLocationFromIndex( closestPathNode, _localTargetLocation);
+			getSimulationEngine()->getSpatialDatabase()->getLocationFromIndex( closestPathNode, _localTargetLocation);
 		}
 		else {
 			// this case should never be reached
@@ -1807,13 +1818,13 @@ void PPRAgent::doEulerStepWithForce(const Vector & force)
 	// _velocity = clamp(_velocity, _maxSpeed);  // clamp _velocity to the max speed
 	// std::cout << "PPR did Euler with velocity" << _velocity << " and accel " << acceleration << std::endl;
 	_currentSpeed = _velocity.length();
-	const Point newPosition = _position + (_dt*_velocity);
+	const Util::Point newPosition = _position + (_dt*_velocity);
 
 
 	// update the database with the new agent's setup
 	AxisAlignedBox oldBounds = AxisAlignedBox(_position.x - _radius, _position.x + _radius, 0.0f, 0.0f, _position.z - _radius, _position.z + _radius);
 	AxisAlignedBox newBounds = AxisAlignedBox(newPosition.x - _radius, newPosition.x + _radius, 0.0f, 0.0f, newPosition.z - _radius, newPosition.z + _radius);
-	gSpatialDatabase->updateObject( dynamic_cast<SpatialDatabaseItemPtr>(this), oldBounds, newBounds);
+	getSimulationEngine()->getSpatialDatabase()->updateObject( dynamic_cast<SpatialDatabaseItemPtr>(this), oldBounds, newBounds);
 
 	_position = newPosition;
 }
@@ -1954,7 +1965,7 @@ void PPRAgent::doCommandBasedSteering()
 void PPRAgent::collectObjectsInVisualField()
 {
 	_neighbors.clear();
-	gSpatialDatabase->getItemsInVisualField(_neighbors, _position.x-_PPRParams.ped_query_radius, _position.x+_PPRParams.ped_query_radius,
+	getSimulationEngine()->getSpatialDatabase()->getItemsInVisualField(_neighbors, _position.x-_PPRParams.ped_query_radius, _position.x+_PPRParams.ped_query_radius,
 		_position.z-_PPRParams.ped_query_radius, _position.z+_PPRParams.ped_query_radius, dynamic_cast<SpatialDatabaseItemPtr>(this),
 		_position, _forward, (float)(_PPRParams.ped_query_radius*_PPRParams.ped_query_radius));
 }
@@ -2039,11 +2050,11 @@ bool PPRAgent::updateReactiveFeelers( FeelerInfo & feelers )
 	myLSideRay.initWithLengthInterval( _position - _radius * _rightSide,  (0.05f * _forward - 0.1f * _rightSide)* (_PPRParams.ped_typical_speed*_PPRParams.ped_reactive_anticipation_factor));
 
 	SpatialDatabaseItemPtr me = dynamic_cast<SpatialDatabaseItemPtr>(this);
-	gSpatialDatabase->trace(myRay,      feelers.t_front, feelers.object_front, me, false);
-	gSpatialDatabase->trace(myRightRay, feelers.t_right, feelers.object_right, me, false);
-	gSpatialDatabase->trace(myLeftRay,  feelers.t_left,  feelers.object_left,  me, false);
-	gSpatialDatabase->trace(myRSideRay, feelers.t_rside, feelers.object_rside, me, false);
-	gSpatialDatabase->trace(myLSideRay, feelers.t_lside, feelers.object_lside, me, false);
+	getSimulationEngine()->getSpatialDatabase()->trace(myRay,      feelers.t_front, feelers.object_front, me, false);
+	getSimulationEngine()->getSpatialDatabase()->trace(myRightRay, feelers.t_right, feelers.object_right, me, false);
+	getSimulationEngine()->getSpatialDatabase()->trace(myLeftRay,  feelers.t_left,  feelers.object_left,  me, false);
+	getSimulationEngine()->getSpatialDatabase()->trace(myRSideRay, feelers.t_rside, feelers.object_rside, me, false);
+	getSimulationEngine()->getSpatialDatabase()->trace(myLSideRay, feelers.t_lside, feelers.object_lside, me, false);
 
 #ifdef USE_ANNOTATIONS
 	__myRay = myRay;
@@ -2080,7 +2091,7 @@ void PPRAgent::disable()
 
 	//  1. remove from database
 	AxisAlignedBox b = AxisAlignedBox(_position.x - _radius, _position.x + _radius, 0.0f, 0.0f, _position.z - _radius, _position.z + _radius);
-	gSpatialDatabase->removeObject(dynamic_cast<SpatialDatabaseItemPtr>(this), b);
+	getSimulationEngine()->getSpatialDatabase()->removeObject(dynamic_cast<SpatialDatabaseItemPtr>(this), b);
 
 	//  2. set enabled = false
 	_enabled = false;
@@ -2102,18 +2113,19 @@ void PPRAgent::drawPlannedPath()
 
 #ifdef ENABLE_GUI
 #ifdef USE_ANNOTATIONS
-#ifndef IGNORE_PLANNING
+if (dont_plan == false)
+{
 
 #ifdef _WIN32
 	// draw long-term path line
 	if (longTermPath.size() > 0) {
 		for (unsigned int i=0; i < longTermPath.size() - 1; i++) {
 			Vector xOffset,zOffset;
-			Point center,nextCenter;
-			xOffset.x = 0.5f * gSpatialDatabase->getCellSizeX();
-			zOffset.z = 0.5f * gSpatialDatabase->getCellSizeZ();
-			gSpatialDatabase->getLocationFromIndex(longTermPath._Get_container()[i], center); // DOes not work on LInux
-			gSpatialDatabase->getLocationFromIndex(longTermPath._Get_container()[i+1], nextCenter);
+			Util::Point center,nextCenter;
+			xOffset.x = 0.5f * getSimulationEngine()->getSpatialDatabase()->getCellSizeX();
+			zOffset.z = 0.5f * getSimulationEngine()->getSpatialDatabase()->getCellSizeZ();
+			getSimulationEngine()->getSpatialDatabase()->getLocationFromIndex(longTermPath._Get_container()[i], center); // DOes not work on LInux
+			getSimulationEngine()->getSpatialDatabase()->getLocationFromIndex(longTermPath._Get_container()[i+1], nextCenter);
 			center.y = 0.01f;
 			nextCenter.y = 0.01f;
 			DrawLib::glColor(gDarkBlue);
@@ -2123,26 +2135,21 @@ void PPRAgent::drawPlannedPath()
 #else
 	if (longTermPath.size() > 0)
 	{
-		std::vector<unsigned int> * ltpath = new std::vector<unsigned int>();
-		while ( !longTermPath.empty() )
+		std::vector<Util::Point> ltpath;
+		for (size_t p=0; p < longTermPath.size(); p++ )
 		{
-			ltpath->push_back(longTermPath.top());
-			longTermPath.pop();
+			ltpath.push_back(longTermPath.at(p));
 		}
 
-		int i = 0;
-		for (i = ltpath->size() - 1; i >= 0; i--)
-		{
-			longTermPath.push(ltpath->at(i));
-		}
 
-		for (unsigned int i=0; i < longTermPath.size() - 1; i++) {
+
+		for (unsigned int i=0; i < ltpath.size() - 1; i++) {
 			Vector xOffset,zOffset;
-			Point center,nextCenter;
-			xOffset.x = 0.5f * gSpatialDatabase->getCellSizeX();
-			zOffset.z = 0.5f * gSpatialDatabase->getCellSizeZ();
-			gSpatialDatabase->getLocationFromIndex(ltpath->at(i), center);
-			gSpatialDatabase->getLocationFromIndex(ltpath->at(i+1), nextCenter);
+			Util::Point center,nextCenter;
+			xOffset.x = 0.5f * getSimulationEngine()->getSpatialDatabase()->getCellSizeX();
+			zOffset.z = 0.5f * getSimulationEngine()->getSpatialDatabase()->getCellSizeZ();
+			center = ltpath.at(i);
+			nextCenter = ltpath.at(i+1);
 			center.y = 0.01f;
 			nextCenter.y = 0.01f;
 			DrawLib::glColor(gDarkBlue);
@@ -2156,17 +2163,18 @@ void PPRAgent::drawPlannedPath()
 	// draw markers on each waypoint
 	for(unsigned int i=0; i<_waypoints.size(); i++) {
 		DrawLib::drawStar(_waypoints[i] + Vector(0.0f, 0.005f, 0.0f), Vector(1.0f, 0.0f, 0.0f), 0.15f, gGreen);
+		DrawLib::drawFlag(_waypoints[i] + Vector(0.0f, 0.005f, 0.0f), gBlue, 1.15f);
 	}
 
 	// draw mid-term path line
 	if (_midTermPathSize > 0) {
 		for (unsigned int i=0; i < _midTermPathSize - 1; i++) {
 			Vector xOffset,zOffset;
-			Point center,nextCenter;
-			xOffset.x = 0.5f * gSpatialDatabase->getCellSizeX();
-			zOffset.z = 0.5f * gSpatialDatabase->getCellSizeZ();
-			gSpatialDatabase->getLocationFromIndex(_midTermPath[i], center);
-			gSpatialDatabase->getLocationFromIndex(_midTermPath[i+1], nextCenter);
+			Util::Point center,nextCenter;
+			xOffset.x = 0.5f * getSimulationEngine()->getSpatialDatabase()->getCellSizeX();
+			zOffset.z = 0.5f * getSimulationEngine()->getSpatialDatabase()->getCellSizeZ();
+			center = _midTermPath[i];
+			nextCenter = _midTermPath[i+1];
 			center.y = 0.02f;
 			nextCenter.y = 0.02f;
 			DrawLib::glColor(gBlue);
@@ -2175,12 +2183,11 @@ void PPRAgent::drawPlannedPath()
 	}
 
 	// draw a marker on the closest node you are to the mid-term path (computed from short-term planning)
-	Point closestNodeOnPath;
-	gSpatialDatabase->getLocationFromIndex(_midTermPath[__closestPathNode],closestNodeOnPath);
+	Util::Point closestNodeOnPath;
+	closestNodeOnPath = _midTermPath[__closestPathNode];
 	DrawLib::drawHighlight(closestNodeOnPath + Util::Vector(0, -0.25, 0), Vector(1.0f, 0.0f, 0.0f), 0.5f, gBlue);
 	//drawXZCircle(0.30f, closestNodeOnPath, gBlue, 10);
-
-#endif  // #ifndef IGNORE_PLANNING
+}
 
 	DrawLib::glColor(gWhite);
 	DrawLib::drawLine(_position, _localTargetLocation);
@@ -2198,7 +2205,7 @@ void PPRAgent::draw()
 {
 	// DrawLib::drawAgent
 
-
+	AgentInterface::draw();
 #ifdef ENABLE_GUI
 	if (!_enabled) return;
 	AutomaticFunctionProfiler profileThisFunction( &PPRGlobals::gPhaseProfilers->drawProfiler );
@@ -2211,39 +2218,31 @@ void PPRAgent::draw()
 
 #ifndef USE_ANNOTATIONS
 
-	if ( this->isSelected() )
+	if ( this->isSelected() ) {
 		DrawLib::drawAgentDisc(_position, _forward, _radius,Util::gDarkBlue); 
+		
+		if (_currentGoal.goalType == SteerLib::GOAL_TYPE_SEEK_STATIC_TARGET ||
+			_currentGoal.goalType == GOAL_TYPE_AXIS_ALIGNED_BOX_GOAL)
+		{
+			DrawLib::drawFlag(_currentGoal.targetLocation);
+			Color color(0.4,0.9,0.4);
+			DrawLib::glColor(color);
+			DrawLib::drawQuad(Util::Point(this->currentGoal().targetRegion.xmin, 0.1, this->currentGoal().targetRegion.zmin),
+					Util::Point(this->currentGoal().targetRegion.xmin, 0.1, this->currentGoal().targetRegion.zmax),
+					Util::Point(this->currentGoal().targetRegion.xmax, 0.1, this->currentGoal().targetRegion.zmax),
+					Util::Point(this->currentGoal().targetRegion.xmax, 0.1, this->currentGoal().targetRegion.zmin));
+		}
+	}
 	else
-		DrawLib::drawAgentDisc(_position, _radius, Util::gDarkGreen);
-
+		DrawLib::drawAgentDisc(_position, _radius, this->_color);
+		
 	if (_currentGoal.goalType == SteerLib::GOAL_TYPE_SEEK_STATIC_TARGET ||
 			_currentGoal.goalType == GOAL_TYPE_AXIS_ALIGNED_BOX_GOAL)
 	{
 		DrawLib::drawFlag(_currentGoal.targetLocation);
 	}
-#ifdef DRAW_HISTORIES
-	__oldPositions.push_back(position());
-	int points = 0;
-	float mostPoints = 100.0f;
-	while ( __oldPositions.size() > mostPoints )
-	{
-		__oldPositions.pop_front();
-	}
-	for (int q = __oldPositions.size()-1 ; q > 0 && __oldPositions.size() > 1; q--)
-	{
-		DrawLib::drawLineAlpha(__oldPositions.at(q), __oldPositions.at(q-1),gBlack, q/(float)__oldPositions.size());
-	}
-
-#endif
 	// DrawLib::drawLine(_position, _position+(__plannedSteeringForce), gGreen);
 #else
-	/*
-	__oldPositions.push_back(position());
-	for (int q = 0; q < __oldPositions.size() -2 && __oldPositions.size() > 1;q++ )
-	{
-		DrawLib::drawLine(__oldPositions.at(q), __oldPositions.at(q+1));
-	}
-	*/
 
 	if (_steeringState == STEERING_STATE_NO_THREAT) {
 		DrawLib::drawAgentDisc(_position, _forward, _radius, gGray50); 
@@ -2324,30 +2323,6 @@ void PPRAgent::draw()
 
 
 #endif  // ifndef USE_ANNOTATIONS
-	// Draw collisions when they happen.
-	std::set<SteerLib::SpatialDatabaseItemPtr> __neighbors;
-	gSpatialDatabase->getItemsInRange(__neighbors, this->position().x-(this->_radius * 3), this->position().x+(this->_radius * 3),
-			this->position().z-(this->_radius * 3), this->position().z+(this->_radius * 3), dynamic_cast<SpatialDatabaseItemPtr>(this));
 
-	for (std::set<SteerLib::SpatialDatabaseItemPtr>::iterator neighbor = __neighbors.begin();  neighbor != __neighbors.end();  neighbor++)
-	{
-		if ( (*neighbor)->isAgent())
-		{
-			if ((*neighbor)->computePenetration(this->position(), this->_radius) > 0.001f)
-			{
-				Util::DrawLib::drawStar(this->position() + ((dynamic_cast<AgentInterface*>(*neighbor)->position() - this->position())/2), Util::Vector(1,0,0), 1.14f, gRed);
-				//std::cerr << "COLLISION FOUND AT TIME " << gTempCurrentTime << "\n";
-			}
-		}
-		else
-		{
-			SteerLib::ObstacleInterface * obstacle;
-			obstacle = dynamic_cast<SteerLib::ObstacleInterface *>(*neighbor);
-			if (obstacle->overlaps(this->position(), _radius))
-			{
-				Util::DrawLib::drawStar(this->position(), Util::Vector(1,0,0), 1.34f, gRed);
-			}
-		}
-	}
 #endif  // ifdef ENABLE_GUI
 }

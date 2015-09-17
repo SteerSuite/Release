@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 /// @file CircleObstacle.cpp
 /// @brief Implements the CircleObstacle class.
@@ -29,6 +30,35 @@ CircleObstacle::CircleObstacle ( Point centerPosition, float radius, float ymin,
 	// calculating _blocksLineOfSight
 	_blocksLineOfSight = (ymax > 0.7) ? true : false;
 
+}
+
+std::pair<std::vector<Util::Point>,std::vector<size_t> > CircleObstacle::getStaticGeometry()
+{
+	std::cout << "*****CircleObstacle:: get static geometry not implemented yet" << std::endl;
+	std::vector<Util::Point> ps;
+	std::vector<size_t> vs;
+	return std::make_pair(ps, vs);
+}
+
+/**
+ * Returns a set of points that can be used to define the bounding polygon
+ * of this <code>CircleObstacle</code>.
+ */
+std::vector<Util::Point> CircleObstacle::getCirclePoints()
+{
+
+	Util::Vector offset(1.0,this->position().y,0.0); // because we work in x,z plane
+	offset = offset * this->radius();
+	std::vector<Util::Point> points;
+	double thetaPart = float(360) / CIRCLE_SAMPLES;
+
+	for (int i = 0; i < CIRCLE_SAMPLES; i++)
+	{
+		double theta = -radians((i*thetaPart)+45.0);
+		Util::Point tmp_p = this->position() + rotateInXZPlane( offset, theta);
+		points.push_back(tmp_p);
+	}
+	return points;
 }
 
 void CircleObstacle::draw() {

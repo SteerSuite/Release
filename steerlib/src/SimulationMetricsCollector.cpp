@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 /// @file SimulationMetricsCollector.cpp
 /// @brief implements the SteerLib::SimulationMetricsCollector class
@@ -53,7 +54,7 @@ void SimulationMetricsCollector::_resetEnvironmentMetrics()
 }
 
 
-void SimulationMetricsCollector::_updateAgentMetrics(SteerLib::GridDatabase2D * gridDB, const std::vector<SteerLib::AgentInterface*> & updatedAgents, float currentTimeStamp, float timePassedSinceLastFrame)
+void SimulationMetricsCollector::_updateAgentMetrics(SteerLib::SpatialDataBaseInterface * gridDB, const std::vector<SteerLib::AgentInterface*> & updatedAgents, float currentTimeStamp, float timePassedSinceLastFrame)
 {
 	for (unsigned int i=0; i < getNumAgents(); i++) {
 		/// @todo do we need this enabled() check here?  It may even be undesirable to keep it here.
@@ -63,7 +64,7 @@ void SimulationMetricsCollector::_updateAgentMetrics(SteerLib::GridDatabase2D * 
 }
 
 
-void SimulationMetricsCollector::_updateEnvironmentMetrics(GridDatabase2D * gridDB, float currentTimeStamp, float timePassedSinceLastFrame)
+void SimulationMetricsCollector::_updateEnvironmentMetrics(SpatialDataBaseInterface * gridDB, float currentTimeStamp, float timePassedSinceLastFrame)
 {
 	// no environment metrics implemented yet
 	// TODO : (Glen) This needs to be implemented now.
@@ -71,7 +72,7 @@ void SimulationMetricsCollector::_updateEnvironmentMetrics(GridDatabase2D * grid
 
 
 
-void SimulationMetricsCollector::update(SteerLib::GridDatabase2D * gridDB, const std::vector<SteerLib::AgentInterface*> & updatedAgents, float currentTimeStamp, float timePassedSinceLastFrame)
+void SimulationMetricsCollector::update(SteerLib::SpatialDataBaseInterface * gridDB, const std::vector<SteerLib::AgentInterface*> & updatedAgents, float currentTimeStamp, float timePassedSinceLastFrame)
 {
 	_updateAgentMetrics(gridDB, updatedAgents, currentTimeStamp, timePassedSinceLastFrame);
 	_updateEnvironmentMetrics(gridDB, currentTimeStamp, timePassedSinceLastFrame);

@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 /*
  * RVO2D_Parameters.h
  *
@@ -12,12 +13,12 @@
 #ifndef RVO2D_PARAMETERS_H_
 #define RVO2D_PARAMETERS_H_
 
-#define NEIGHBOR_DISTANCE 15.0f
+#define NEIGHBOR_DISTANCE 10.0f
 #define MAX_NEIGHBORS 10
-#define TIME_HORIZON 7.0f
+#define TIME_HORIZON 2.0f
 #define MAX_SPEED 1.33f
 // #define PREFERRED_SPEED 1.33f
-#define	 TIME_HORIZON_OBSTACLES 7.0f
+#define	 TIME_HORIZON_OBSTACLES 2.0f
 
 #define NEXT_WAYPOINT_DISTANCE 5
 
@@ -26,7 +27,7 @@
 
 
 #define USE_PLANNING 1
-// #define DRAW_ANNOTATIONS 1
+#define DRAW_ANNOTATIONS 1
 
 
 class RVO2DParameters

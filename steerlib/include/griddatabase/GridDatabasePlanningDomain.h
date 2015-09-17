@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_GRID_DATABASE_PLANNING_DOMAIN_H__
 #define __STEERLIB_GRID_DATABASE_PLANNING_DOMAIN_H__
@@ -12,6 +13,8 @@
 #include "Globals.h"
 #include "griddatabase/GridDatabase2D.h"
 #include "planning/BestFirstSearchPlanner.h"
+#include "interfaces/PlanningDomainInterface.h"
+#include "interfaces/EngineInterface.h"
 
 namespace SteerLib {
 
@@ -24,10 +27,30 @@ namespace SteerLib {
 	 * This class should not be used directly.  Instead, use the GridDatabase2D public interface which provides
 	 * path-planning functionality.
 	 */
-	class STEERLIB_API GridDatabasePlanningDomain {
+	class STEERLIB_API GridDatabasePlanningDomain : public SteerLib::PlanningDomainInterface
+	{
 	public:
-		GridDatabasePlanningDomain(SteerLib::GridDatabase2D * spatialDatabase) : _spatialDatabase(spatialDatabase) {  }
+		GridDatabasePlanningDomain(SteerLib::GridDatabase2D * spatialDatabase, SteerLib::EngineInterface * engineInfo) : _spatialDatabase(spatialDatabase)
+		{
+			_engineInfo = engineInfo;
+			std::cout << "Created a grid database planning domain *************" << std::endl;
+		}
+		// virtual ~GridDatabasePlanningDomain() {}
 
+		virtual bool findPath (Util::Point &startPosition, Util::Point &endPosition, std::vector<Util::Point> & path,
+				unsigned int _maxNodesToExpandForSearch);
+
+		virtual bool findSmoothPath (Util::Point &startPosition, Util::Point &endPosition, std::vector<Util::Point> & path,
+				unsigned int _maxNodesToExpandForSearch);
+
+		virtual bool refresh();
+		virtual void draw() {};
+	protected:
+		virtual bool planPath(unsigned int startLocation, unsigned int goalLocation, std::stack<unsigned int> & outputPlan);
+
+		virtual bool planPath(unsigned int startLocation, unsigned int goalLocation, std::stack<unsigned int> & outputPlan, unsigned int maxNodes);
+
+	public:
 		inline bool canBeTraversed(unsigned int index) const { return (_spatialDatabase->getTraversalCost(index) < 1000.0f); }
 
 		inline bool isAGoalState( const unsigned int & state, const unsigned int & idealGoalState) {
@@ -143,6 +166,7 @@ namespace SteerLib {
 
 		SteerLib::GridDatabase2D * _spatialDatabase;
 		SteerLib::DefaultAction<unsigned int> _tempAction;
+		SteerLib::EngineInterface * _engineInfo;
 	};
 
 

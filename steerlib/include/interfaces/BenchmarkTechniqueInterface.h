@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_BENCHMARK_TECHNIQUE_INTERFACE_H__
 #define __STEERLIB_BENCHMARK_TECHNIQUE_INTERFACE_H__
@@ -12,6 +13,7 @@
 #include "Globals.h"
 #include "benchmarking/SimulationMetricsCollector.h"
 #include "interfaces/ModuleInterface.h" // For OptionsDictionary
+#include "util/GenericException.h"
 
 namespace SteerLib {
 

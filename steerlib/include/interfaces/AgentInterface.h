@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_AGENT_INTERFACE_H__
 #define __STEERLIB_AGENT_INTERFACE_H__
@@ -12,8 +13,14 @@
 #include <queue>
 #include "Globals.h"
 #include "testcaseio/AgentInitialConditions.h"
-#include "griddatabase/GridDatabase2D.h"
+#include "interfaces/SpatialDataBaseInterface.h"
 #include "util/Geometry.h"
+#include "interfaces/ObstacleInterface.h"
+#include "util/GenericException.h"
+#include <sstream>
+
+#define FURTHEST_LOCAL_TARGET_DISTANCE 40
+// #define DONT_PLAN 1
 
 namespace SteerLib {
 
@@ -38,7 +45,7 @@ namespace SteerLib {
 	 * @see
 	 *  - The SteerLib::EngineInterface provides functionality to modules and agents.
 	 *  - The SteerLib::ModuleInterface is the main class to inherit and implement for creating a module
-	 *  - The SteerLib::GridDatabase2D is a spatial database that agents may want to use to interact with other agents, such as
+	 *  - The SteerLib::SpatialDataBaseInterface is a spatial database that agents may want to use to interact with other agents, such as
 	 *    nearest-neighbor queries or ray tracing.
 	 *
 	 */
@@ -55,7 +62,7 @@ namespace SteerLib {
 		/// Called once per frame by the engine, update the agent here.
 		virtual void updateAI(float timeStamp, float dt, unsigned int frameNumber) = 0;
 		/// Called once per frame by the engine, use openGL to draw an agent here.
-		virtual void draw() = 0;
+		virtual void draw();
 		//@}
 
 		/// @name Accessors to query info about the agent
@@ -97,9 +104,21 @@ namespace SteerLib {
 		virtual float getTraversalCost() { return 0; }
 		virtual bool intersects(const Util::Ray &r, float &t) = 0;
 		virtual bool overlaps(const Util::Point & p, float radius) = 0;
+		/// Returns true if the database item (represented however that item likes...) overlaps your object.
+		virtual bool overlaps(const SteerLib::SpatialDatabaseItemPtr item)
+		{
+			throw Util::GenericException("This type of general overlap not implemented by this agent");
+			return false;
+		}
 		virtual float computePenetration(const Util::Point & p, float radius) = 0;
 
-		virtual void insertAgentNeighbor(const SteerLib::AgentInterface *agent, float &rangeSq) = 0;
+		// So AgentInterface can get Simulation members
+		virtual SteerLib::EngineInterface * getSimulationEngine() = 0;
+
+#define AGENT_NEIGHBOURS 10
+		virtual void insertAgentNeighbor(const SteerLib::AgentInterface * agent, float &rangeSq);
+		virtual void insertObstacleNeighbor(const ObstacleInterface *obstacle, float rangeSq);
+
 		virtual void setParameters(SteerLib::Behaviour behave) = 0;
 		//@}
 
@@ -150,20 +169,57 @@ namespace SteerLib {
 			// goals.push_back(agentInterface->currentGoal());
 			initialConditions.goals = goals;
 			initialConditions.radius = agentInterface->radius();
-			std::stringstream name;
-			name << "agent" << agentInterface->id();
-			initialConditions.name = name.str(); // TODO AgentInterface does not support name
+			std::stringstream name_;
+			name_ << "agent" << agentInterface->id();
+			initialConditions.name = name_.str(); // TODO AgentInterface does not support name
 			initialConditions.position = agentInterface->position();
 			//initialConditions.
 			return initialConditions;
 		}
-
 		/*
 		std::ostream & operator<<(std::ostream &out)
 		{ // methods used here must be const
 			out << "agent" << velocity() << std::endl;
 			return out;
 		}*/
+		std::vector<std::pair<float, const SteerLib::AgentInterface *> > agentNeighbors_;
+		std::vector<std::pair<float, const ObstacleInterface *> > obstacleNeighbors_;
+		
+	protected:
+		virtual void updateLocalTarget();
+		virtual void updateLocalTarget2();
+		bool _enabled;
+		Util::Point _position;
+		Util::Vector _velocity;
+		Util::Vector _forward; // normalized version of velocity
+		Util::Vector _prefVelocity; // This is the velocity the agent wants to be at
+		Util::Vector _newVelocity;
+		Util::Color _color;
+		float _radius;
+		size_t _id;
+				// Used to store Waypoints between goals
+		// A waypoint is choosen every FURTHEST_LOCAL_TARGET_DISTANCE
+		std::deque<Util::Point> _waypoints;
+
+		///
+		virtual bool runLongTermPlanning(Util::Point goalLocation, bool dontPlan);
+		virtual bool runLongTermPlanning2(Util::Point goalLocation, bool dontPlan);
+		virtual bool reachedCurrentWaypoint();
+		virtual void updateMidTermPath();
+		virtual bool hasLineOfSightTo(Util::Point point);
+
+		// For midterm planning stores the plan to the current goal
+		std::deque<Util::Point> _midTermPath;
+		// holds the location of the best local target along the midtermpath
+		Util::Point _currentLocalTarget;
+		SteerLib::AgentGoalInfo _currentGoal;
+		std::queue<SteerLib::AgentGoalInfo> _goalQueue;
+
+// #define DRAW_HISTORIES 1
+
+#ifdef DRAW_HISTORIES
+	std::deque<Util::Point> __oldPositions;
+#endif
 
 
 	};
@@ -171,7 +227,9 @@ namespace SteerLib {
 
 	inline std::ostream &operator<<(std::ostream &out, const AgentInterface &a)
 	{ // methods used here must be const
-		out << "agent# " << a.id() << " at " << a.position();
+		out << "agent# " << a.id() << " at " << a.position() <<
+				" radius: " << a.radius()  <<
+				" velocity: " << a.velocity() << std::endl;
 		return out;
 	}
 

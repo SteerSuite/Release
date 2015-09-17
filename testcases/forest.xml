@@ -1,4 +1,7 @@
 <!--
+  Copyright (c) 2009-2015  Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
+  See license.txt for complete license.
+--><!--
   Copyright (c) 2009 Shawn Singh, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
   See license.txt for complete license.
 -->
@@ -89,7 +92,7 @@
       <zmax>100</zmax>
     </regionBounds>
     <obstacleSize>0.98</obstacleSize>
-    <obstacleHeight>0.5</obstacleHeight>
+    <obstacleHeight>1.0</obstacleHeight>
   </obstacleRegion>
 
   

@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 /// @file RVO2DAIModule.cpp
 /// @brief Implements the RVO2DAIModule plugin.
@@ -17,14 +18,14 @@
 
 
 // globally accessible to the simpleAI plugin
-SteerLib::EngineInterface * gEngine;
-// SteerLib::GridDatabase2D * gSpatialDatabase;
+// SteerLib::EngineInterface * gEngine;
+// SteerLib::SpatialDataBaseInterface * gSpatialDatabase;
 
 namespace RVO2DGlobals
 {
 
-	SteerLib::EngineInterface * gEngineInfo;
-	SteerLib::GridDatabase2D * gSpatialDatabase;
+	// SteerLib::EngineInterface * gEngineInfo;
+	// SteerLib::SpatialDataBaseInterface * gSpatialDatabase;
 	unsigned int gLongTermPlanningPhaseInterval;
 	unsigned int gMidTermPlanningPhaseInterval;
 	unsigned int gShortTermPlanningPhaseInterval;
@@ -34,6 +35,7 @@ namespace RVO2DGlobals
 	bool gUseDynamicPhaseScheduling;
 	bool gShowStats;
 	bool gShowAllStats;
+	bool dont_plan;
 
 
 	// Adding a bunch of parameters so they can be changed via input
@@ -64,16 +66,15 @@ PLUGIN_API void destroyModule( SteerLib::ModuleInterface*  module )
 
 void RVO2DAIModule::init( const SteerLib::OptionDictionary & options, SteerLib::EngineInterface * engineInfo )
 {
-	gEngine = engineInfo;
-	gSpatialDatabase = engineInfo->getSpatialDatabase();
-	kdTree_ = new KdTree;
-	kdTree_->setSimulator(engineInfo);
+	_gEngine = engineInfo;
+	// gSpatialDatabase = engineInfo->getSpatialDatabase();
 
 	gUseDynamicPhaseScheduling = false;
 	gShowStats = false;
 	logStats = false;
 	gShowAllStats = false;
 	logFilename = "rvo2AI.log";
+	dont_plan=false;
 
 	rvo_max_neighbors = MAX_NEIGHBORS;
 	rvo_max_speed = MAX_SPEED;
@@ -132,33 +133,37 @@ void RVO2DAIModule::init( const SteerLib::OptionDictionary & options, SteerLib::
 		{
 			gShowAllStats = Util::getBoolFromString(value.str());
 		}
+		else if ((*optionIter).first == "dont_plan")
+		{
+			dont_plan = Util::getBoolFromString(value.str());
+		}
 		else
 		{
 			// throw Util::GenericException("unrecognized option \"" + Util::toString((*optionIter).first) + "\" given to PPR AI module.");
 		}
 	}
 
+	_rvoLogger = LogManager::getInstance()->createLogger(logFilename,LoggerType::BASIC_WRITE);
+
+	_rvoLogger->addDataField("number_of_times_executed",DataType::LongLong );
+	_rvoLogger->addDataField("total_ticks_accumulated",DataType::LongLong );
+	_rvoLogger->addDataField("shortest_execution",DataType::LongLong );
+	_rvoLogger->addDataField("longest_execution",DataType::LongLong );
+	_rvoLogger->addDataField("fastest_execution", DataType::Float);
+	_rvoLogger->addDataField("slowest_execution", DataType::Float);
+	_rvoLogger->addDataField("average_time_per_call", DataType::Float);
+	_rvoLogger->addDataField("total_time_of_all_calls", DataType::Float);
+	_rvoLogger->addDataField("tick_frequency", DataType::Float);
+
 	if( logStats )
-	{
-
-		_rvoLogger = LogManager::getInstance()->createLogger(logFilename,LoggerType::BASIC_WRITE);
-
-		_rvoLogger->addDataField("number_of_times_executed",DataType::LongLong );
-		_rvoLogger->addDataField("total_ticks_accumulated",DataType::LongLong );
-		_rvoLogger->addDataField("shortest_execution",DataType::LongLong );
-		_rvoLogger->addDataField("longest_execution",DataType::LongLong );
-		_rvoLogger->addDataField("fastest_execution", DataType::Float);
-		_rvoLogger->addDataField("slowest_execution", DataType::Float);
-		_rvoLogger->addDataField("average_time_per_call", DataType::Float);
-		_rvoLogger->addDataField("total_time_of_all_calls", DataType::Float);
-		_rvoLogger->addDataField("tick_frequency", DataType::Float);
-
+		{
 		// LETS TRY TO WRITE THE LABELS OF EACH FIELD
 		std::stringstream labelStream;
 		unsigned int i;
 		for (i=0; i < _rvoLogger->getNumberOfFields() - 1; i++)
 			labelStream << _rvoLogger->getFieldName(i) << " ";
 		labelStream << _rvoLogger->getFieldName(i);
+		// _data = labelStream.str() + "\n";
 
 		_rvoLogger->writeData(labelStream.str());
 
@@ -189,7 +194,7 @@ void RVO2DAIModule::finish()
 
 void RVO2DAIModule::preprocessSimulation()
 {
-	kdTree_->buildObstacleTree();
+	// kdTree_->buildObstacleTree();
 }
 
 void RVO2DAIModule::preprocessFrame(float timeStamp, float dt, unsigned int frameNumber)
@@ -197,11 +202,11 @@ void RVO2DAIModule::preprocessFrame(float timeStamp, float dt, unsigned int fram
 	if ( frameNumber == 1)
 	{
 		// Adding in this extra one because it seemed sometimes agents would forget about obstacles.
-		kdTree_->buildObstacleTree();
+		// kdTree_->buildObstacleTree();
 	}
 	if ( !agents_.empty() )
 	{
-		kdTree_->buildAgentTree();
+		// kdTree_->buildAgentTree();
 	}
 
 	/*
@@ -222,8 +227,9 @@ SteerLib::AgentInterface * RVO2DAIModule::createAgent()
 {
 	RVO2DAgent * agent = new RVO2DAgent;
 	agent->rvoModule = this;
-	agent->id_ = agents_.size();
+	agent->_id = agents_.size();
 	agents_.push_back(agent);
+	agent->_gEngine = this->_gEngine;
 	return agent;
 }
 
@@ -278,10 +284,8 @@ void RVO2DAIModule::cleanupSimulation()
 {
 	agents_.clear();
 	// kdTree_->deleteObstacleTree(kdTree_->obstacleTree_);
-	kdTree_->agents_.clear();
+	// kdTree_->agents_.clear();
 
-	if ( logStats )
-	{
 		LogObject rvoLogObject;
 
 		rvoLogObject.addLogData(gPhaseProfilers->aiProfiler.getNumTimesExecuted());
@@ -294,18 +298,21 @@ void RVO2DAIModule::cleanupSimulation()
 		rvoLogObject.addLogData(gPhaseProfilers->aiProfiler.getTotalTime());
 		rvoLogObject.addLogData(gPhaseProfilers->aiProfiler.getTickFrequency());
 
+		_logData.push_back(rvoLogObject.copy());
+	if ( logStats )
+	{
 		_rvoLogger->writeLogObject(rvoLogObject);
 
-		// cleanup profileing metrics for next simulation/scenario
-		gPhaseProfilers->aiProfiler.reset();
-		gPhaseProfilers->longTermPhaseProfiler.reset();
-		gPhaseProfilers->midTermPhaseProfiler.reset();
-		gPhaseProfilers->shortTermPhaseProfiler.reset();
-		gPhaseProfilers->perceptivePhaseProfiler.reset();
-		gPhaseProfilers->predictivePhaseProfiler.reset();
-		gPhaseProfilers->reactivePhaseProfiler.reset();
-		gPhaseProfilers->steeringPhaseProfiler.reset();
+		// cleanup profiling metrics for next simulation/scenario
 	}
 
+	gPhaseProfilers->aiProfiler.reset();
+	gPhaseProfilers->longTermPhaseProfiler.reset();
+	gPhaseProfilers->midTermPhaseProfiler.reset();
+	gPhaseProfilers->shortTermPhaseProfiler.reset();
+	gPhaseProfilers->perceptivePhaseProfiler.reset();
+	gPhaseProfilers->predictivePhaseProfiler.reset();
+	gPhaseProfilers->reactivePhaseProfiler.reset();
+	gPhaseProfilers->steeringPhaseProfiler.reset();
 	// kdTree_->deleteObstacleTree(kdTree_->obstacleTree_);
 }

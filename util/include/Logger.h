@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 #ifndef __LOGGER__
 #define __LOGGER__
 
@@ -10,7 +11,7 @@
 #include "UtilGlobals.h"
 #include <string>
 
-enum UTIL_API DataType 
+enum DataType
 {
 	Integer = 0,
 	Float = 1,
@@ -18,13 +19,13 @@ enum UTIL_API DataType
 	String = 3
 };
 
-enum UTIL_API LogMode 
+enum LogMode
 {
 	Read,
 	Write
 };
 
-class UTIL_API Logger 
+class UTIL_API Logger
 {
 
 public:
@@ -32,17 +33,17 @@ public:
 	Logger () {}; // for testing
 	~Logger();
 
-	void addDataField(const std::string &fieldName, DataType dataType);
+	virtual void addDataField(const std::string &fieldName, DataType dataType);
 	
 	DataType getFieldDataType(unsigned int index) const; 
-	std::string getFieldName(unsigned int index) const; 
-	size_t getNumberOfFields () const; 
+	virtual std::string getFieldName(unsigned int index) const; 
+	virtual size_t getNumberOfFields () const; 
 
 	void writeMetaData ();
 	std::string getMetaData ();
 	void readMetaData ();
 
-	void writeLogObject ( const LogObject & logObject );
+	virtual void writeLogObject ( const LogObject & logObject );
 	void writeLogObjectPretty ( const LogObject & logObject );
 	void readNextLogObject ( LogObject & logObject);
 	std::string logObjectToString ( const LogObject & logObject );
@@ -53,7 +54,7 @@ public:
 	void writeData (T data )
 	{
 		_fileStream << data << "\n";
-		// _fileStream.sync();
+		_fileStream.sync();
 	}
 
 

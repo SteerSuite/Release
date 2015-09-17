@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_OBSTACLE_INITIAL_CONDITIONS_H__
 #define __STEERLIB_OBSTACLE_INITIAL_CONDITIONS_H__
@@ -14,6 +15,7 @@
 #include "obstacles/CircleObstacle.h"
 #include "obstacles/OrientedBoxObstacle.h"
 #include "obstacles/OrientedWallObstacle.h"
+#include "obstacles/PolygonObstacle.h"
 
 namespace SteerLib {
 
@@ -25,19 +27,41 @@ namespace SteerLib {
 	 */
 	struct ObstacleInitialConditions {
 		virtual ObstacleInterface* createObstacle() = 0;
+		virtual ~ObstacleInitialConditions() {}
 	};
 
 	struct BoxObstacleInitialConditions : public ObstacleInitialConditions
 	{
 		float xmin, xmax, ymin, ymax, zmin, zmax;
 		BoxObstacleInitialConditions() {};
-		BoxObstacleInitialConditions(float xmin_, float xmax_, float ymin, float ymax, float zmin, float zmax)
+		BoxObstacleInitialConditions(float xmin_, float xmax_, float ymin_, float ymax_, float zmin_, float zmax_)
 		{
 			xmin=xmin_;
+			xmax=xmax_;
+			ymin=ymin_;
+			ymax=ymax_;
+			zmin=zmin_;
+			zmax=zmax_;
+		}
+		BoxObstacleInitialConditions(const SteerLib::BoxObstacleInitialConditions & box)
+		{
+			xmin=box.xmin;
+			xmax=box.xmax;
+			ymin=box.ymin;
+			ymax=box.ymax;
+			zmin=box.zmin;
+			zmax=box.zmax;
 		}
 
 		virtual ObstacleInterface* createObstacle() { return new SteerLib::BoxObstacle(xmin, xmax, ymin, ymax, zmin, zmax); }
 	};
+	
+	inline std::ostream &operator<<(std::ostream &out, const BoxObstacleInitialConditions &a)
+		{ // methods used here must be const
+			out << "box initial conditions: (" << a.xmin << ", " << a.xmax << ", " << a.ymin <<
+					", " << a.ymax << ", " << a.zmin << ", " << a.zmax << ")" <<  std::endl;
+			return out;
+		}
 
 	struct CircleObstacleInitialConditions : public ObstacleInitialConditions {
 		Util::Point position;
@@ -59,6 +83,29 @@ namespace SteerLib {
 
 		virtual ObstacleInterface* createObstacle() { return new SteerLib::OrientedWallObstacle(position, lengthX, lengthZ, position.y, position.y+height, thetaY, doorLocation, doorRadius); }
 	};
+
+	struct PolygonObstacleInitialConditions : public ObstacleInitialConditions
+	{
+		std::vector<Util::Point> _vertices;
+		PolygonObstacleInitialConditions() {};
+		PolygonObstacleInitialConditions(const std::vector<Util::Point> & vertices)
+		{
+			for(int i=0; i<vertices.size(); i++)
+				_vertices.push_back(vertices[i]);
+		}
+		
+		virtual ObstacleInterface* createObstacle() { return new PolygonObstacle(_vertices); }
+	};
+
+	inline std::ostream &operator<<(std::ostream &out, const PolygonObstacleInitialConditions &a)
+		{ // methods used here must be const
+			out << "polygon initial conditions:"<<  std::endl;
+			for(int i=0; i<a._vertices.size(); i++)
+				out << "vertex-"<<i<<" (" << a._vertices[i].x << ", " << a._vertices[i].y << ", " << 
+					a._vertices[i].z << ")" <<  std::endl;
+			
+			return out;
+		}
 
 
 } // end namespace SteerLib

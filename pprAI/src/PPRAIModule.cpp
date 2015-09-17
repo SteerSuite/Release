@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #include "SteerLib.h"
 #include "SimulationPlugin.h"
@@ -29,8 +30,8 @@ using namespace SteerLib;
 
 // todo: make these static?
 namespace PPRGlobals {
-	SteerLib::EngineInterface * gEngine;
-	SteerLib::GridDatabase2D * gSpatialDatabase;
+	// SteerLib::EngineInterface * gEngine;
+	// SteerLib::SpatialDataBaseInterface * gSpatialDatabase;
 	unsigned int gLongTermPlanningPhaseInterval;
 	unsigned int gMidTermPlanningPhaseInterval;
 	unsigned int gShortTermPlanningPhaseInterval;
@@ -42,6 +43,7 @@ namespace PPRGlobals {
 	bool gShowStats;
 	bool logStats;
 	bool gShowAllStats;
+	bool dont_plan;
 	
 	// Adding a bunch of parameters so they can be changed via input
 	float ped_max_speed;
@@ -94,9 +96,9 @@ using namespace PPRGlobals;
 //
 void PPRAIModule::init( const SteerLib::OptionDictionary & options, SteerLib::EngineInterface * engineInfo )
 {
-	gSpatialDatabase = engineInfo->getSpatialDatabase();
+	// gSpatialDatabase = engineInfo->getSpatialDatabase();
 
-	gEngine = engineInfo;
+	_gEngine = engineInfo;
 
 
 	gLongTermPlanningPhaseInterval = LONG_TERM_PLANNING_INTERVAL;
@@ -110,6 +112,7 @@ void PPRAIModule::init( const SteerLib::OptionDictionary & options, SteerLib::En
 	logStats = false;
 	gShowAllStats = false;
 	logFilename = "pprAI.log";
+	dont_plan = false;
 
 
 	ped_max_speed = PED_MAX_SPEED;
@@ -352,6 +355,11 @@ void PPRAIModule::init( const SteerLib::OptionDictionary & options, SteerLib::En
 		else if ((*optionIter).first == "allstats")
 		{
 			gShowAllStats = Util::getBoolFromString(value.str());
+			logStats = true;
+		}
+		else if ((*optionIter).first == "dont_plan")
+		{
+			dont_plan = Util::getBoolFromString(value.str());
 		}
 		else
 		{
@@ -849,8 +857,8 @@ void PPRAIModule::finish()
 SteerLib::AgentInterface * PPRAIModule::createAgent()
 {
 	PPRAgent * agent = new PPRAgent;
-	agent->_id = gEngine->getAgents().size();
-
+	agent->_gEngine = this->_gEngine;
+	agent->_id = _gEngine->getAgents().size();	
 	return agent;
 }
 

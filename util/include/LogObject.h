@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 #ifndef __LOGOBJECT__
 #define __LOGOBJECT__
 
@@ -31,7 +32,10 @@ class UTIL_API LogObject
 
 public:
 	LogObject() {}
-	~LogObject () {};
+	~LogObject ()
+	{
+		_record.clear();
+	}
 
 	template<class T>
 	void addLogData (T dataItem)
@@ -57,7 +61,7 @@ public:
 		}
 		else if ( type.compare("std::string") == 0 ) // probably does not work
 		{
-			std::cout << "Found a string type" << std::endl;
+			// std::cout << "Found a string type" << std::endl;
 			data.string = dataItem;
 		}
 		else

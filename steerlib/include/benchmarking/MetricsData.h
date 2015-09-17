@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_METRICS_DATA_H__
 #define __STEERLIB_METRICS_DATA_H__
@@ -19,6 +20,7 @@
 #include "Globals.h"
 #include "util/Geometry.h"
 #include "util/Misc.h"
+#include "util/GenericException.h"
 
 
 namespace SteerLib {
@@ -146,6 +148,10 @@ namespace SteerLib {
 
 		// MUBBASIR 2011-07
 		float pleEnergy;
+
+		// Glen 2015-05
+		// penetration penalty for effort penalty in ScenarioSpace
+		float _totalPenetration;
 
 	};
 

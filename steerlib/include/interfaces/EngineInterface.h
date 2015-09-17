@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_ENGINE_INTERFACE_H__
 #define __STEERLIB_ENGINE_INTERFACE_H__
@@ -10,7 +11,8 @@
 /// @brief Declares the SteerLib::EngineInterface virtual interface.
 
 #include "Globals.h"
-#include "griddatabase/GridDatabase2D.h"
+#include "interfaces/SpatialDataBaseInterface.h"
+#include "interfaces/PlanningDomainInterface.h"
 #include "recfileio/RecFileIO.h"
 #include "interfaces/AgentInterface.h"
 #include "interfaces/ObstacleInterface.h"
@@ -71,8 +73,10 @@ namespace SteerLib {
 		/// @brief The engine provides access to most of the internals through these accessors so that modules can use them.  Beware that some
 		/// of the accessors may not perform well, since the engine must search through data structures to find what you are asking for.
 		//@{
-		/// Returns a pointer to the GridDatabase2D contained in the engine.
-		virtual SteerLib::GridDatabase2D * getSpatialDatabase() = 0;
+		/// Returns a pointer to the SpatialDataBaseInterface contained in the engine.
+		virtual SteerLib::SpatialDataBaseInterface * getSpatialDatabase() = 0;
+		/// Returns a pointer to the PathPlanningInterface contained in the engine.
+		virtual SteerLib::PlanningDomainInterface * getPathPlanner() = 0;
 		/// Returns a reference to an STL vector containing a list of agents.
 		virtual const std::vector<SteerLib::AgentInterface*> & getAgents() = 0;
 		/// Returns a reference to an STL set of selected agents.
@@ -101,6 +105,8 @@ namespace SteerLib {
 		virtual const OptionDictionary & getModuleOptions(const std::string & moduleName) = 0;
 		/// Returns the options that were used to initialize the engine
 		virtual const SimulationOptions & getOptions() = 0;
+		// Get the current static triangle geometry of the Engine
+		virtual std::pair<std::vector<Util::Point>,std::vector<size_t> > getStaticGeometry() = 0;
 		//@}
 
 		/// @name Boolean state queries
@@ -147,6 +153,8 @@ namespace SteerLib {
 		virtual void unselectAgent(SteerLib::AgentInterface * agent) = 0;
 		/// Clears the list of selected agents.
 		virtual void unselectAllAgents() = 0;
+		/// Asks a module to create an agent; returns a reference to the agent or NULL if the module does not support creating agents.
+		virtual void createAgentEmitter(const SteerLib::AgentInitialConditions & initialConditions, SteerLib::ModuleInterface * module) = 0;
 		//@}
 
 		/// @name Obstacle management
@@ -155,6 +163,8 @@ namespace SteerLib {
 		virtual void addObstacle(SteerLib::ObstacleInterface * newObstacle) = 0;
 		/// Removes an obstacle without de-allocating it; whoever removed it is responsible for de-allocating it; <b>Warning:</b> this does not update the spatial database.
 		virtual void removeObstacle(SteerLib::ObstacleInterface * obstacleToRemvoe) = 0;
+		/// Removes all obstacles without de-allocating it; whoever removed it is responsible for de-allocating it; <b>Warning:</b> this does not update the spatial database.
+		virtual void removeAllObstacles() = 0;
 		//@}
 
 		/// @name Command management
@@ -166,6 +176,9 @@ namespace SteerLib {
 		/// Invokes an existing command.
 		virtual void runCommand(const std::string & commandName) = 0;
 		//@}
+
+		//True if CameraView is given in the testcase file
+		virtual void isTestcaseCameraView(bool) = 0;
 
 		/// @name Error management
 		//@{

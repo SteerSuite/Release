@@ -1,4 +1,7 @@
 <!--
+  Copyright (c) 2009-2015  Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
+  See license.txt for complete license.
+--><!--
   Copyright (c) 2009 Shawn Singh, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
   See license.txt for complete license.
 -->
@@ -12,12 +15,12 @@
     <version>1.0</version>
     <name>overtake</name>
     <worldBounds>
-      <xmin>-100</xmin>
-      <xmax>100</xmax>
+      <xmin>-30</xmin>
+      <xmax>30</xmax>
       <ymin>0</ymin>
       <ymax>0</ymax>
-      <zmin>-100</zmin>
-      <zmax>100</zmax>
+      <zmin>-30</zmin>
+      <zmax>30</zmax>
     </worldBounds>
   </header>
 

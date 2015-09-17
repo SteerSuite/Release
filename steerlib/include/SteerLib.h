@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_H__
 #define __STEERLIB_H__
@@ -27,7 +28,8 @@
 #include "testcaseio/ObstacleInitialConditions.h"
 
 #include "griddatabase/GridCell.h"
-#include "griddatabase/GridDatabase2D.h"
+#include "interfaces/SpatialDataBaseInterface.h"
+#include "util/GenericException.h"
 #include "griddatabase/GridDatabasePlanningDomain.h"
 
 #include "obstacles/BoxObstacle.h"

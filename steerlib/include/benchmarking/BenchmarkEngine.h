@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_BENCHMARK_ENGINE_H__
 #define __STEERLIB_BENCHMARK_ENGINE_H__
@@ -22,6 +23,7 @@
 #include "benchmarking/AccelerationEfficiencyTechnique.h"
 #include "benchmarking/CompositeTechniquePLE.h"
 #include "benchmarking/CompositeTechniqueGraph.h"
+#include "benchmarking/CompositeTechniqueEntropy.h"
 
 namespace SteerLib {
 
@@ -49,8 +51,11 @@ namespace SteerLib {
 		{
 			return new CompositeBenchmarkTechniqueGraph();
 		}
-		else
+		else if (techniqueName == "compositeEntropy")
 		{
+			return new CompositeTechniqueEntropy();
+		}
+		else {
 			throw Util::GenericException("Cannot create benchmark technique, unknown benchmark technique \"" + techniqueName + "\".");
 		}
 	}

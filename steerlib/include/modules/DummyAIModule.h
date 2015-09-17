@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_DUMMY_AI_MODULE_H__
 #define __STEERLIB_DUMMY_AI_MODULE_H__
@@ -68,11 +69,9 @@ namespace SteerLib {
 			throw Util::GenericException("setParameters() not implemented yet for this Agent");
 		}
 
+		virtual SteerLib::EngineInterface * getSimulationEngine() { return NULL; }
+
 	protected:
-		Util::Point _position;
-		Util::Vector _forward;
-		float _radius;
-		SteerLib::AgentGoalInfo _currentGoal;
 	};
 
 

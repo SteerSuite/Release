@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __UTIL_HIGH_RES_COUNTER_H__
 #define __UTIL_HIGH_RES_COUNTER_H__
@@ -13,6 +14,11 @@
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+// #elif defined(__APPLE__)
+// #include <CoreServices/CoreServices.h>
+// #include <mach/mach_time.h>
+// #include <mach/mach.h>
+// #include <unistd.h>
 #else
 #include <time.h>
 #endif
@@ -91,43 +97,46 @@ namespace Util {
 		unsigned long long tick;
 		QueryPerformanceCounter((LARGE_INTEGER *)&tick);
 		return tick;
-	#elif defined _SOLARIS
-		timespec timeInfo;
-		clock_gettime(CLOCK_HIGHRES, &timeInfo);
-		unsigned long long int nanosecs = ((unsigned long long)timeInfo.tv_sec)*1000000000  +  ((unsigned long long)timeInfo.tv_nsec);
-		return nanosecs;
-	#else
-		// **** NOTE CAREFULLY: ****
-		// if you change the option used here, you MUST update the frequency that is computed in getHighResCounterFrequency() as well!
 
-		// OPTION 1: use intel's time stamp counter.  this is the highest resolution, but has problems in the multi-core era,
-		// and only works on intel processors from pentium 4 onwards.
-		//
+	#elif defined(__APPLE__)
+		/*
+		uint64_t time = mach_absolute_time();
+		// PETROS: commented out depreciated function call
+		//Nanoseconds     elapsedNano = AbsoluteToNanoseconds( *(AbsoluteTime *) &time );
+		//return * (unsigned long long *) &elapsedNano;
+		// PETROS: End commented out
+
+		// PETROS: Replacement code
+		static mach_timebase_info_data_t    sTimebaseInfo;
+
+    		// If this is the first time we've run, get the timebase.
+    		// We can use denom == 0 to indicate that sTimebaseInfo is 
+    		// uninitialised because it makes no sense to have a zero 
+    		// denominator is a fraction.
+
+    		if ( sTimebaseInfo.denom == 0 ) {
+        		(void) mach_timebase_info(&sTimebaseInfo);
+    		}
+
+    		// Do the maths. We hope that the multiplication doesn't 
+    		// overflow; the price you pay for working in fixed point.
+
+    		uint64_t elapsedNano = time * sTimebaseInfo.numer / sTimebaseInfo.denom;
+		// PETROS: End replacement code
+		return * (unsigned long long *) &elapsedNano;
+		*/
+
+		/// Glen UGH!!! Mac is so annoying
 		unsigned int lo, hi;
 		__asm__ __volatile__ ("rdtsc" : "=a" (lo), "=d" (hi));
 		return ((unsigned long long)hi<<32) | lo;
 
+	#else
+		timespec timeInfo;
+		clock_gettime(CLOCK_MONOTONIC, &timeInfo); // nanosecond resolution
+		unsigned long long int nanosecs = ((unsigned long long)timeInfo.tv_sec)*1000000000  +  ((unsigned long long)timeInfo.tv_nsec);
+		return nanosecs;
 
-		// OPTION 2: use gettimeofday, which is already limited to microsecond resolution (instead of nanoseconds
-		// @todo 
-		//   - implement this timer option
-
-		// OPTION 3: use GLFW's counter.  this allows us to rely on glfw for platform-independence, but
-		// requires us to link glfw into any dynamic plugin module, which is unacceptable.
-		//
-		// glfwGetTime returns a double, in seconds.
-		// Multiply by 1 billion to keep most of the numerical precision before converting it to 64-bit integer.
-		//return (unsigned long long)(glfwGetTime()*1000000000.0);
-
-
-		// OPTION 4: use the "real-time" timer library, but unfortunately, this
-		// completely sacrifices high resolution on many systems that could have a platform-dependent
-		// high-resolution alternative.
-		//
-		//timespec timeInfo;
-		//clock_gettime(CLOCK_REALTIME, &timeInfo);
-		//unsigned long long int nanosecs = ((unsigned long long)timeInfo.tv_sec)*1000000000  +  ((unsigned long long)timeInfo.tv_nsec);
-		//return nanosecs;
 
 	#endif
 	}
@@ -146,14 +155,9 @@ namespace Util {
 		unsigned long long tickFrequency;
 		QueryPerformanceFrequency((LARGE_INTEGER *)&tickFrequency);
 		return tickFrequency;
-	#elif defined _SOLARIS
+	#else // same for Apple
 		// since we are using nanoseconds units, return 1 billion here.
 		return 1000000000;
-	#else
-		return CounterFrequencyEstimator::value();
-
-		// since we are using nanoseconds units, return 1 billion here.
-		//return 1000000000;
 	#endif
 	}
 

@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_BENCHMARK_ENGINE_PRIVATE_H__
 #define __STEERLIB_BENCHMARK_ENGINE_PRIVATE_H__
@@ -79,6 +80,8 @@ namespace SteerLib {
 			throw Util::GenericException("setParameters() not implemented yet for this Agent");
 		}
 
+		virtual SteerLib::EngineInterface * getSimulationEngine() { return NULL; }
+
 	protected:
 		bool _enabled;
 		Util::Point _position;
@@ -100,7 +103,7 @@ namespace SteerLib {
 	protected:
 		bool _done;
 		unsigned int _currentFrameNumber;
-		SteerLib::GridDatabase2D * _spatialDatabase;
+		SteerLib::SpatialDataBaseInterface * _spatialDatabase;
 		SteerLib::RecFileReader * _recFileReader;
 		std::vector<SteerLib::AgentInterface*> _agents;
 		std::vector<SteerLib::ObstacleInterface*> _obstacles;

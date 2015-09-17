@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_GRID_DATABASE_PRIVATE_H__
 #define __STEERLIB_GRID_DATABASE_PRIVATE_H__
@@ -28,7 +29,7 @@
 namespace SteerLib {
 
 	// forward declarations
-	class GridDatabasePlanningDomain;
+	// class GridDatabasePlanningDomain;
 
 
 	/** 
@@ -70,7 +71,7 @@ namespace SteerLib {
 		GridCell* _cells;
 
 		/// The state space interface used by the planner to plan paths through the database.
-		GridDatabasePlanningDomain * _planningDomain;
+		// GridDatabasePlanningDomain * _planningDomain;
 	};
 
 

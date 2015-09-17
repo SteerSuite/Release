@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 /// @file XMLParser.cpp
 /// @brief Implements the Util::XMLParser functionality
@@ -246,7 +247,7 @@ void XMLTag::parse(const ticpp::Element * subRoot, bool throwIfUnrecognizedTag )
 			}
 			else {
 				if ((!_callbackInterface) && ( throwIfUnrecognizedTag )) {
-					throw GenericException("Unexpected tag <" + nextTagFromFile + "> found on line " + toString(child->Row()) + "\n");
+					throw GenericException("Unexpected tag <" + nextTagFromFile + "> found on line " + toString(child->Row()) + " in XMLParser\n");
 			    }
 			}
 		}

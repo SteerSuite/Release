@@ -1,13 +1,14 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_SPATIAL_DATABASE_ITEM_H__
 #define __STEERLIB_SPATIAL_DATABASE_ITEM_H__
 
 /// @file SpatialDatabaseItem.h
-/// @brief Declares the virtual interface inherited by any objects that want to be used by the SteerLib::GridDatabase2D.
+/// @brief Declares the virtual interface inherited by any objects that want to be used by the SteerLib::SpatialDataBaseInterface.
 
 #include "Globals.h"
 #include "util/Geometry.h"
@@ -25,7 +26,7 @@ namespace SteerLib {
 	 *
 	 * @see
 	 *  - helpful utility functions in Geometry.h
-	 *  - the GridDatabase2D spatial database
+	 *  - the SpatialDataBaseInterface spatial database
 	 *  - examples of this virtual interface being used: RawAgentInfo, RawObstacleInfo.
 	 *
 	 */
@@ -43,6 +44,9 @@ namespace SteerLib {
 		virtual bool intersects(const Util::Ray &r, float &t) = 0;
 		/// Returns true if the circle (represented by Point p and the radius) overlaps your object.
 		virtual bool overlaps(const Util::Point & p, float radius) = 0;
+
+		/// Returns true if the database item (represented however that item likes...) overlaps your object.
+		// virtual bool overlaps(const SteerLib::SpatialDatabaseItemPtr item) = 0;
 		/// Returns the amount of penetration that a circle has if it overlaps, or 0.0 if there is no overlap.
 		virtual float computePenetration(const Util::Point & p, float radius) = 0;
 	};

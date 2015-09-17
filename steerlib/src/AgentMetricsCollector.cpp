@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 //
 // Copyright (c) 2009-2010 Shawn Singh, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
@@ -28,7 +29,7 @@ using namespace std;
 using namespace SteerLib;
 using namespace Util;
 
-
+// TODO this class should use the pointer it has to the agent. It will have the most up to date data
 AgentMetricsCollector::AgentMetricsCollector(SteerLib::AgentInterface * agent)
 {
 	_agentBeingAnalyzed = agent;
@@ -107,6 +108,7 @@ void AgentMetrics::reset()
 	sumTotalOfInstantaneousKineticEnergies = 0.0f;
 
 	pleEnergy = 0.0f; 
+	_totalPenetration = 0.0f;
 
 	// spatial location metrics:
 	// distanceToNearestObstacle = 0.0f;
@@ -186,6 +188,8 @@ void AgentMetricsCollector::_checkAndUpdateOneCollision(uintptr_t collisionKey, 
 			_currentCollidingObjects[collisionKey].endTime = currentTimeStamp;
 			_currentCollidingObjects[collisionKey].timeDuration = _currentCollidingObjects[collisionKey].endTime - _currentCollidingObjects[collisionKey].startTime;
 		}
+		float e_c = 10; // J / (Kg * m * s)
+		_metrics._totalPenetration += ( penetration * e_c );
 	}
 	else {
 		//
@@ -208,7 +212,7 @@ void AgentMetricsCollector::_checkAndUpdateOneCollision(uintptr_t collisionKey, 
 }
 
 
-void AgentMetricsCollector::_updateCollisionStats(GridDatabase2D * gridDB, AgentInterface * updatedAgent, float currentTimeStamp)
+void AgentMetricsCollector::_updateCollisionStats(SpatialDataBaseInterface * gridDB, AgentInterface * updatedAgent, float currentTimeStamp)
 {
 	//
 	// check for collisions with other agents and obstacles.
@@ -218,7 +222,7 @@ void AgentMetricsCollector::_updateCollisionStats(GridDatabase2D * gridDB, Agent
 
 	std::set<SpatialDatabaseItemPtr> neighbors;
 	std::set<SpatialDatabaseItemPtr>::iterator neighbor;
-	gridDB->getItemsInRange(neighbors, _currentPosition.x - _radius, _currentPosition.x + _radius, _currentPosition.z - _radius, _currentPosition.z + _radius, updatedAgent);
+	gridDB->getItemsInRange(neighbors, _currentPosition.x - _agentBeingAnalyzed->radius(), _currentPosition.x + _agentBeingAnalyzed->radius(), _currentPosition.z - _agentBeingAnalyzed->radius(), _currentPosition.z + _agentBeingAnalyzed->radius(), updatedAgent);
 
 
 	for (neighbor = neighbors.begin(); neighbor != neighbors.end(); ++neighbor) {
@@ -264,10 +268,11 @@ void AgentMetricsCollector::_updateAgentInformation(SteerLib::AgentInterface * u
 
 
 
-void AgentMetricsCollector::update(SteerLib::GridDatabase2D * gridDB, SteerLib::AgentInterface * updatedAgent, float currentTimeStamp, float timePassedSinceLastFrame)
+void AgentMetricsCollector::update(SpatialDataBaseInterface * gridDB, SteerLib::AgentInterface * updatedAgent, float currentTimeStamp, float timePassedSinceLastFrame)
 {
 	// this function should not be called if agent is disabled.
-	assert(_enabled);
+	// std::cout << "collecting metrics for agent " << updatedAgent << " enabled " << updatedAgent->enabled() << std::endl;
+	assert(updatedAgent->enabled());
 
 	_updateAgentInformation(updatedAgent);
 
@@ -322,7 +327,7 @@ void AgentMetricsCollector::update(SteerLib::GridDatabase2D * gridDB, SteerLib::
 		else {
 			std::cerr << "INTERNAL ERROR: did not expect to reach here in the code: " << __FILE__ << ", line " << __LINE__ << "\n";
 			std::cerr << "cosTheta should be between -1.0 and 1.0... its value is " << std::setprecision(10) << cosTheta << "\n";
-			std::cerr << "Most likely you AI just did a 180 in one timestep." << "\n";
+			std::cerr << "Most likely your AI just did a 180 in one timestep." << "\n"; // Glen
 			
 			// MUBBASIR TODO -- SHOULD NOT BE DOING THIS -- CORY ??! !!! 
 			
@@ -439,7 +444,10 @@ void AgentMetricsCollector::update(SteerLib::GridDatabase2D * gridDB, SteerLib::
 	_metrics.totalChangeInSpeed += changeInSpeedSinceLastFrame;
 
 	// update max change in speed
-	if (_metrics.maxChangeInSpeed < _metrics.instantaneousChangeInSpeed) _metrics.maxChangeInSpeed = _metrics.instantaneousChangeInSpeed;
+	if (_metrics.maxChangeInSpeed < _metrics.instantaneousChangeInSpeed)
+	{
+		_metrics.maxChangeInSpeed = _metrics.instantaneousChangeInSpeed;
+	}
 
 	// update the total acceleration
 	// the "totalAcceleration" is the integral of velocity over a window;

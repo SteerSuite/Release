@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 /// @file BenchmarkEngine.cpp
 /// @brief Implements the SteerLib::BenchmarkEngine class.
@@ -13,6 +14,8 @@
 #include "benchmarking/CompositeTechnique02.h"
 #include "benchmarking/EnergyEfficiencyTechnique.h"
 #include "benchmarking/AccelerationEfficiencyTechnique.h"
+
+#include "griddatabase/GridDatabase2D.h"
 
 #include "obstacles/BoxObstacle.h"
 
@@ -34,7 +37,7 @@ BenchmarkEngine::BenchmarkEngine(const std::string & recordingFilename, Benchmar
 
 	// allocate the spatial database
 	// @todo allocate the database according to the world bounds of the rec file instead of hard-coded
-	_spatialDatabase = new GridDatabase2D(Point(-100.0f, 0.0f, -100.0f), 200.0f, 200.0f, 200, 200, 7, true);
+	_spatialDatabase = new GridDatabase2D(Util::Point(-100.0f, 0.0f, -100.0f), 200.0f, 200.0f, 200, 200, 7, true);
 
 	// allocate agents
 	_agents.clear();
@@ -105,7 +108,7 @@ void BenchmarkEngine::stepOneFrame()
 		_spatialDatabase->updateObject(agent, oldBounds, agent->getBounds());
 	}
 
-	std::cout << "Is this ever called" << std::endl;
+	// std::cout << "Is this ever called" << std::endl;
 	// 2. give this list of agents to the simulation metrics collector along with the time/dt info
 	_simulationMetricsCollector->update(_spatialDatabase, _agents, _recFileReader->getTimeStampForFrame(_currentFrameNumber), _recFileReader->getElapsedTimeBetweenFrames(_currentFrameNumber-1,_currentFrameNumber));
 

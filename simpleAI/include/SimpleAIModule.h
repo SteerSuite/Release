@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __SIMPLE_AI_MODULE__
 #define __SIMPLE_AI_MODULE__
@@ -17,7 +18,7 @@
 
 // globally accessible to the simpleAI plugin
 extern SteerLib::EngineInterface * gEngine;
-extern SteerLib::GridDatabase2D * gSpatialDatabase;
+extern SteerLib::SpatialDataBaseInterface * gSpatialDatabase;
 
 namespace SimpleAIGlobals {
 

@@ -1,13 +1,15 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 /// @file SimulationRecorderModule.cpp
 /// @brief Implements the SimulationRecorderModule built-in module.
 
 #include "modules/SimulationRecorderModule.h"
 #include "simulation/SimulationOptions.h"
+#include "util/GenericException.h"
 
 using namespace SteerLib;
 

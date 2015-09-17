@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 /// @file SimulationEngine.cpp
 /// @brief Implements the SimulationEngine class.
@@ -23,6 +24,12 @@
 #include "modules/SteerBenchModule.h"
 #include "modules/MetricsCollectorModule.h"
 #include "modules/SimulationRecorderModule.h"
+// #include "modules/SpatialDatabaseModule.h"
+#include "griddatabase/GridDatabase2D.h"
+#include "griddatabase/GridDatabasePlanningDomain.h"
+// #include "kdtree/KdTreeDataBase.h"
+#include "interfaces/SpatialDataBaseModuleInterface.h"
+#include "interfaces/PlanningDomainModuleInterface.h"
 
 
 // to handle user input properly with GLFW_PRESS and GLFW_RELEASE macros
@@ -42,6 +49,7 @@ SimulationEngine::SimulationEngine()
 
 void SimulationEngine::_reset()
 {
+	_testcaseCameraView = false;
 	_moduleMetaInfoByName.clear();
 	_moduleMetaInfoByReference.clear();
 	_modulesInExecutionOrder.clear();
@@ -61,6 +69,10 @@ void SimulationEngine::_reset()
 	_simulationDone = false;
 	_engineStateMachineCallback.setEngine(this);
 	_stop = false;
+
+	_init_agents.clear();
+	_agents_ai.clear();
+	_spawned_agent_emitter_num.clear();
 }
 
 void SimulationEngine::stop()
@@ -96,8 +108,11 @@ void SimulationEngine::init(SimulationOptions * options, SteerLib::EngineControl
 	}
 	_clock.setClockMode(clockMode, _options->engineOptions.fixedFPS, _options->engineOptions.minVariableDt, _options->engineOptions.maxVariableDt);
 
-	_camera.reset();
-	_camera.setView(_options->guiOptions.cameraPosition, _options->guiOptions.cameraLookAt, _options->guiOptions.cameraUp, _options->guiOptions.cameraFovy);
+	if(!_testcaseCameraView)
+	{
+		_camera.reset();
+		_camera.setView(_options->guiOptions.cameraPosition, _options->guiOptions.cameraLookAt, _options->guiOptions.cameraUp, _options->guiOptions.cameraFovy);
+	}
 
 	float xmin = -(_options->gridDatabaseOptions.gridSizeX / 2.0f);
 	float xmax = (_options->gridDatabaseOptions.gridSizeX / 2.0f);
@@ -109,7 +124,144 @@ void SimulationEngine::init(SimulationOptions * options, SteerLib::EngineControl
 		throw GenericException("multi-threading not supported yet");
 	}
 
-	_spatialDatabase = new GridDatabase2D(xmin, xmax, zmin, zmax, _options->gridDatabaseOptions.numGridCellsX, _options->gridDatabaseOptions.numGridCellsZ, _options->gridDatabaseOptions.maxItemsPerGridCell, _options->gridDatabaseOptions.drawGrid);
+	int spatialDataBaseIndex = -1;
+	if ( _options->spatialDatabaseOptions.name == "gridDatabase")
+	{// Grid planner only works with grid database
+		std::cout << "Creating spatialdatabase: " << _options->spatialDatabaseOptions.name << std::endl;
+		GridDatabase2D * grid = new GridDatabase2D(xmin, xmax, zmin, zmax, _options->gridDatabaseOptions.numGridCellsX, _options->gridDatabaseOptions.numGridCellsZ, _options->gridDatabaseOptions.maxItemsPerGridCell, _options->gridDatabaseOptions.drawGrid);
+		_spatialDatabase = grid;
+		// _pathPlanner = new GridDatabasePlanningDomain(grid);
+
+	}
+	else if ( _options->spatialDatabaseOptions.name == "kdTreeDatabase")
+	{// This might still be done better
+		// _spatialDatabase = new KdTreeDataBase(this);
+		SteerLib::ModuleMetaInformation * spatialDataBasemoduleMetaInfo;
+		std::cout << "Creating spatialdatabase: " << _options->spatialDatabaseOptions.name << std::endl;
+		spatialDataBasemoduleMetaInfo = _loadModule("kdtree",  _options->engineOptions.moduleSearchPath);
+		spatialDataBasemoduleMetaInfo->isInitialized = true;
+		spatialDataBasemoduleMetaInfo->isLoaded = true;
+
+		spatialDataBasemoduleMetaInfo->module->init( _options->getModuleOptions(spatialDataBasemoduleMetaInfo->moduleName), this);
+
+		// get the "createModule" function from the dynamic library
+		typedef SpatialDataBaseInterface* (*createModuleFuncPtr)(SpatialDataBaseModuleInterface * mod);
+		createModuleFuncPtr getSpatialDataBase = (createModuleFuncPtr) spatialDataBasemoduleMetaInfo->dll->getSymbol("getSpatialDataBase", true);
+
+		// create the module itself
+		_spatialDatabase = getSpatialDataBase(dynamic_cast<SpatialDataBaseModuleInterface *>(spatialDataBasemoduleMetaInfo->module));
+		if (_spatialDatabase == NULL) {
+			throw GenericException("Could not create spatialDatabse \"" +spatialDataBasemoduleMetaInfo->moduleName + "\", createModule() returned NULL.");
+		}
+		else
+		{
+			std::cout << "Loaded spatial database: " << _options->spatialDatabaseOptions.name << std::endl;
+		}
+		spatialDataBaseIndex = _modulesInExecutionOrder.size()-1;
+		// _modulesInExecutionOrder.push_back(spatialDataBasemoduleMetaInfo->module);
+	}
+	else if ( _options->spatialDatabaseOptions.name == "meshDatabase")
+	{// This might still be done better
+		// _spatialDatabase = new KdTreeDataBase(this);
+		SteerLib::ModuleMetaInformation * spatialDataBasemoduleMetaInfo;
+		std::cout << "Creating spatialdatabase: " << _options->spatialDatabaseOptions.name << std::endl;
+		spatialDataBasemoduleMetaInfo = _loadModule("meshdatabase",  _options->engineOptions.moduleSearchPath);
+		spatialDataBasemoduleMetaInfo->isInitialized = true;
+		spatialDataBasemoduleMetaInfo->isLoaded = true;
+
+		spatialDataBasemoduleMetaInfo->module->init( _options->getModuleOptions(spatialDataBasemoduleMetaInfo->moduleName), this);
+
+		// get the "createModule" function from the dynamic library
+		typedef SpatialDataBaseInterface* (*createModuleFuncPtr)(SpatialDataBaseModuleInterface * mod);
+		createModuleFuncPtr getSpatialDataBase = (createModuleFuncPtr) spatialDataBasemoduleMetaInfo->dll->getSymbol("getSpatialDataBase", true);
+
+		// create the module itself
+		_spatialDatabase = getSpatialDataBase(dynamic_cast<SpatialDataBaseModuleInterface *>(spatialDataBasemoduleMetaInfo->module));
+		if (_spatialDatabase == NULL) {
+			throw GenericException("Could not create spatialDatabse \"" +spatialDataBasemoduleMetaInfo->moduleName + "\", createModule() returned NULL.");
+		}
+		else
+		{
+			std::cout << "Loaded spatial database: " << _options->spatialDatabaseOptions.name << std::endl;
+		}
+		spatialDataBaseIndex = _modulesInExecutionOrder.size()-1;
+		// _modulesInExecutionOrder.push_back(spatialDataBasemoduleMetaInfo->module);
+	}
+	else
+	{
+		throw Util::GenericException("Spatial Database " + _options->spatialDatabaseOptions.name + " is not a valid spatial database module");
+	}
+
+	int planningDomainIndex = -1;
+	if ( _options->planningDomainOptions.name == "gridDomain")
+	{
+		std::cout << "Creating planning domain: " << _options->planningDomainOptions.name << std::endl;
+		// GridDatabase2D* grid = dynamic_cast<GridDatabase2D *>(_spatialDatabase);
+		GridDatabase2D* grid = new GridDatabase2D(xmin, xmax, zmin, zmax, _options->gridDatabaseOptions.numGridCellsX, _options->gridDatabaseOptions.numGridCellsZ, _options->gridDatabaseOptions.maxItemsPerGridCell, _options->gridDatabaseOptions.drawGrid);
+		/*if ( grid == NULL )
+		{
+			grid = new GridDatabase2D(xmin, xmax, zmin, zmax, _options->gridDatabaseOptions.numGridCellsX, _options->gridDatabaseOptions.numGridCellsZ, _options->gridDatabaseOptions.maxItemsPerGridCell, _options->gridDatabaseOptions.drawGrid);
+		}*/
+		_pathPlanner = new GridDatabasePlanningDomain(grid, this);
+		/*else
+		{
+			throw Util::GenericException("Planning Domain " + _options->planningDomainOptions.name + " can only be used with the grid database");
+		}*/
+	}
+	else if (_options->planningDomainOptions.name == "navmeshDomain")
+	{
+		std::cout << "Creating planning domain: " << _options->planningDomainOptions.name << std::endl;
+		SteerLib::ModuleMetaInformation * planningDomainModuleMetaInfo;
+		planningDomainModuleMetaInfo = _loadModule("navmesh",  _options->engineOptions.moduleSearchPath);
+		planningDomainModuleMetaInfo->isInitialized = true;
+		planningDomainModuleMetaInfo->isLoaded = true;
+		planningDomainModuleMetaInfo->module->init( _options->getModuleOptions(planningDomainModuleMetaInfo->moduleName), this);
+
+		// get the "getPathPlanner" function from the dynamic library
+		typedef PlanningDomainInterface* (*createModuleFuncPtr)(PlanningDomainModuleInterface * mod);
+		createModuleFuncPtr getPathPlanner = (createModuleFuncPtr) planningDomainModuleMetaInfo->dll->getSymbol("getPathPlanner", true);
+
+		// create the module itself
+		_pathPlanner = getPathPlanner(dynamic_cast<PlanningDomainModuleInterface *>(planningDomainModuleMetaInfo->module));
+		if (_pathPlanner == NULL) {
+			throw GenericException("Could not create planning Domain \"" +planningDomainModuleMetaInfo->moduleName + "\", getPathPlanner() returned NULL.");
+		}
+		else
+		{
+			std::cout << "Loaded planning Domain: " << _options->planningDomainOptions.name << std::endl;
+		}
+		planningDomainIndex = _modulesInExecutionOrder.size()-1;
+		// _modulesInExecutionOrder.push_back(planningDomainModuleMetaInfo->module);
+	}
+	else if (_options->planningDomainOptions.name == "acclmeshDomain")
+	{
+		std::cout << "Creating planning domain: " << _options->planningDomainOptions.name << std::endl;
+		SteerLib::ModuleMetaInformation * planningDomainModuleMetaInfo;
+		planningDomainModuleMetaInfo = _loadModule("acclmesh",  _options->engineOptions.moduleSearchPath);
+		planningDomainModuleMetaInfo->isInitialized = true;
+		planningDomainModuleMetaInfo->isLoaded = true;
+		planningDomainModuleMetaInfo->module->init( _options->getModuleOptions(planningDomainModuleMetaInfo->moduleName), this);
+
+		// get the "getPathPlanner" function from the dynamic library
+		typedef PlanningDomainInterface* (*createModuleFuncPtr)(PlanningDomainModuleInterface * mod);
+		createModuleFuncPtr getPathPlanner = (createModuleFuncPtr) planningDomainModuleMetaInfo->dll->getSymbol("getPathPlanner", true);
+
+		// create the module itself
+		_pathPlanner = getPathPlanner(dynamic_cast<PlanningDomainModuleInterface *>(planningDomainModuleMetaInfo->module));
+		if (_pathPlanner == NULL) {
+			throw GenericException("Could not create planning Domain \"" +planningDomainModuleMetaInfo->moduleName + "\", getPathPlanner() returned NULL.");
+		}
+		else
+		{
+			std::cout << "Loaded planning Domain: " << _options->planningDomainOptions.name << std::endl;
+		}
+		planningDomainIndex = _modulesInExecutionOrder.size()-1;
+		// _modulesInExecutionOrder.push_back(planningDomainModuleMetaInfo->module);
+	}
+	else
+	{
+		throw Util::GenericException("Planning Domain " + _options->planningDomainOptions.name + " is not a valid planning domain module");
+	}
 
 
 
@@ -117,7 +269,10 @@ void SimulationEngine::init(SimulationOptions * options, SteerLib::EngineControl
 	std::set<std::string>::iterator moduleIter;
 	for (moduleIter=_options->engineOptions.startupModules.begin(); moduleIter != _options->engineOptions.startupModules.end(); ++moduleIter) {
 		// CAREFUL - _loadModule() is being called, not loadModule().
-		_loadModule(*moduleIter,  _options->engineOptions.moduleSearchPath);
+		SteerLib::ModuleMetaInformation * newMetaInfo = _loadModule(*moduleIter,  _options->engineOptions.moduleSearchPath);
+		// _modulesInExecutionOrder.push_back( newMetaInfo->module);
+		// std::cout << "loaded module " << newMetaInfo->moduleName << "\n";
+
 	}
 
 
@@ -127,15 +282,20 @@ void SimulationEngine::init(SimulationOptions * options, SteerLib::EngineControl
 	_engineState.transitionToState(ENGINE_STATE_READY);
 
 
-	// Modules are initialized in execution order, to avoid the possibly random ordering from the comand line, and also the fact that
+	// Modules are initialized in execution order, to avoid the possibly random ordering from the command line, and also the fact that
 	// other dependency modules may have been auto-loaded.
-	for (unsigned int i=0; i<_modulesInExecutionOrder.size(); i++) {
-		SteerLib::ModuleMetaInformation * moduleMetaInfo;
-		moduleMetaInfo = _moduleMetaInfoByReference[_modulesInExecutionOrder[i]];
+	for (unsigned int i=0; (i<_modulesInExecutionOrder.size()) ; i++)
+	{
+		if ( (i != spatialDataBaseIndex) && (i != planningDomainIndex))
+		{ // don't re-initialize spatial database
+			SteerLib::ModuleMetaInformation * moduleMetaInfo;
+			moduleMetaInfo = _moduleMetaInfoByReference[_modulesInExecutionOrder[i]];
+			// std::cout << "initing module " << moduleMetaInfo->moduleName << " i= " << i << " spatialdatabase index:" << spatialDataBaseIndex << std::endl;
 
-		if (!moduleMetaInfo->isInitialized) {
-			moduleMetaInfo->isInitialized = true;  // set this BEFORE calling init.
-			_modulesInExecutionOrder[i]->init( _options->getModuleOptions(moduleMetaInfo->moduleName), this);
+			if (!moduleMetaInfo->isInitialized) {
+				moduleMetaInfo->isInitialized = true;  // set this BEFORE calling init.
+				_modulesInExecutionOrder[i]->init( _options->getModuleOptions(moduleMetaInfo->moduleName), this);
+			}
 		}
 	}
 
@@ -180,13 +340,22 @@ void SimulationEngine::finish()
 		_unloadModule(_modulesInExecutionOrder.back(), true, true);
 	}
 
+	// std::cout << "_moduleMetaInfoByName.size() = " << _moduleMetaInfoByName.size() << std::endl;
+	// _dumpModuleDataStructures();
+	// std::cout << "_moduleMetaInfoByName[0] = " << _moduleMetaInfoByName["kdtree"]->moduleName << std::endl;
 	assert(_moduleMetaInfoByName.size() == 0);
 	assert(_moduleMetaInfoByReference.size() == 0);
 	assert(_modulesInExecutionOrder.size() == 0);
 	assert(_moduleConflicts.size() == 0);
 
-	if (_spatialDatabase != NULL) delete _spatialDatabase;
+	// should make griddatabase a module
+
+	if ( (_options->spatialDatabaseOptions.name == "gridDatabase") && _spatialDatabase != NULL)
+	{
+		delete _spatialDatabase;
+	}
 	_commands.clear();
+	// this->_pathPlanner cleanup??
 	//_clock cleanup??
 	//_camera cleanup??
 
@@ -244,6 +413,17 @@ void SimulationEngine::preprocessSimulation()
 	for ( iter = _modulesInExecutionOrder.begin(); iter != _modulesInExecutionOrder.end();  ++iter ) {
 		(*iter)->preprocessSimulation();
 	}
+
+	this->_pathPlanner->refresh();
+	// reset the agents
+	for (size_t a=0; a < _agentInitialConditions.size(); a++)
+	{
+		if ( !_agents.at(a)->enabled() )
+		{
+			_agents.at(a)->reset(_agentInitialConditions.at(a),this);
+		}
+	}
+	// _agentInitialConditions.clear();
 
 	_engineState.transitionToState(ENGINE_STATE_SIMULATION_READY_FOR_UPDATE);
 }
@@ -317,6 +497,8 @@ bool SimulationEngine::_simulateOneStep()
 		(*moduleIterator)->preprocessFrame(currentSimulationTime, simulatonDt, currentFrameNumber);
 	}
 
+	int iter = 0;
+	std::vector<int> agentsEmit;
 	// call updateAI for all agents
 	std::vector<SteerLib::AgentInterface*>::iterator agentIterator;
 	for ( agentIterator = _agents.begin(); agentIterator != _agents.end(); ++agentIterator )
@@ -328,7 +510,22 @@ bool SimulationEngine::_simulateOneStep()
 			if((*agentIterator)->finished()) {	//for most AIs, this will in turn call enabled() and duplicate original behavior; ShadowAI overrides this behavior
 				numDisabledAgents++;
 			}
+			if(iter <= _spawned_agent_emitter_num.size()-1) {//make sure agent is within bounds
+				if(_spawned_agent_emitter_num[iter] >= 0) {//only agents emitted call another emit
+					agentsEmit.push_back(iter);
+				}
+			}
 		}
+		iter++;
+	}
+
+	// emit agents and turn off disabled agent from emitting more agents
+	int j = 0;
+	for(j = 0; j < agentsEmit.size(); j++) {
+		int z = _spawned_agent_emitter_num[agentsEmit[j]];//get emitter to spawn from
+		if(z < 0) continue;//in case of error
+		createEmittedAgent( _init_agents[z], _agents_ai[z], z );
+		_spawned_agent_emitter_num[agentsEmit[j]] = -1;//disable spawning agent
 	}
 
 	// call postprocess for all modules
@@ -366,6 +563,22 @@ void SimulationEngine::processKeyboardInput(int key, int action)
 	std::vector<SteerLib::ModuleInterface*>::iterator moduleIterator;
 	for ( moduleIterator = _modulesInExecutionOrder.begin(); moduleIterator != _modulesInExecutionOrder.end();  ++moduleIterator ) {
 		(*moduleIterator)->processKeyboardInput(key, action);
+	}
+}
+
+void SimulationEngine::processMouseMovementEvent(int deltaX, int deltaY )
+{
+	std::vector<SteerLib::ModuleInterface*>::iterator moduleIterator;
+	for ( moduleIterator = _modulesInExecutionOrder.begin(); moduleIterator != _modulesInExecutionOrder.end();  ++moduleIterator ) {
+		(*moduleIterator)->processMouseMovementEvent(deltaX, deltaY);
+	}
+}
+
+void SimulationEngine::processMouseButtonEvent(int button, int action)
+{
+	std::vector<SteerLib::ModuleInterface*>::iterator moduleIterator;
+	for ( moduleIterator = _modulesInExecutionOrder.begin(); moduleIterator != _modulesInExecutionOrder.end();  ++moduleIterator ) {
+		(*moduleIterator)->processMouseButtonEvent(button, action);
 	}
 }
 #endif // ifdef ENABLE_GUI
@@ -464,6 +677,7 @@ void SimulationEngine::_drawEnvironment()
 {
 	// visualize the grid database
 	_spatialDatabase->draw();
+	_pathPlanner->draw();
 }
 #endif  // ifdef ENABLE_GUI
 
@@ -586,6 +800,7 @@ void SimulationEngine::loadModule(const std::string & moduleName, const std::str
 	// other modules (dependencies) may have been auto-loaded, so we must iterate
 	// over all modules and initialized any un-initialized modules.
 	SteerLib::ModuleMetaInformation * tempModuleMetaInfo = NULL;
+	std::cout << "Loading more modules" << std::endl;
 	std::vector<SteerLib::ModuleInterface*>::iterator moduleIter;
 	for (moduleIter = _modulesInExecutionOrder.begin(); moduleIter != _modulesInExecutionOrder.end(); ++moduleIter) {
 		tempModuleMetaInfo = _moduleMetaInfoByReference[(*moduleIter)];
@@ -597,7 +812,21 @@ void SimulationEngine::loadModule(const std::string & moduleName, const std::str
 
 	_engineState.transitionToState(ENGINE_STATE_READY);
 }
+void split(const std::string &s, char delim, std::vector<std::string> &elems) {
+    std::stringstream ss(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        elems.push_back(item);
+    }
+    // return elems;
+}
 
+ 
+std::vector<std::string> split(const std::string &s, char delim) {
+    std::vector<std::string> elems;
+    split(s, delim, elems);
+    return elems;
+}
 //========================================
 
 SteerLib::ModuleMetaInformation * SimulationEngine::_loadModule(const std::string & moduleName, const std::string & searchPath)
@@ -665,23 +894,67 @@ SteerLib::ModuleMetaInformation * SimulationEngine::_loadModule(const std::strin
 		// In this case, the module was not built-in.
 #ifdef _WIN32
 		std::string extension = ".dll";
+		std::string libstr = "";
+#elif __APPLE__
+		std::string extension = ".dylib";
+		std::string libstr = "lib";
 #else
-		std::string extension = ".o";
+		std::string extension = ".so";
+		std::string libstr = "lib";
 #endif
 
-		std::string moduleFileName = searchPath + moduleName + extension;
-		if (!isExistingFile(moduleFileName)) {
-			moduleFileName = _options->engineOptions.moduleSearchPath + moduleName + extension;  // if module wasn't found in the searchPath directory, try with the default search path.
-			if (!isExistingFile(moduleFileName)) {
-				moduleFileName = moduleName + extension;  // if it still wasnt found, try without the search path
-				if (!isExistingFile(moduleFileName)) {
-					// if it still didn't work, then cause an error.
-					throw GenericException("Could not find the module named \"" + moduleName + "\".\n" +
-						"  tried user-specified search path: " + searchPath + moduleName + extension +"\n" +
-						"  tried engine's search path: " + _options->engineOptions.moduleSearchPath + moduleName + extension +"\n" +
-						"  tried the current directory: " + moduleName + extension +"\n");
-				}
+		std::vector<string> paths = split(searchPath,':');
+		bool foundModule=false;
+		std::string moduleFileName = searchPath + libstr + moduleName + extension;
+		for (size_t p=0; (!foundModule) && (p < paths.size()); p++)
+		{
+			moduleFileName = paths[p] + libstr + moduleName + extension;
+			std::cout << "checking: " << moduleFileName << " for module" << std::endl;
+			if (isExistingFile(moduleFileName)) {
+				foundModule=true;
+				
 			}
+			
+		}
+
+		paths = split(_options->engineOptions.moduleSearchPath,':');
+		for (size_t p=0; (!foundModule) && (p < paths.size()); p++)
+		{
+			moduleFileName = paths[p] + libstr + moduleName + extension;
+			std::cout << "checking: " << moduleFileName << " for module" << std::endl;
+			if (isExistingFile(moduleFileName)) {
+				foundModule=true;
+			}
+			
+		}
+
+		if ( !foundModule )
+		{
+			moduleFileName = libstr + moduleName + extension;
+			if (!isExistingFile(moduleFileName)) {
+			
+			}
+			else{
+				foundModule=true;
+			}
+		}
+
+		if (!foundModule)
+		{
+			// if it still didn't work, then cause an error.
+			throw GenericException("Could not find the module named \"" + moduleName + "\".\n" +
+				"  tried user-specified search path: " + searchPath + moduleName + extension +"\n" +
+				"  tried engine's search path: " + _options->engineOptions.moduleSearchPath + moduleName + extension +"\n" +
+				"  tried the current directory: " + moduleName + extension +"\n");
+		}
+
+		if (!foundModule)
+		{
+			// if it still didn't work, then cause an error.
+			throw GenericException("Could not find the module named \"" + moduleName + "\".\n" +
+				"  tried user-specified search path: " + searchPath + moduleName + extension +"\n" +
+				"  tried engine's search path: " + _options->engineOptions.moduleSearchPath + moduleName + extension +"\n" +
+				"  tried the current directory: " + moduleName + extension +"\n");
 		}
 
 
@@ -741,6 +1014,7 @@ SteerLib::ModuleMetaInformation * SimulationEngine::_loadModule(const std::strin
 	//================
 	// everything is loaded except for dependencies; recursively load all dependencies here.
 	while (dependencies >> token) {
+		std::cout << "Loading dependancy: " << token << std::endl;
 		ModuleMetaInformation * dependency = _loadModule(token,searchPath);
 		dependency->modulesDependentOnThis.insert(newMetaInfo);
 		newMetaInfo->dependencies.insert(dependency);
@@ -796,12 +1070,14 @@ bool SimulationEngine::_unloadModule( SteerLib::ModuleInterface * moduleToDestro
 		if (recursivelyUnloadDependencies) {
 			// If the user indicated so, recursively remove the module's dependencies
 			// note that if the dependency cannot be unloaded yet, its not an error.
+			std::cout << "unloading dependancy of " << moduleMetaInfoToDestroy->moduleName << " module: " << (*dependencyIter)->moduleName << std::endl;
 			_unloadModule((*dependencyIter)->module, true, false );
 		}
 	}
 
 	// at this point we really can begin to remove the module:
 	// first, remove this module from the engine's data structures
+	std::cout << "Removing module: " << moduleMetaInfoToDestroy->moduleName << std::endl;
 	_moduleMetaInfoByName.erase(moduleMetaInfoToDestroy->moduleName);
 	_moduleMetaInfoByReference.erase(moduleToDestroy);
 	std::vector<SteerLib::ModuleInterface*>::iterator moduleExecIter = _modulesInExecutionOrder.begin();
@@ -841,7 +1117,7 @@ bool SimulationEngine::_unloadModule( SteerLib::ModuleInterface * moduleToDestro
 }
 
 
-//========================================
+//======================================== This was hard to find -- Glen
 void SimulationEngine::getListOfKnownBuiltInModules(std::vector<std::string> & moduleNames)
 {
 	moduleNames.push_back("dummyAI");
@@ -851,6 +1127,7 @@ void SimulationEngine::getListOfKnownBuiltInModules(std::vector<std::string> & m
 	moduleNames.push_back("metricsCollector");
 	moduleNames.push_back("steerBench");
 	moduleNames.push_back("steerBug");
+	// moduleNames.push_back("spatialDatabase");
 }
 
 
@@ -922,6 +1199,9 @@ SteerLib::ModuleInterface * SimulationEngine::_createBuiltInModule(const std::st
 	else if (moduleName == "steerBug" ) {
 		return new SteerBugModule();
 	}
+	// else if (moduleName == "spatialDatabase" ) {
+	// 	return new SpatialDatabaseModule();
+	// }
 	else {
 		return NULL;
 	}
@@ -933,14 +1213,58 @@ SteerLib::ModuleInterface * SimulationEngine::_createBuiltInModule(const std::st
 SteerLib::AgentInterface * SimulationEngine::createAgent(const SteerLib::AgentInitialConditions & initialConditions, SteerLib::ModuleInterface * owner)
 {
 	SteerLib::AgentInterface * newAgent = owner->createAgent();
+	if (newAgent != NULL) {
+		// std::cout << "creating new agent: " << _agents.size() << std::endl;
+		_agentInitialConditions.push_back(initialConditions);
+		// newAgent->reset(initialConditions,this);
+		_agents.push_back(newAgent);
+		_agentOwners[newAgent] = owner;
+		_spawned_agent_emitter_num.push_back(-1);// default = no emitter
+	}
+
+	return newAgent;
+}
+
+SteerLib::AgentInterface * SimulationEngine::createEmittedAgent(const SteerLib::AgentInitialConditions & initialConditions, SteerLib::ModuleInterface * owner, int emitterNum)
+{
+	SteerLib::AgentInterface * newAgent = owner->createAgent();
 
 	if (newAgent != NULL) {
 		newAgent->reset(initialConditions,this);
 		_agents.push_back(newAgent);
 		_agentOwners[newAgent] = owner;
+		_spawned_agent_emitter_num.push_back(emitterNum);// default = no emitter
 	}
 
 	return newAgent;
+}
+
+void SimulationEngine::createAgentEmitter(const SteerLib::AgentInitialConditions & initialConditions, SteerLib::ModuleInterface * owner)
+{
+	SteerLib::AgentInitialConditions inits;
+	/// The (optional) name that identifies an agent; useful for describing the role of an agent, or naming it as a dynamic target.
+	inits.name = initialConditions.name;
+	/// The agent's initial position.
+	inits.position = initialConditions.position;
+	/// The agent's initial forward-facing direction.
+	inits.direction = initialConditions.direction;
+	/// The radius of the agent
+	inits.radius = initialConditions.radius;
+	/// The initial speed of the agent (not the same as the desiredSpeed that is part of each goal)
+	inits.speed = initialConditions.speed;
+	/// An ordered list of goals that the agent should try to complete.
+	//std::vector<AgentGoalInfo> goals;
+	inits.goals = initialConditions.goals;
+	/// The color of the agent
+	//Util::Color color;
+	inits.color = initialConditions.color;
+	inits.colorSet = initialConditions.colorSet;
+	inits.fromRandom = initialConditions.fromRandom;
+	//Util::AxisAlignedBox randBox;
+	inits.direction = initialConditions.direction;
+	_init_agents.push_back(inits);
+	_agents_ai.push_back(owner);
+	createEmittedAgent(inits, owner, _init_agents.size()-1);
 }
 
 //========================================
@@ -1078,6 +1402,14 @@ void SimulationEngine::addObstacle(SteerLib::ObstacleInterface * newObstacle)
 void SimulationEngine::removeObstacle(SteerLib::ObstacleInterface * obstacleToRemove)
 {
 	_obstacles.erase(obstacleToRemove);
+}
+
+/**
+ * empties the obstacles from the simulation;
+ */
+void SimulationEngine::removeAllObstacles()
+{
+	_obstacles.clear();
 }
 
 
@@ -1287,3 +1619,54 @@ unsigned int SimulationEngine::EngineStateMachineCallback::handleUnknownTransiti
 
 }
 
+std::pair<std::vector<Util::Point>,std::vector<size_t> > SimulationEngine::getStaticGeometry()
+{
+	std::vector<Util::Point> verts;
+	std::vector<size_t> triVerts;
+	// Start with the SpatialDatabase geometry
+	float xmin = getSpatialDatabase()->getOriginX();
+	float zmin = getSpatialDatabase()->getOriginZ();
+	float xmax = xmin + getSpatialDatabase()->getGridSizeX();
+	float zmax = zmin + getSpatialDatabase()->getGridSizeZ();
+
+	Util::Point p = Util::Point(xmin, 0.0, zmin);
+	verts.push_back(p);
+	p = Util::Point(xmin, 0.0, zmax);
+	verts.push_back(p);
+	p = Util::Point(xmax, 0.0, zmax);
+	verts.push_back(p);
+	p = Util::Point(xmax, 0.0, zmin);
+	verts.push_back(p);
+
+	triVerts.push_back(0);
+	triVerts.push_back(1);
+	triVerts.push_back(3);
+
+	triVerts.push_back(1);
+	triVerts.push_back(2);
+	triVerts.push_back(3);
+
+	// Now for obstacles
+	for (std::set<SteerLib::ObstacleInterface*>::iterator obs = this->getObstacles().begin();  obs != this->getObstacles().end();  obs++)
+	{
+		size_t num_verts = verts.size();
+		std::pair<std::vector<Util::Point>,std::vector<size_t> > geom = (*obs)->getStaticGeometry();
+		for (size_t p=0; p < geom.first.size(); p++)
+		{
+			verts.push_back(geom.first.at(p)+Util::Point(0.0,0.0,0.0));
+		}
+		for (size_t tv=0; tv < geom.second.size(); tv++)
+		{// need to adjust for the number of points already in verts
+			triVerts.push_back(geom.second.at(tv)+num_verts);
+		}
+
+		// std::cout << "Done adding points from obstacles" << std::endl;
+	}
+
+	return std::make_pair(verts, triVerts);
+}
+
+void SimulationEngine::isTestcaseCameraView(bool status)
+{
+	_testcaseCameraView = status;
+}

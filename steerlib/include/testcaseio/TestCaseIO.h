@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_TEST_CASE_IO_H__
 #define __STEERLIB_TEST_CASE_IO_H__
@@ -65,6 +66,8 @@ namespace SteerLib {
 		//@{
 		/// Returns the total number of agents specified by the test case.
 		inline size_t getNumAgents() const { return _initializedAgents.size(); }
+		/// Returns the total number of agent emitters specified by the test case.
+		inline size_t getNumAgentEmitters() const { return _initializedAgentEmitters.size(); }
 		/// Returns the total number of obstacles specified by the test case.
 		inline size_t getNumObstacles() const { return _initializedObstacles.size(); }
 		/// Returns the total number of suggested camera views specified by the test case.
@@ -90,6 +93,8 @@ namespace SteerLib {
 		//@{
 		/// Returns a data structure containing the agent's initial conditions for the parsed test case
 		inline const AgentInitialConditions & getAgentInitialConditions(unsigned int agentIndex) const { return _initializedAgents.at(agentIndex); }
+		/// Returns a data structure containing the agent emitter's initial conditions for the parsed test case
+		inline const AgentInitialConditions & getAgentEmitterInitialConditions(unsigned int agentEmitterIndex) const { return _initializedAgentEmitters.at(agentEmitterIndex); }
 		/// Returns a data structure containing the obstacle's initial conditions for the parsed test case
 		inline const ObstacleInitialConditions * getObstacleInitialConditions(unsigned int obstacleIndex) const { return _initializedObstacles.at(obstacleIndex); }
 		//@}
@@ -128,6 +133,17 @@ namespace SteerLib {
         	std::vector<SteerLib::AgentInitialConditions> & agents,
                 std::vector<SteerLib::ObstacleInitialConditions*> & obstacles,
         	SteerLib::EngineInterface *engineInfo) ;
+
+        void writeTestCaseToFile(
+        	const std::string & testCaseName,
+        	std::vector<SteerLib::AgentInitialConditions> & agents,
+                std::vector<SteerLib::ObstacleInterface*> & obstacles,
+        	SteerLib::EngineInterface *engineInfo) ;
+
+        void writeTestCaseToFile(FILE *fp,
+			std::vector<SteerLib::AgentInitialConditions> & agents,
+		        std::vector<SteerLib::ObstacleInterface*> & obstacles,
+			SteerLib::EngineInterface *engineInfo) ;
 
     private:
         /// The name of the testcase

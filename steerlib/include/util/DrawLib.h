@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __UTIL_DRAWLIB_H__
 #define __UTIL_DRAWLIB_H__
@@ -99,6 +100,7 @@ namespace Util {
 		static void drawLine(const Point & startPoint, const Point & endPoint, const Color & color);
 		static void drawLineAlpha(const Point & startPoint, const Point & endPoint, const Color &color, float alpha);
 		static void drawLine(const Point & startPoint, const Point & endPoint, const Color &color, float thickness);
+		static void drawRay(const Ray & r, const Color & color);
 		static void drawQuad(const Point & a, const Point & b, const Point & c, const Point & d);
 		// static void drawCircle(const Point & center, float radius);
 		static void drawBox(float xmin, float xmax, float ymin, float ymax, float zmin, float zmax);
@@ -122,6 +124,7 @@ namespace Util {
 		// static void drawFlag(const Point & loc, const Color& color = Color(0.9f, 0.0f, 0.0f), float scale = 1.0f);
 		static void drawAgentDisc(const Point & pos, const Vector & dir, float radius, const Color& color = Color(0.9f,0.4f,0.1f));
 		static void drawAgentDisc(const Point & pos, float radius, const Color& color = Color(0.9f,0.4f,0.1f));
+		static void drawAgentDisc(const Point & pos, const Vector & dir, const Vector & up, float radius, const Color& color);
 		//@}
 
 	private:

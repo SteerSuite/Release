@@ -1,6 +1,3 @@
-SteerSuite
-==========
-
 -----------
  CONTENTS
 -----------
@@ -59,29 +56,34 @@ The documentation includes:
 
 The directory structure of this package is as follows:
 
-	- build/          Unix scripts and Visual Studio 2012 solution file 
+build/          - Unix scripts and Visual Studio 2012 solution file 
                   to compile all components of SteerSuite.
-	- documentation/  raw unprocessed documentation and instructions for
+documentation/  - raw unprocessed documentation and instructions for
                   building the documentation.
-	- external/       external dependencies that are (legally) included
+external/       - external dependencies that are (legally) included
                   for convenience, but NOT part of SteerSuite.
-	- pprAI/          source directory for the PPR steering module, a
+kdtree/         - Spatial Database module for a kdtree type spatial databse.
+navmeshBuilder/ - Module to build navigation meshes during runtime. Uses Recast.
+pprAI/          - source directory for the PPR steering module, a
                   demo steering algorithm for SteerSim.
-	- rvo2AI/         source directory for the ORCA steering module, based
+rvo2AI/         - source directory for the ORCA steering module, based
                   on the RVO2 steering algorithm library.
-	- socialForcesAI/ source directory for the social foces steering module, a
+reactiveAI/     - source directory for the reactive steering module, a
+                  demo steering algorithm for SteerSim (just the 
+                  reactive appraoch of PPR).
+socialForcesAI/ - source directory for the social foces steering module, a
                   implementation of the social forces steering algorithm.
-	- simpleAI/       source directory for the simpleAI module, a basic
+simpleAI/       - source directory for the simpleAI module, a basic
                   demo plugin for SteerSim.
-	- steerbench/     source directory for SteerBench, a tool used to
+steerbench/     - source directory for SteerBench, a tool used to
                   score and analyze steering AI.
-	- steerlib/       - source directory for SteerLib, a shared library
+steerlib/       - source directory for SteerLib, a shared library
                   containing most of SteerSuite's functionality.
-	- steersim/       source directory for SteerSim, a modular simulation
+steersim/       - source directory for SteerSim, a modular simulation
                   tool.
-	- steertool/      source directory for SteerTool, a utility for useful
+steertool/      - source directory for SteerTool, a utility for useful
                   miscellaneous tasks
-	- testcases/      XML test cases and the XML schema describing the
+testcases/      - XML test cases and the XML schema describing the
                   test case format.
 
 
@@ -97,53 +99,54 @@ As with any graphics library you will need to make sure you already have the
 opengl libraries on you computer. For example on Ubuntu 14.04 you will want
 to install
 ```
-freeglut3-dev build-essential libx11-dev libxmu-dev libxi-dev libgl1-mesa-glx libglu1-mesa libglu1-mesa-dev libglew1.6-dev mesa-utils libglew-dev
+freeglut3-dev build-essential libx11-dev libxmu-dev libxi-dev libgl1-mesa-glx libglu1-mesa libglu1-mesa-dev libglew1.6-dev mesa-utils libglew-dev premake4
 ```
 This will install opengl and glew.  
 
-Windows XP/Vista/7/8 with Visual Studio 2012:
-  1. Open the Visual Studio 2012 solution file, located in 
-     build/win32/steersuite.sln
-  2. Choose Debug or Release mode,
-  3. All components should compile successfully.
-  4. All compiled components will be in the build/win32/Debug/ or
-     build/win32/Release/ folder.
+Note: The build system has been updated and now uses premake4. You are going to need to have this installed 
+to be able to build the software.
 
+Windows 7/8 with Visual Studio 2012:
+  1. premake4 --platform=x64 vs2012
+  2. Choose Debug/Release and 32/64 bit mode,
+  3. Most components should compile successfully.
+  4. All compiled components will be in the build/bin folder.
+
+Linux/Unix:
+  1. From a command line, go to the build/ directory
+  2. premake4 gmake
+      - make sure you are in the build/ directory.
+  3. go into the newly created gmake directory and run
+      - make config=[debug|release]
+      - Depending on your preference for the type of build you want to perform you can build a debug version or a release version.
+  4. All components are copied into the build/bin/ and build/lib/ directories.
+     
 Mac OS X:
   For now, the process is the same as Linux/Unix.  With OS X version
   10.4 or earlier, you may need to use an LD_LIBRARY_PATH environment
   variable for the executable to properly link with shared and dynamic
   libraries.
 
-Linux/Unix:
-  1. From a command line, go to the build/ directory
-  2. Run ./buildall <platform>
-      - make sure you are in the build/ directory.
-      - running ./buildall with no args will list the possible platforms.
-  3. All of the given components should compile succefuly. A few librarys
-   that are not included may fail.
-  4. All components are copied into the build/bin/, build/lib/, and
-     build/modules/ directories.
 
 
 ----------------------
  CONTACT INFORMATION
 ----------------------
 
-To report bugs or give general feedback, email Shawn or Glen or Mubbasir.
-
 Contact Information:
-  Glen Berseth      gberseth@cs.ubc.ca
+  Glen Berseth      glenpb@cse.yorku.ca
   Mubbasir Kapadia  mubbasir@cs.ucla.edu
   Petros Faloutsos  pfal@cse.yorku.ca
   Glenn Reinman     reinman@cs.ucla.edu
 
 SteerSuite web page:
   http://steersuite.eecs.yorku.ca/
-  
+
 Forum (Google Group):
   https://groups.google.com/forum/#!forum/steersuite
-
+  
+Please report bugs by opening an issue on github. For any other queries please use the forum.
+  
 ------------------------
  COPYRIGHT AND LICENSE
 ------------------------
@@ -157,12 +160,11 @@ See license.txt for complete license.
 NOTE:
 The contents of the external/ directory are NOT part of SteerSuite.
 Each component in external/ has its own authors, copyright, and
-license, and those sources are only included for convenience.
+license, and those souces are only included for convenience.
 
 ----------
  CREDITS
 ----------
 
 Refer to the SteerSuite web page for credits and acknowledgements.
-
 

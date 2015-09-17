@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 
 #ifndef __STEERLIB_REC_FILE_PLAYER_MODULE_H__
 #define __STEERLIB_REC_FILE_PLAYER_MODULE_H__
@@ -56,6 +57,8 @@ namespace SteerLib
 			_velocity = newVelocity;
 		}
 		void setCurrentGoal(const SteerLib::AgentGoalInfo & newGoal) { _currentGoal = newGoal; }
+
+		virtual SteerLib::EngineInterface * getSimulationEngine() { return NULL; }
 
 
 	protected:

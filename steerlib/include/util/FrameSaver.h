@@ -1,7 +1,8 @@
 //
-// Copyright (c) 2009-2014 Shawn Singh, Glen Berseth, Mubbasir Kapadia, Petros Faloutsos, Glenn Reinman
+// Copyright (c) 2009-2015 Glen Berseth, Mubbasir Kapadia, Shawn Singh, Petros Faloutsos, Glenn Reinman
 // See license.txt for complete license.
 //
+
 #ifndef FrameSaver_h 
 #define FrameSaver_h
 
@@ -20,24 +21,25 @@
 #include <string.h>
 #include "util/DrawLib.h"
 #include <errno.h>
+#include "SteerLib.h"
 
 namespace Util {
-class  UTIL_API FrameSaver
-{
-public:
-	FrameSaver() ;
-		
-	unsigned char *m_pixels;
-	int m_record ;
-	int m_frameCount ;
-	int DumpPPM(int w, int h) ;
-	void DumpPPM(FILE *fp,int w, int h) ;
-	void StartRecord(int width) ;
-	void Toggle(int width) ;
+	class  UTIL_API FrameSaver
+	{
+	public:
+		FrameSaver() ;
 
-	std::string baseName;
-	std::string filePath;
-} ;
+		unsigned char *m_pixels;
+		int m_record ;
+		int m_frameCount ;
+		int DumpPPM(int w, int h) ;
+		void DumpPPM(FILE *fp,int w, int h) ;
+		void StartRecord(int width) ;
+		void Toggle(int width) ;
+
+		std::string baseName;
+		std::string filePath;
+	} ;
 
 }
 
