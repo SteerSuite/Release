@@ -99,6 +99,8 @@ Ubuntu 14.04 you will want to install the following:
 
 This will install OpenGL and GLEW.
 
+On Windows you will need to download glut32.lib and the opengl header files and put them in your Visual Studio library path.
+
 Note: The build system has been updated and now uses
 [premake4](http://premake.github.io/). You are going to need to have
 this installed to be able to build the software.
@@ -114,7 +116,7 @@ compiled components will be in the `build/bin` folder.
 First run the following:
 
     cd build
-    premake gmake
+    premake4 gmake
     cd gmake
 
 Then run `make config=[debug|release]`, depending on your preference
