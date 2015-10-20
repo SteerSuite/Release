@@ -16,7 +16,6 @@
 
 #include "core/GLFWEngineDriver.h"
 #include "SimulationPlugin.h"
-#include "AntTweakBar/include/AntTweakBar.h"
 #include "core/SteerSim.h"
 
 using namespace std;
