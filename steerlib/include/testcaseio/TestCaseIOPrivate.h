@@ -75,8 +75,8 @@ namespace SteerLib {
 		virtual bool blocksLineOfSight() { return false; }
 		virtual float getTraversalCost() { return 0.0f; }
 		virtual bool intersects(const Util::Ray &r, float &t) { return Util::rayIntersectsCircle2D(position, radius, r, t); }
-		virtual bool overlaps(const Util::Point & p, float radius) { return Util::circleOverlapsCircle2D( position, this->radius, p, radius); }
-		virtual float computePenetration(const Util::Point & p, float radius) { return Util::computeCircleCirclePenetration2D( position, this->radius, p, radius); }
+		virtual bool overlaps(const Util::Point & p, float r) { return Util::circleOverlapsCircle2D(position, radius, p, r); }
+		virtual float computePenetration(const Util::Point & p, float r) { return Util::computeCircleCirclePenetration2D(position, radius, p, r); }
 		//@}
 	};
 
@@ -295,8 +295,8 @@ namespace SteerLib {
 		virtual bool blocksLineOfSight() { return false; }
 		virtual float getTraversalCost() { return 0.0f; }
 		virtual bool intersects(const Util::Ray &r, float &t) { return Util::rayIntersectsCircle2D(position, radius, r, t); }
-		virtual bool overlaps(const Util::Point & p, float radius) { return Util::circleOverlapsCircle2D(this->position, this->radius, p, radius); }
-		virtual float computePenetration(const Util::Point & p, float radius) { return Util::computeCircleCirclePenetration2D(this->position, this->radius, p, radius); }
+		virtual bool overlaps(const Util::Point & p, float r) { return Util::circleOverlapsCircle2D(position, radius, p, r); }
+		virtual float computePenetration(const Util::Point & p, float r) { return Util::computeCircleCirclePenetration2D(position, radius, p, r); }
 		//@}
 	};
 

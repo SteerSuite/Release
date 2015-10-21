@@ -433,7 +433,7 @@ namespace SteerLib {
 				}
 
 
-				float newf = _planningDomain->estimateTotalCost((*action).state, idealGoalState, newg);
+				newf = _planningDomain->estimateTotalCost((*action).state, idealGoalState, newg);
 				nextNode = BestFirstSearchNode<PlanningState, PlanningAction>(newg, newf, x.action.state, (*action));
 
 				stateMap[nextNode.action.state] = nextNode;
