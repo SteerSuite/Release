@@ -319,7 +319,7 @@ public:
       {
         for (size_t j = k; j < _size; ++j)
         {
-          double abs_ij = abs(m(row_p[i], col_p[j]));
+          double abs_ij = fabs(m(row_p[i], col_p[j]));
           if (abs_ij > maximum)
           {
             maximum = abs_ij; max_row = i; max_col = j;
@@ -446,7 +446,7 @@ inline Matrix operator!(const Matrix& q) {
     double maximum = double(0); size_t max_row = k; size_t max_col = k;
     for (size_t i = k; i < _size; ++i) {
       for (size_t j = k; j < _size; ++j) {
-        double abs_ij = abs(m(row_p[i], col_p[j]));
+        double abs_ij = fabs(m(row_p[i], col_p[j]));
         if (abs_ij > maximum) {
           maximum = abs_ij; max_row = i; max_col = j;
         }
@@ -543,7 +543,7 @@ inline double norm(const Matrix& q) {
   for (size_t j = 0; j < q.numColumns(); ++j) {
     double colabssum = double(0);
     for (size_t i = 0; i < q.numRows(); ++i) {
-      colabssum += abs(q(i,j));
+      colabssum += fabs(q(i,j));
     }
     if (colabssum > norm1) {
       norm1 = colabssum;
@@ -632,7 +632,7 @@ inline Matrix pseudoInverse(const Matrix& q) {
     double maximum = double(0); size_t max_row = k; size_t max_col = k;
     for (size_t i = k; i < _numRows; ++i) {
       for (size_t j = k; j < _numColumns; ++j) {
-        double abs_ij = abs(m(row_p[i], col_p[j]));
+        double abs_ij = fabs(m(row_p[i], col_p[j]));
         if (abs_ij > maximum) {
           maximum = abs_ij; max_row = i; max_col = j;
         }
@@ -732,8 +732,8 @@ inline void jacobi(const Matrix& q, Matrix& V, Matrix& D) {
     double maximum = 0; size_t max_row = 0; size_t max_col = 0;
     for (size_t i = 0; i < _size; ++i) {
       for (size_t j = i + 1; j < _size; ++j) {
-        if (abs(D(i,j)) > maximum) {
-          maximum = abs(D(i,j));
+        if (fabs(D(i,j)) > maximum) {
+          maximum = fabs(D(i,j));
           max_row = i;
           max_col = j;
         }
@@ -745,7 +745,7 @@ inline void jacobi(const Matrix& q, Matrix& V, Matrix& D) {
     }
 
     double theta = (D(max_col, max_col) - D(max_row, max_row)) / (2 * D(max_row, max_col));
-    double t = 1 / (abs(theta) + sqrt(theta*theta+1));
+    double t = 1 / (fabs(theta) + sqrt(theta*theta+1));
     if (theta < 0) t = -t;
     double c = 1 / sqrt(t*t+1); 
     double s = c*t;
