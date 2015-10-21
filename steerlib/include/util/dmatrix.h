@@ -369,7 +369,7 @@ public:
     }
 
     // Backward substitution
-    for (size_t k = _size - 1; k != -1; --k) {
+    for (size_t k = _size - 1;; --k) {
       double quotient = m(row_p[k], col_p[k]);
       for (size_t j = 0; j < inv._numColumns; ++j) {
         inv(row_p[k], j) /= quotient;
@@ -381,6 +381,8 @@ public:
           inv(row_p[i], j) -= factor * inv(row_p[k], j);
         }
       } 
+      if (k == 0)
+          break;
     }
 
     // reshuffle result
@@ -477,7 +479,7 @@ inline Matrix operator!(const Matrix& q) {
   }
 
   // Backward substitution
-  for (size_t k = _size - 1; k != -1; --k) {
+  for (size_t k = _size - 1;; --k) {
     double quotient = m(row_p[k], col_p[k]);
     for (size_t j = 0; j < _size; ++j) {
       inv(row_p[k], j) /= quotient;
@@ -489,6 +491,8 @@ inline Matrix operator!(const Matrix& q) {
         inv(row_p[i], j) -= factor * inv(row_p[k], j);
       }
     } 
+    if (k == 0)
+        break;
   }
 
   // reshuffle result
@@ -691,7 +695,7 @@ inline Matrix pseudoInverse(const Matrix& q) {
   }
   
   // subtract rows such that 0's appear above leading row elements
-  for (size_t k = rank - 1; k != -1; --k) {
+  for (size_t k = rank - 1;; --k) {
     for (size_t i = 0; i < k; ++i) {
       double factor = m(row_p[i], col_p[k]);
       m(row_p[i], col_p[k]) = double(0);
@@ -699,6 +703,8 @@ inline Matrix pseudoInverse(const Matrix& q) {
         m(row_p[i], col_p[j]) -= factor * m(row_p[k], col_p[j]);
       }
     } 
+    if (k == 0)
+        break;
   }
 
   // copy m into smaller matrix C and swap columns
