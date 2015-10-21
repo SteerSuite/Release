@@ -84,9 +84,9 @@ const AStarLiteNode* AStarLiteOpen::search(int nodeId)
 	// find node
 	NodeMapIter nodeInfo = m_nodeMap.find(nodeId);
 
-	// if node not found, return false
+	// if node not found, return NULL
 	if(nodeInfo == m_nodeMap.end())
-		return false;
+		return NULL;
 
 	// return node
 	return &(*(nodeInfo->second));
