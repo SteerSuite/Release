@@ -315,7 +315,7 @@ public:
 };
 
 inline Mesh::Mesh()
-	: edit_count(0), subdiv_iter(0)
+	: subdiv_iter(0), edit_count(0)
 {}
 
 inline half_edge Mesh::get_he_for_face(size_t face)
