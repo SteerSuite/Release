@@ -539,24 +539,28 @@ bool GridDatabase2D::trace(const Ray & r, float & t, SpatialDatabaseItemPtr &hit
 		// otherwise, decide which way to move to the next grid cell
 		if (txfar < tzfar) {
 			// then move along the x grid cells
-			if (r.dir.x < 0.0f)
+			if (r.dir.x < 0.0f) {
+                if (x == 0)
+                    return false; // no intersection found yet, and next we'd be out of bounds.
 				x--;
-			else
+			} else {
+                if (x == _xNumCells)
+                    return false; // no intersection found yet, and next we'd be out of bounds.
 				x++;
-			if ((x < 0) || (x > _xNumCells)) {
-				return false; // no intersection found yet, and now we're out of bounds.
-			}
+            }
 		}
 		else {
 			// then move along the z grid cells
-			if (r.dir.z < 0.0f)
+			if (r.dir.z < 0.0f) {
+                if (z == 0)
+                    return false; // no intersection found yet, and next we'd be out of bounds.
 				z--;
-			else
+			} else {
+                if (z == _zNumCells)
+                    return false; // no intersection found yet, and next we'd be out of bounds.
 				z++;
-			if ((z < 0) || (z > _zNumCells)) {
-				return false; // no intersection found yet, and now we're out of bounds.
-			}
-		}
+            }
+        }
 
 		// set up info for the next grid cell
 		currentBin = getCellIndexFromGridCoords(x,z);
@@ -667,23 +671,27 @@ bool GridDatabase2D::hasLineOfSight(const Ray & r, SpatialDatabaseItemPtr exclud
 		// otherwise, decide which way to move to the next grid cell
 		if (txfar < tzfar) {
 			// then move along the x grid cells
-			if (r.dir.x < 0.0f)
+			if (r.dir.x < 0.0f) {
+                if (x == 0)
+                    return false; // no intersection found yet, and next we'd be out of bounds.
 				x--;
-			else
+			} else {
+                if (x == _xNumCells)
+                    return false; // no intersection found yet, and next we'd be out of bounds.
 				x++;
-			if ((x < 0) || (x > _xNumCells)) {
-				return true; // no intersection found yet, and now we're out of bounds.
-			}
+            }
 		}
 		else {
 			// then move along the z grid cells
-			if (r.dir.z < 0.0f)
+			if (r.dir.z < 0.0f) {
+                if (z == 0)
+                    return false; // no intersection found yet, and next we'd be out of bounds.
 				z--;
-			else
+			} else {
+                if (z == _zNumCells)
+                    return false; // no intersection found yet, and next we'd be out of bounds.
 				z++;
-			if ((z < 0) || (z > _zNumCells)) {
-				return true; // no intersection found yet, and now we're out of bounds.
-			}
+            }
 		}
 
 		// set up info for the next grid cell
