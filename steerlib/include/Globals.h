@@ -26,8 +26,4 @@
 ///  eventually make it a compile-time option for users.
 #define ENABLE_MULTITHREADING
 
-#define ENABLE_GLFW
-
-
-
 #endif
