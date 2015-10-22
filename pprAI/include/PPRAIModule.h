@@ -112,7 +112,6 @@ public:
 	void cleanupSimulation();
 
 private:
-	bool logToFie;
 	std::string logFilename;
 	Logger * _pprLogger;
 
