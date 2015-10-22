@@ -99,7 +99,7 @@ protected:
 	 *                             inserted.
 	 * \param      rangeSq         The squared range around this agent.
 	 */
-	void insertObstacleNeighbor(const Obstacle *obstacle, float rangeSq);
+	void insertObstacleNeighbor(const ObstacleInterface *obstacle, float rangeSq);
 
 	/**
 	 * \brief   Computes the neighbors of this agent.

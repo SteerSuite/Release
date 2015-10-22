@@ -111,6 +111,8 @@ namespace ticpp
 	class Visitor : public TiXmlVisitor
 	{
 	public:
+        using TiXmlVisitor::Visit;
+
 		// Overload the TiXmlVisitor functions, wrap objects, call ticpp::Visitor functions
 		/// @internal
 		virtual bool VisitEnter( const TiXmlDocument& doc );
