@@ -658,8 +658,8 @@ Util::Vector SocialForcesAgent::calcWallNormal(SteerLib::ObstacleInterface* obs)
 	{
 		if ( position().z > box.zmax)
 		{
-			if ( abs(position().z - box.zmax ) >
-				abs( position().x - box.xmax) )
+			if (fabs(position().z - box.zmax) >
+				fabs(position().x - box.xmax))
 			{
 				return Util::Vector(0, 0, 1);
 			}
@@ -671,8 +671,8 @@ Util::Vector SocialForcesAgent::calcWallNormal(SteerLib::ObstacleInterface* obs)
 		}
 		else if ( position().z < box.zmin )
 		{
-			if ( abs(position().z - box.zmin ) >
-				abs( position().x - box.xmax) )
+			if (fabs(position().z - box.zmin) >
+				fabs(position().x - box.xmax))
 			{
 				return Util::Vector(0, 0, -1);
 			}
@@ -692,8 +692,8 @@ Util::Vector SocialForcesAgent::calcWallNormal(SteerLib::ObstacleInterface* obs)
 	{
 		if ( position().z > box.zmax )
 		{
-			if ( abs(position().z - box.zmax ) >
-				abs( position().x - box.xmin) )
+			if (fabs(position().z - box.zmax) >
+				fabs(position().x - box.xmin))
 			{
 				return Util::Vector(0, 0, 1);
 			}
@@ -705,8 +705,8 @@ Util::Vector SocialForcesAgent::calcWallNormal(SteerLib::ObstacleInterface* obs)
 		}
 		else if ( position().z < box.zmin )
 		{
-			if ( abs(position().z - box.zmin ) >
-				abs( position().x - box.xmin) )
+			if (fabs(position().z - box.zmin) >
+				fabs(position().x - box.xmin))
 			{
 				return Util::Vector(0, 0, -1);
 			}
