@@ -258,7 +258,7 @@ void GridDatabase2D::removeObject( SpatialDatabaseItemPtr item, const AxisAligne
 void GridDatabase2D::updateObject( SpatialDatabaseItemPtr item, const AxisAlignedBox & oldBounds, const AxisAlignedBox & newBounds )
 {
 	// TODO: make an efficient "diff" between the two bounding boxes, and only iterate over the disjoint parts.
-#ifdef _DEBUG_!
+#ifdef _DEBUG
 	std::cout << "about to updateObject()\n";
 #endif
 	removeObject(item, oldBounds);
@@ -456,7 +456,7 @@ bool GridDatabase2D::trace(const Ray & r, float & t, SpatialDatabaseItemPtr &hit
 
 	// one-time initialization stuff here
 	currentBin = getCellIndexFromLocation(r.pos.x, r.pos.z);
-#ifdef _DEBUG_!
+#ifdef _DEBUG
 	std::cout << "r.pos.x = " << r.pos.x << "\n";
 	std::cout << "r.pos.z = " << r.pos.z << "\n";
 
