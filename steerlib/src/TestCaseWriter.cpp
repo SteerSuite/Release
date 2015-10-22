@@ -137,10 +137,11 @@ void TestCaseWriter::writeTestCaseToFile(FILE *fp,
 	std::vector<SteerLib::ObstacleInitialConditions> ::iterator iter ;
 	for( unsigned int i = 0 ; i < obstacles.size() ;  i++)
 	{
+        SteerLib::ObstacleInitialConditions* obs = obstacles[i];
 
-		if (typeid(*obstacles[i]) == typeid(SteerLib::BoxObstacleInitialConditions))
+		if (typeid(*obs) == typeid(SteerLib::BoxObstacleInitialConditions))
 		{
-			const Util::AxisAlignedBox & box = obstacles[i]->createObstacle()->getBounds() ;
+			const Util::AxisAlignedBox & box = obs->createObstacle()->getBounds() ;
 			fprintf(fp,"\t<obstacle>\n") ;
 			fprintf(fp,"\t\t<xmin>%f</xmin>\n", box.xmin) ;
 			fprintf(fp,"\t\t<xmax>%f</xmax>\n", box.xmax) ;
@@ -150,7 +151,7 @@ void TestCaseWriter::writeTestCaseToFile(FILE *fp,
 			fprintf(fp,"\t\t<zmax>%f</zmax>\n", box.zmax) ;
 			fprintf(fp,"\t</obstacle>\n") ;
 		}
-		else if (typeid(*obstacles[i]) == typeid(SteerLib::CircleObstacleInitialConditions))
+		else if (typeid(*obs) == typeid(SteerLib::CircleObstacleInitialConditions))
 		{
 			assert(false && "No support for writing this kind of obstacle");
 		}
@@ -470,9 +471,11 @@ void TestCaseWriter::writeTestCaseToFile(FILE *fp,
 	std::vector<SteerLib::BoxObstacle> ::iterator iter ;	
 	for( unsigned int i = 0 ; i < obstacles.size() ;  i++)
 	{
-		if (typeid(*obstacles[i]) == typeid(PolygonObstacle))
+        SteerLib::ObstacleInterface* obs = obstacles[i];
+
+		if (typeid(*obs) == typeid(PolygonObstacle))
 		{
-			const std::vector<Util::Point> & vertices = obstacles[i]->get2DStaticGeometry();
+			const std::vector<Util::Point> & vertices = obs->get2DStaticGeometry();
 			fprintf(fp,"\t<polygonObstacle>\n") ;			
 
 			for(int k=0; k<vertices.size(); k++)
@@ -487,7 +490,7 @@ void TestCaseWriter::writeTestCaseToFile(FILE *fp,
 		}
 		else	//for SteerLib::BoxObstacle and other obstacles
 		{
-			const Util::AxisAlignedBox & box = obstacles[i]->getBounds() ;
+			const Util::AxisAlignedBox & box = obs->getBounds() ;
 			fprintf(fp,"\t<obstacle>\n") ;
 			fprintf(fp,"\t\t<xmin>%f</xmin>\n", box.xmin) ;
 			fprintf(fp,"\t\t<xmax>%f</xmax>\n", box.xmax) ;
