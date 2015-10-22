@@ -1542,7 +1542,8 @@ void Mesh::drawMesh()
 
 /*
  * Splits an edge by adding a new point in the middle of the edge
- * /* Before
+
+	Before
 				v4
 			   /  \
 			  /    \

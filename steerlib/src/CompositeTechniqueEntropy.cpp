@@ -604,7 +604,7 @@ void CompositeTechniqueEntropy::performEstimation()
 	for ( int ts = 0; ts < _posData[0].size()-1; ts++)
 	{
 		std::cout << "Xs[" << ts << "][0]: " << ~(Xs[ts][_numSamples-2]) << std::endl;
-		/*
+
 		for (int samp = 0; samp < _numSamples ; samp++)
 		{
 			for ( int d = 0; d < tsSize; d++)
@@ -615,8 +615,8 @@ void CompositeTechniqueEntropy::performEstimation()
 				}
 			}
 		}
-	}*/
-
+	}
+	*/
 
 	/************************************************************
 	* End of EM estimation
