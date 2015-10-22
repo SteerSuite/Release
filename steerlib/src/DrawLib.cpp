@@ -353,8 +353,6 @@ void DrawLib::drawBoxWireFrame(float xmin, float xmax, float ymin, float ymax, f
 //
 void DrawLib::drawCylinder(const Point & pos, float radius, float ymin, float ymax )
 {
-	const float h = fabsf(ymax-ymin);
-
 	glPushMatrix();
 	{
 		glTranslate(pos);

@@ -103,7 +103,6 @@ Util::Point KdTreeDataBase::randomPositionWithoutCollisions(float radius, bool e
 	bool found_hit = false;
 	float rx = 0;
 	float rz = 0;
-	float dist = 0;
 	float r = 0;
 	float r2 = 0;
 
@@ -120,7 +119,6 @@ Util::Point KdTreeDataBase::randomPositionWithoutCollisions(float radius, bool e
 
 		r2 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 		rz = (r2 * (region.zmax - region.zmin)) + region.zmin;
-		Util::Point out = Util::Point(rx,0,rz);
 		//std::cout << "Normalized R: " << Util::Point(r,0,r2) << " | Bounded R: " << Util::Point(rx,0,rz) << std::endl;
 
 		std::vector<SteerLib::AgentInterface*> agents_list = this->_engine->getAgents();
@@ -175,7 +173,6 @@ Util::Point KdTreeDataBase::randomPositionInRegionWithoutCollisions(const Util::
 	bool found_hit = true;
 	float rx = 0;
 	float rz = 0;
-	float dist = 0;
 	float r = 0;
 	float r2 = 0;
 	size_t numTries = 0;

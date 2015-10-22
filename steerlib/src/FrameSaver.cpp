@@ -71,9 +71,11 @@ void Util::FrameSaver::DumpPPM(FILE *fp, int width, int height)
 #ifdef ENABLE_GLFW
     const int maxVal=255;
     int y;
+#ifdef _DEBUG
     int r = 0;
     int sum = 0;
     int b_width = 3*width;
+#endif
     //printf("width = %d height = %d\n",width, height) ;
 #ifdef _DEBUG
     std::cout << "Writing Frame Dump\n";

@@ -269,7 +269,8 @@ void SimulationEngine::init(SimulationOptions * options, SteerLib::EngineControl
 	std::set<std::string>::iterator moduleIter;
 	for (moduleIter=_options->engineOptions.startupModules.begin(); moduleIter != _options->engineOptions.startupModules.end(); ++moduleIter) {
 		// CAREFUL - _loadModule() is being called, not loadModule().
-		SteerLib::ModuleMetaInformation * newMetaInfo = _loadModule(*moduleIter,  _options->engineOptions.moduleSearchPath);
+		// SteerLib::ModuleMetaInformation * newMetaInfo = _loadModule(*moduleIter,  _options->engineOptions.moduleSearchPath);
+        _loadModule(*moduleIter,  _options->engineOptions.moduleSearchPath);
 		// _modulesInExecutionOrder.push_back( newMetaInfo->module);
 		// std::cout << "loaded module " << newMetaInfo->moduleName << "\n";
 

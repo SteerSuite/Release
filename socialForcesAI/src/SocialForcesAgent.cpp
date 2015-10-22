@@ -248,9 +248,6 @@ std::pair<float, Util::Point> minimum_distance(Util::Point l1, Util::Point l2, U
 
 Util::Vector SocialForcesAgent::calcProximityForce(float dt)
 {
-
-	Util::Vector agent_repulsion_force = Util::Vector(0,0,0);
-
 	std::set<SteerLib::SpatialDatabaseItemPtr> _neighbors;
 		getSimulationEngine()->getSpatialDatabase()->getItemsInRange(_neighbors,
 				_position.x-(this->_radius + _SocialForcesParams.sf_query_radius),

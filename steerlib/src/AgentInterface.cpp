@@ -271,8 +271,6 @@ void AgentInterface::draw()
 	{
 		Util::Ray ray;
 		ray.initWithUnitInterval(_position, _forward);
-		float t = 0.0f;
-		SteerLib::SpatialDatabaseItem * objectFound;
 		Util::DrawLib::drawLine(ray.pos + adjust, ray.eval(1.0f));
 		// if (getSimulationEngine()->getSpatialDatabase()->trace(ray, t, objectFound, this, false))
 		{
@@ -318,7 +316,6 @@ void AgentInterface::draw()
 		if (false)
 		{
 			Util::Vector _rightSide = rightSideInXZPlane(this->forward()*this->radius());
-			SpatialDatabaseItemPtr dummyObject;
 			Ray lineOfSightTestRight, lineOfSightTestLeft, lineOfSightTestCentre, lineOfSightTestBack;
 			Util::Point tmp_pos;
 			// lineOfSightTestRight.initWithUnitInterval(_position + _radius*_rightSide, target - (_position + _radius*_rightSide));

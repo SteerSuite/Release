@@ -127,8 +127,7 @@ bool RecastNavMeshPlanner::refresh()
 	_navTool->init(_sample);
 	std::cout << "NavMesh number of agents: " << _engine->getAgents().size() << std::endl;
 
-
-	Mesh * mesh = new Mesh();
+	// Mesh * mesh = new Mesh();
 	std::pair<std::vector<Util::Point>,std::vector<size_t> > navmesh_stuff = this->getNavMeshGeometry();
 
 	/*

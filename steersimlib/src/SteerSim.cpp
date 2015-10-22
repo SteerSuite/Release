@@ -133,7 +133,7 @@ const char * steersuite_init(int argc, char ** argv)
 LogData * init_steersuite(int argc, char ** argv)
 {
 	// save the original cerr streambuf, so that we can restore it on an exception.
-	std::streambuf * cerrOriginalStreambuf = std::cerr.rdbuf();
+	// std::streambuf * cerrOriginalStreambuf = std::cerr.rdbuf();
 
 	LogData * outData = NULL;
 

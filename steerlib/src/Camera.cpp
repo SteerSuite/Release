@@ -139,7 +139,6 @@ void Camera::apply_stereo(bool right)
 	glLoadIdentity();
 
 	const float eyeSep = 0.3f; // TODO: make configurable
-	Vector vd = m_currentView.lookat - m_currentView.position;
 	Vector rightVec = cross(normalize(m_currentView.lookat - m_currentView.position), m_currentView.up);
 	Point position = m_currentView.position + rightVec * eyeSep * (right ? 1 : -1);
 	Point lookat = m_currentView.lookat + rightVec * eyeSep * (right ? 1 : -1);
