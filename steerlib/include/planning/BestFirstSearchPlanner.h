@@ -74,7 +74,7 @@ namespace SteerLib {
 	template < class PlanningState, class PlanningAction >
 	class CompareCosts {
 	public:
-		bool operator () (const BestFirstSearchNode<PlanningState, PlanningAction> & n1, const BestFirstSearchNode<PlanningState, PlanningAction> & n2) { 
+		bool operator () (const BestFirstSearchNode<PlanningState, PlanningAction> & n1, const BestFirstSearchNode<PlanningState, PlanningAction> & n2) const { 
 			if (n1.f != n2.f) {
 				return (n1.f < n2.f);
 			}
