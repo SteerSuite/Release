@@ -15,4 +15,4 @@ install(TARGETS steerlib
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib)
-install(DIRECTORY include DESTINATION include/steerlib)
+install(DIRECTORY include/ DESTINATION include/steerlib)

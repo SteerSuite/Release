@@ -7,5 +7,5 @@ if(DOXYGEN_FOUND)
     COMMENT "Generating API documentation with Doxygen"
     VERBATIM)
 
- install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/CodeReference DESTINATION doc)
+ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/CodeReference/ DESTINATION doc)
 endif()

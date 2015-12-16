@@ -1,6 +1,7 @@
 cmake_minimum_required( VERSION 2.8.11 )
 project( SteerSuite )
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
+set(CMAKE_DEBUG_POSTFIX "d")
 
 include(CheckCXXCompilerFlag)
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)

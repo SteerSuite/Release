@@ -22,4 +22,4 @@ install(TARGETS steersimlib
 if(NOT WIN32)
   target_link_libraries(steersimlib dl)
 endif()
-install(DIRECTORY include DESTINATION include/steersimlib)
+install(DIRECTORY include/ DESTINATION include/steersimlib)
