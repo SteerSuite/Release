@@ -1,0 +1,9 @@
+file(GLOB TINYXML_SRC *.cpp)
+file(GLOB TINYXML_HDR *.h)
+
+add_library(tinyxml STATIC ${TINYXML_SRC} ${TINYXML_HDR})
+
+install(TARGETS tinyxml
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib)
