@@ -66,8 +66,6 @@
 #include "Obstacle.h"
 
 
-const size_t RVO_MAX_LEAF_SIZE = 10;
-
 using namespace Util;
 
 KdTree::KdTree(): obstacleTree_(NULL)

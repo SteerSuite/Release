@@ -91,21 +91,21 @@ namespace SteerLib {
 
 				// possibly add the action that transitions to location (x+1, z+1)
 				if (z+1 < _spatialDatabase->getNumCellsZ()) {
-					unsigned int n = _spatialDatabase->getCellIndexFromGridCoords(x+1,z+1);
+					unsigned int m = _spatialDatabase->getCellIndexFromGridCoords(x+1,z+1);
 					unsigned int nAdjacent1 = _spatialDatabase->getCellIndexFromGridCoords(x,z+1);
 					unsigned int nAdjacent2 = _spatialDatabase->getCellIndexFromGridCoords(x+1,z);
-					if ((n != previousState)&&(canBeTraversed(n))&&(canBeTraversed(nAdjacent1))&&(canBeTraversed(nAdjacent2))) {
-						transitions.push_back(initAction(n,_spatialDatabase->getTraversalCost(n) * sqrtf(2)));
+					if ((m != previousState)&&(canBeTraversed(m))&&(canBeTraversed(nAdjacent1))&&(canBeTraversed(nAdjacent2))) {
+						transitions.push_back(initAction(m,_spatialDatabase->getTraversalCost(m) * sqrtf(2)));
 					}
 				}
 
 				// possibly add the action that transitions to location (x+1, z-1)
 				if (z >= 1) {
-					unsigned int n = _spatialDatabase->getCellIndexFromGridCoords(x+1,z-1);
+					unsigned int m = _spatialDatabase->getCellIndexFromGridCoords(x+1,z-1);
 					unsigned int nAdjacent1 = _spatialDatabase->getCellIndexFromGridCoords(x,z-1);
 					unsigned int nAdjacent2 = _spatialDatabase->getCellIndexFromGridCoords(x+1,z);
-					if ((n != previousState)&&(canBeTraversed(n))&&(canBeTraversed(nAdjacent1))&&(canBeTraversed(nAdjacent2))) {
-						transitions.push_back(initAction(n,_spatialDatabase->getTraversalCost(n) * sqrtf(2)));
+					if ((m != previousState)&&(canBeTraversed(m))&&(canBeTraversed(nAdjacent1))&&(canBeTraversed(nAdjacent2))) {
+						transitions.push_back(initAction(m,_spatialDatabase->getTraversalCost(m) * sqrtf(2)));
 					}
 				}
 			}
@@ -119,21 +119,21 @@ namespace SteerLib {
 
 				// possibly add the action that transitions to location (x-1, z+1)
 				if (z+1 < _spatialDatabase->getNumCellsZ()) {
-					unsigned int n = _spatialDatabase->getCellIndexFromGridCoords(x-1,z+1);
+					unsigned int m = _spatialDatabase->getCellIndexFromGridCoords(x-1,z+1);
 					unsigned int nAdjacent1 = _spatialDatabase->getCellIndexFromGridCoords(x,z+1);
 					unsigned int nAdjacent2 = _spatialDatabase->getCellIndexFromGridCoords(x-1,z);
-					if ((n != previousState)&&(canBeTraversed(n))&&(canBeTraversed(nAdjacent1))&&(canBeTraversed(nAdjacent2))) {
-						transitions.push_back(initAction(n,_spatialDatabase->getTraversalCost(n) * sqrtf(2)));
+					if ((m != previousState)&&(canBeTraversed(m))&&(canBeTraversed(nAdjacent1))&&(canBeTraversed(nAdjacent2))) {
+						transitions.push_back(initAction(m,_spatialDatabase->getTraversalCost(m) * sqrtf(2)));
 					}
 				}
 
 				// possibly add the action that transitions to location (x-1, z-1)
 				if (z >= 1) {
-					unsigned int n = _spatialDatabase->getCellIndexFromGridCoords(x-1,z-1);
+					unsigned int m = _spatialDatabase->getCellIndexFromGridCoords(x-1,z-1);
 					unsigned int nAdjacent1 = _spatialDatabase->getCellIndexFromGridCoords(x,z-1);
 					unsigned int nAdjacent2 = _spatialDatabase->getCellIndexFromGridCoords(x-1,z);
-					if ((n != previousState)&&(canBeTraversed(n))&&(canBeTraversed(nAdjacent1))&&(canBeTraversed(nAdjacent2))) {
-						transitions.push_back(initAction(n,_spatialDatabase->getTraversalCost(n) * sqrtf(2)));
+					if ((m != previousState)&&(canBeTraversed(m))&&(canBeTraversed(nAdjacent1))&&(canBeTraversed(nAdjacent2))) {
+						transitions.push_back(initAction(m,_spatialDatabase->getTraversalCost(m) * sqrtf(2)));
 					}
 				}
 			}

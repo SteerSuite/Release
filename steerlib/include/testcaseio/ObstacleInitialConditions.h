@@ -90,7 +90,7 @@ namespace SteerLib {
 		PolygonObstacleInitialConditions() {};
 		PolygonObstacleInitialConditions(const std::vector<Util::Point> & vertices)
 		{
-			for(int i=0; i<vertices.size(); i++)
+			for(std::vector<Util::Point>::size_type i=0; i<vertices.size(); i++)
 				_vertices.push_back(vertices[i]);
 		}
 		
@@ -100,7 +100,7 @@ namespace SteerLib {
 	inline std::ostream &operator<<(std::ostream &out, const PolygonObstacleInitialConditions &a)
 		{ // methods used here must be const
 			out << "polygon initial conditions:"<<  std::endl;
-			for(int i=0; i<a._vertices.size(); i++)
+			for(std::vector<Util::Point>::size_type i=0; i<a._vertices.size(); i++)
 				out << "vertex-"<<i<<" (" << a._vertices[i].x << ", " << a._vertices[i].y << ", " << 
 					a._vertices[i].z << ")" <<  std::endl;
 			

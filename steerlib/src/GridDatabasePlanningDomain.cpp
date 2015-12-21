@@ -144,7 +144,6 @@ bool GridDatabasePlanningDomain::findSmoothPath (Util::Point &startPosition, Uti
 
 	float dummyt;
 	SpatialDatabaseItemPtr dummyObject=NULL;
-	unsigned int current_index=0;
 	Util::Point current_p;
 	Util::Point previous_p;
 	Util::Point p;

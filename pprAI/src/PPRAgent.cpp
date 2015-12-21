@@ -275,8 +275,6 @@ void PPRAgent::updateAI(float timeStamp, float dt, unsigned int frameNumber)
 
 	AutomaticFunctionProfiler profileThisFunction( &PPRGlobals::gPhaseProfilers->aiProfiler );
 
-	Util::Point oldPosition = position();
-
 	// initialize some vars for this update step
 	// todo, this should eventually be removed after addressing the small issue with _currentFrameNumber.
 	_currentTimeStamp = timeStamp;
@@ -418,7 +416,6 @@ void PPRAgent::runLongTermPlanningPhase()
 	//==========================================================================
 
 	int myIndexPosition = getSimulationEngine()->getSpatialDatabase()->getCellIndexFromLocation(_position);
-	int goalIndex = getSimulationEngine()->getSpatialDatabase()->getCellIndexFromLocation(_currentGoal.targetLocation);
 
 	if (myIndexPosition != -1) {
 
@@ -511,9 +508,6 @@ void PPRAgent::runMidTermPlanningPhase()
 	}
 
 	// compute a local a-star from your current location to the waypoint.
-	int myIndexPosition = getSimulationEngine()->getSpatialDatabase()->getCellIndexFromLocation(_position.x, _position.z);
-	int waypointIndexPosition = getSimulationEngine()->getSpatialDatabase()->getCellIndexFromLocation(_waypoints[_currentWaypointIndex].x, _waypoints[_currentWaypointIndex].z);
-
 	_gEngine->getPathPlanner()->findPath(_position, _waypoints[_currentWaypointIndex],midTermPath, 50000);
 
 	// copy the local AStar path to your array

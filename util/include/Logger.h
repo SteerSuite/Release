@@ -31,7 +31,7 @@ class UTIL_API Logger
 public:
 	Logger (const std::string & fileName, LogMode logMode);
 	Logger () {}; // for testing
-	~Logger();
+	virtual ~Logger();
 
 	virtual void addDataField(const std::string &fieldName, DataType dataType);
 	

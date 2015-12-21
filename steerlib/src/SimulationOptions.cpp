@@ -468,7 +468,7 @@ void SimulationOptions::_setupXMLStructure( Util::XMLParser & xmlOpts )
 	// spatial database stuff
 	spatialDatabaseTag->createChildTag("useDatabase", "Option to select the database type to use , ", XML_DATA_TYPE_STRING, &spatialDatabaseOptions.name);
 	XMLTag * gridDatabaseTag = spatialDatabaseTag->createChildTag("gridDatabase", "Options related to the grid database");
-	XMLTag * navmeshDatabaseTag = spatialDatabaseTag->createChildTag("navmeshDatabase", "Options related to the navmesh database");
+	spatialDatabaseTag->createChildTag("navmeshDatabase", "Options related to the navmesh database");
 
 	// planning domain stuff
 	planningDomainTag->createChildTag("planner", "Options selects which planning tool to use during simulation", XML_DATA_TYPE_STRING, &planningDomainOptions.name);

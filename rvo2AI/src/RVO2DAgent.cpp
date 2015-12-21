@@ -644,7 +644,7 @@ void RVO2DAgent::insertAgentNeighbor(const SteerLib::AgentInterface *agent, floa
 	}
 }
 
-void RVO2DAgent::insertObstacleNeighbor(const Obstacle *obstacle, float rangeSq)
+void RVO2DAgent::insertObstacleNeighbor(const ObstacleInterface *obstacle, float rangeSq)
 {
 	const ObstacleInterface *const nextObstacle = obstacle->nextObstacle_;
 

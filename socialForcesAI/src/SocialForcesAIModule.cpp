@@ -278,7 +278,7 @@ void SocialForcesAIModule::destroyAgent( SteerLib::AgentInterface * agent )
 	 * This is going to cause issues soon.
 	 */
 	// agents_.erase(agents_.begin()+(agent)->id());
-	int i;
+	// int i;
 
 	// Not as fast but seems to work properly
 	// std::cout << "number of ORCA agents " << agents_.size() << std::endl;

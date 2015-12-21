@@ -174,8 +174,10 @@ void init_adjacency( std::size_t numVertices, const std::vector<std::size_t>& fa
 		m_heData.push_back( he[2] );
 	}
 
+#ifdef USE_PREV
 	// Keep track of the last edge we processed so we can hook up half_edge::prev as we go.
 	std::size_t prev = HOLE_INDEX;
+#endif
 
 	// Add half-edges for any holes. Any edges still in the map are holes.
 	edge_map_type::iterator it = edgeMap.begin();
@@ -190,7 +192,6 @@ void init_adjacency( std::size_t numVertices, const std::vector<std::size_t>& fa
 		m_heData[he.twin].twin = m_heData.size();
 		m_heData.push_back( he );
 
-		std::size_t curVert = it->first.first;
 		std::size_t nextVert = it->first.second; // We are about to erase this information, so store it to use later.
 
 		edgeMap.erase( it ); // We are done with this edge now.
@@ -1295,8 +1296,9 @@ void Mesh::write_to_obj_stream( std::ostream& stream ) const {
 
 void Mesh::verify() const {
 	for( std::size_t i = 0, iEnd = m_faceData.size(); i < iEnd; ++i ){
+#ifdef DEBUG
 		std::size_t c = 0;
-		
+#endif
 		const half_edge* it = &m_heData[ m_faceData[i] ];
 		assert( it->next != m_faceData[i] );
 		while( it->next != m_faceData[i] ){
@@ -1311,13 +1313,16 @@ void Mesh::verify() const {
 	for( std::size_t i = 0, iEnd = m_vertData.size(); i < iEnd; ++i ){
 		assert( m_vertData[i] == HOLE_INDEX || m_vertData[i] < m_heData.size() );
 		if( m_vertData[i] != HOLE_INDEX ){
+#ifdef DEBUG
 			const half_edge* it = &m_heData[ m_vertData[i] ];
 			assert( it->vert == i );
 			assert( it->face != HOLE_INDEX && "By convention, vertices should not reference hole faces" );
+#endif
 		}
 	}
 
 	for( std::size_t i = 0, iEnd = m_heData.size(); i < iEnd; ++i ){
+#ifdef DEBUG
 		const half_edge* it = &m_heData[i];
 		assert( it->vert < m_vertData.size() );
 		assert( it->face == HOLE_INDEX || it->face < m_faceData.size() );
@@ -1339,6 +1344,7 @@ void Mesh::verify() const {
 		assert( m_heData[it->prev].next == i );
 		assert( m_heData[it->prev].face == it->face );
 		assert( m_heData[it->prev].vert != it->vert );
+#endif
 #endif
 	}
 }
@@ -1536,7 +1542,8 @@ void Mesh::drawMesh()
 
 /*
  * Splits an edge by adding a new point in the middle of the edge
- * /* Before
+
+	Before
 				v4
 			   /  \
 			  /    \
@@ -1570,8 +1577,6 @@ size_t Mesh::splitHalfEdgeProper(size_t he)
 
 	size_t new_vert = this->add_vertex(location);
 
-	size_t _twin_f = twin(this->m_heData[he]).face;
-	size_t _he_f = (this->m_heData[he]).face;
 	size_t _twin = this->m_heData[he].twin;
 
 

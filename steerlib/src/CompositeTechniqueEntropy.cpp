@@ -312,7 +312,6 @@ void CompositeTechniqueEntropy::selectGoodData(unsigned int maxFrameNumber)
 	unsigned int timestart = 0, timestop = 0, maxsum = 0;
 
 	dataSums.resize(maxFrameNumber);
-	int i = 0;
 	for (int i = 1; i < maxFrameNumber; i++ )
 	{
 		// calculate sum of agents active from i to i+j
@@ -605,7 +604,7 @@ void CompositeTechniqueEntropy::performEstimation()
 	for ( int ts = 0; ts < _posData[0].size()-1; ts++)
 	{
 		std::cout << "Xs[" << ts << "][0]: " << ~(Xs[ts][_numSamples-2]) << std::endl;
-		/*
+
 		for (int samp = 0; samp < _numSamples ; samp++)
 		{
 			for ( int d = 0; d < tsSize; d++)
@@ -616,8 +615,8 @@ void CompositeTechniqueEntropy::performEstimation()
 				}
 			}
 		}
-	}*/
-
+	}
+	*/
 
 	/************************************************************
 	* End of EM estimation
@@ -882,7 +881,7 @@ Matrix CompositeTechniqueEntropy::m_fHat(const Matrix& x, const Matrix& u, const
 
 
 	Matrix xNew(4*_numAgt);
-	double speedTrav = 0;
+	// double speedTrav = 0;
 	for (int a = 0; a < _numAgt; a++){
 		Matrix m = Util::sampleGaussian(zeros(4),m_identity(4));
 		if (m1[0] == m1[1] && m1[1] == 0){
@@ -1033,7 +1032,7 @@ void CompositeTechniqueEntropy::update(SteerLib::EngineInterface * engineInterfa
 		else
 		{
 			// In this case I want to run the real world data
-			int numFrames = readNoisyData2(this->_realDataFileName);
+			readNoisyData2(this->_realDataFileName);
 			std::cout << "Number of agents in the simulation again " << _numAgt << std::endl;
 			initData(_timeStep, sumSamp, _numAgt, _posData); // This is done already via other means.
 			setDIM();

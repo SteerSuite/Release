@@ -319,7 +319,7 @@ public:
       {
         for (size_t j = k; j < _size; ++j)
         {
-          double abs_ij = abs(m(row_p[i], col_p[j]));
+          double abs_ij = fabs(m(row_p[i], col_p[j]));
           if (abs_ij > maximum)
           {
             maximum = abs_ij; max_row = i; max_col = j;
@@ -369,7 +369,7 @@ public:
     }
 
     // Backward substitution
-    for (size_t k = _size - 1; k != -1; --k) {
+    for (size_t k = _size - 1;; --k) {
       double quotient = m(row_p[k], col_p[k]);
       for (size_t j = 0; j < inv._numColumns; ++j) {
         inv(row_p[k], j) /= quotient;
@@ -381,6 +381,8 @@ public:
           inv(row_p[i], j) -= factor * inv(row_p[k], j);
         }
       } 
+      if (k == 0)
+          break;
     }
 
     // reshuffle result
@@ -446,7 +448,7 @@ inline Matrix operator!(const Matrix& q) {
     double maximum = double(0); size_t max_row = k; size_t max_col = k;
     for (size_t i = k; i < _size; ++i) {
       for (size_t j = k; j < _size; ++j) {
-        double abs_ij = abs(m(row_p[i], col_p[j]));
+        double abs_ij = fabs(m(row_p[i], col_p[j]));
         if (abs_ij > maximum) {
           maximum = abs_ij; max_row = i; max_col = j;
         }
@@ -477,7 +479,7 @@ inline Matrix operator!(const Matrix& q) {
   }
 
   // Backward substitution
-  for (size_t k = _size - 1; k != -1; --k) {
+  for (size_t k = _size - 1;; --k) {
     double quotient = m(row_p[k], col_p[k]);
     for (size_t j = 0; j < _size; ++j) {
       inv(row_p[k], j) /= quotient;
@@ -489,6 +491,8 @@ inline Matrix operator!(const Matrix& q) {
         inv(row_p[i], j) -= factor * inv(row_p[k], j);
       }
     } 
+    if (k == 0)
+        break;
   }
 
   // reshuffle result
@@ -543,7 +547,7 @@ inline double norm(const Matrix& q) {
   for (size_t j = 0; j < q.numColumns(); ++j) {
     double colabssum = double(0);
     for (size_t i = 0; i < q.numRows(); ++i) {
-      colabssum += abs(q(i,j));
+      colabssum += fabs(q(i,j));
     }
     if (colabssum > norm1) {
       norm1 = colabssum;
@@ -632,7 +636,7 @@ inline Matrix pseudoInverse(const Matrix& q) {
     double maximum = double(0); size_t max_row = k; size_t max_col = k;
     for (size_t i = k; i < _numRows; ++i) {
       for (size_t j = k; j < _numColumns; ++j) {
-        double abs_ij = abs(m(row_p[i], col_p[j]));
+        double abs_ij = fabs(m(row_p[i], col_p[j]));
         if (abs_ij > maximum) {
           maximum = abs_ij; max_row = i; max_col = j;
         }
@@ -691,7 +695,7 @@ inline Matrix pseudoInverse(const Matrix& q) {
   }
   
   // subtract rows such that 0's appear above leading row elements
-  for (size_t k = rank - 1; k != -1; --k) {
+  for (size_t k = rank - 1;; --k) {
     for (size_t i = 0; i < k; ++i) {
       double factor = m(row_p[i], col_p[k]);
       m(row_p[i], col_p[k]) = double(0);
@@ -699,6 +703,8 @@ inline Matrix pseudoInverse(const Matrix& q) {
         m(row_p[i], col_p[j]) -= factor * m(row_p[k], col_p[j]);
       }
     } 
+    if (k == 0)
+        break;
   }
 
   // copy m into smaller matrix C and swap columns
@@ -732,8 +738,8 @@ inline void jacobi(const Matrix& q, Matrix& V, Matrix& D) {
     double maximum = 0; size_t max_row = 0; size_t max_col = 0;
     for (size_t i = 0; i < _size; ++i) {
       for (size_t j = i + 1; j < _size; ++j) {
-        if (abs(D(i,j)) > maximum) {
-          maximum = abs(D(i,j));
+        if (fabs(D(i,j)) > maximum) {
+          maximum = fabs(D(i,j));
           max_row = i;
           max_col = j;
         }
@@ -745,7 +751,7 @@ inline void jacobi(const Matrix& q, Matrix& V, Matrix& D) {
     }
 
     double theta = (D(max_col, max_col) - D(max_row, max_row)) / (2 * D(max_row, max_col));
-    double t = 1 / (abs(theta) + sqrt(theta*theta+1));
+    double t = 1 / (fabs(theta) + sqrt(theta*theta+1));
     if (theta < 0) t = -t;
     double c = 1 / sqrt(t*t+1); 
     double s = c*t;

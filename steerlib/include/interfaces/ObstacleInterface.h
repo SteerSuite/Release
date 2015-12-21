@@ -21,7 +21,7 @@ namespace SteerLib {
 	 */
 	class STEERLIB_API ObstacleInterface : public SteerLib::SpatialDatabaseItem {
 	public:
-		ObstacleInterface() : isConvex_(false), nextObstacle_(NULL), prevObstacle_(NULL), id_(0) {}
+		ObstacleInterface() : nextObstacle_(NULL), prevObstacle_(NULL), id_(0), isConvex_(false) {}
 		virtual ~ObstacleInterface() { }
 		virtual void init() { }
 		virtual void update(float timeStamp, float dt, unsigned int frameNumber) { }

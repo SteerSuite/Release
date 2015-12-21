@@ -288,8 +288,6 @@ namespace Util {
 							Matrix (*f)(const Matrix&, const Matrix&, const Matrix&), double jStep = DEFAULTSTEPSIZE)
 	{
 		size_t aDim = a.numRows();
-		size_t bDim = b.numRows();
-		size_t cDim = c.numRows();
 
 		Matrix A(yDim,aDim);
 		Matrix ar(a), al(a);
@@ -319,7 +317,6 @@ namespace Util {
 							Matrix (*f)(const Matrix&, const Matrix&), double jStep = DEFAULTSTEPSIZE)
 	{
 		size_t aDim = a.numRows();
-		size_t bDim = b.numRows();
 
 		Matrix A(yDim,aDim);
 		Matrix ar(a), al(a);
@@ -375,9 +372,7 @@ namespace Util {
 	inline Matrix jacobian2(const Matrix& a, const Matrix& b, const Matrix& c, size_t yDim,
 							Matrix (*f)(const Matrix&, const Matrix&, const Matrix&), double jStep = DEFAULTSTEPSIZE)
 	{
-		size_t aDim = a.numRows();
 		size_t bDim = b.numRows();
-		size_t cDim = c.numRows();
 
 		Matrix B(yDim,bDim);
 		Matrix br(b), bl(b);
@@ -405,7 +400,6 @@ namespace Util {
 	*/
 	inline Matrix jacobian2(const Matrix& a, const Matrix& b, size_t yDim, Matrix (*f)(const Matrix&, const Matrix&), double jStep = DEFAULTSTEPSIZE)
 	{
-		size_t aDim = a.numRows();
 		size_t bDim = b.numRows();
 
 		Matrix B(yDim,bDim);
@@ -467,9 +461,6 @@ namespace Util {
 	inline void enkfControlUpdate(std::vector<Matrix>& X, const Matrix& u, size_t mDim,
 			SteerLib::CompositeTechniqueEntropy * entopy)
 	{
-		size_t xDim = X[0].numRows();
-		size_t uDim = u.numRows();
-
 		// run ensemble members through f
 		for (size_t i = 0; i < X.size(); ++i) {
 			if (i == 684)
@@ -495,9 +486,6 @@ namespace Util {
 
 	inline void enksControlUpdate(std::vector< std::vector<Matrix> >& Xs, const Matrix& u, size_t mDim, Matrix (*f)(const Matrix&, const Matrix&, const Matrix&))
 	{
-		size_t xDim = Xs.back()[0].numRows();
-		size_t uDim = u.numRows();
-
 		// run ensemble members through f
 		std::vector<Matrix> X(Xs.back().size());
 		for (size_t i = 0; i < X.size(); ++i) {
@@ -953,7 +941,6 @@ namespace Util {
 	*/
 	inline void resample(std::vector<Matrix>& X, std::vector<double>& W)
 	{
-		size_t xDim = X[0].numRows();
 		std::vector<Matrix> Xnew(X.size());
 
 		double avW = 1.0 / X.size();
@@ -1063,7 +1050,6 @@ namespace Util {
 								 double alpha = DEFAULTALPHA, double beta = DEFAULTBETA, double kappa = DEFAULTKAPPA)
 	{
 		size_t xDim = xHat.numRows();
-		size_t uDim = u.numRows();
 
 		size_t L = xDim + mDim;
 
@@ -1230,7 +1216,6 @@ namespace Util {
 	{
 		size_t xDim = xHat.numRows();
 		size_t zDim = z.numRows();
-		size_t uDim = u.numRows();
 
 		size_t L = xDim + mDim + nDim;
 

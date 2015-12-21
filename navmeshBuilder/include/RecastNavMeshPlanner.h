@@ -56,7 +56,7 @@ private:
 	BuildContext ctx;
 	Sample* _sample;
 	NavMeshTesterTool * _navTool;
-	Mesh * _mesh; // Only used for drawing the navmesh
+//	Mesh * _mesh; // Only used for drawing the navmesh
 };
 
 #endif /* RECASTNAVMESHPLANNER_H_ */

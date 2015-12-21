@@ -851,7 +851,6 @@ void PPRAIModule::cleanupSimulation()
 void PPRAIModule::finish()
 {
 	// nothing to do here
-	int i = 0;
 }
 
 SteerLib::AgentInterface * PPRAIModule::createAgent()
