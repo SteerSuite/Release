@@ -14,13 +14,7 @@
 #include <float.h>
 #include <iostream>
 #include <assert.h>
-
-#ifdef _WIN32
-// #include<windows.h>
-// #include<limits>
-// #undef max()
-// #undef identity()
-#endif
+#include <algorithm>
 
 struct mPair
 {
@@ -800,7 +794,7 @@ inline Matrix exp(const Matrix& q) {
   assert(q.numRows() == q.numColumns());
   size_t _size = q.numRows();
   Matrix A(q);
-  int s = (int) max(double(0), ceil(log(norm(A)/_NORMLIM)*MI_LOG2E)); 
+  int s = (int)std::max<double>(double(0), ceil(log(norm(A) / _NORMLIM)*MI_LOG2E));
 
   A /= pow(2.0,s);
   Matrix A2(A*A);

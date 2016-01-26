@@ -9,19 +9,11 @@
 #include "PPRAIModule.h"
 #include "PPRAgent.h"
 #include <math.h>
+#include <algorithm>
 
 using namespace Util;
 using namespace SteerLib;
 using namespace PPRGlobals;
-
-#ifndef _WIN32
-// win32 does not define "std::max", instead they define "max" as a macro.
-// because of this, on unix we use "using std::max" so that the code only
-// needs to use "max()" instead of "std::max()".  This way, the code
-// works on both win32 and unix.
-using std::max;
-using std::min;
-#endif
 
 // #define _DEBUG 1
 // #define _DEBUG2 2
@@ -615,7 +607,7 @@ void PPRAgent::runShortTermPlanningPhase()
 			float dummyt;
 			SpatialDatabaseItemPtr dummyObject=NULL;
 			unsigned int localTargetIndex = closestPathNode;
-			unsigned int furthestTargetIndex = min(_midTermPathSize-1, closestPathNode + _PPRParams.ped_furthest_local_target_distance);
+			unsigned int furthestTargetIndex = std::min<unsigned int>(_midTermPathSize - 1, closestPathNode + _PPRParams.ped_furthest_local_target_distance);
 			// unsigned int localTargetCellID = _midTermPath[localTargetIndex];
 			_localTargetLocation = _midTermPath[localTargetIndex];
 			Ray lineOfSightTest1, lineOfSightTest2;
@@ -889,15 +881,15 @@ void PPRAgent::runPredictivePhase()
 										newThreat.threatType = PredictedThreat::THREAT_TYPE_CROSSING_SOON;
 										threatListChanged = true;
 										_threatList.push_back(newThreat);
-										threat_min_t = min(minTimeOfThreat*_currentSpeed, threat_min_t);
-										threat_max_t = max(maxTimeOfThreat*_currentSpeed, threat_max_t);
+										threat_min_t = std::min<float>(minTimeOfThreat*_currentSpeed, threat_min_t);
+										threat_max_t = std::max<float>(maxTimeOfThreat*_currentSpeed, threat_max_t);
 									}
 									else {
 										newThreat.threatType = PredictedThreat::THREAT_TYPE_CROSSING_LATE;
 										threatListChanged = true;
 										_threatList.push_back(newThreat);
-										threat_min_t = min(minTimeOfThreat*_currentSpeed, threat_min_t);
-										threat_max_t = max(maxTimeOfThreat*_currentSpeed, threat_max_t);
+										threat_min_t = std::min<float>(minTimeOfThreat*_currentSpeed, threat_min_t);
+										threat_max_t = std::max<float>(maxTimeOfThreat*_currentSpeed, threat_max_t);
 									}
 								}
 							}
@@ -962,7 +954,7 @@ void PPRAgent::runPredictivePhase()
 		//cerr << (_threatList[i].imminent ? "imminent" : "avoided") << " threat, times out at " << _threatList[i].maxTime << "/" << _threatList[i].originalMaxTime << endl;
 		//cerr << "        occurs as early as: " << _threatList[i].minTime << "." << endl;
 
-		_maxThreatTime = max(_maxThreatTime, _threatList[i].originalMaxTime);
+		_maxThreatTime = std::max<float>(_maxThreatTime, _threatList[i].originalMaxTime);
 		if ((_threatList[i].imminent) && (_threatList[i].minTime < _minThreatTime)) {
 			_minThreatTime = _threatList[i].minTime;
 			_mostImminentThreatIndex = i;
@@ -1068,22 +1060,22 @@ void PPRAgent::runReactivePhase()
 	//
 	if (feelers.t_right < _PPRParams.ped_comfort_zone) {
 		if ((!feelers.object_left) && (!feelers.object_lside)) {
-			_finalSteeringCommand.scoot = max(-1.0f / feelers.t_right, -_PPRParams.ped_max_force);
+			_finalSteeringCommand.scoot = std::max<float>(-1.0f / feelers.t_right, -_PPRParams.ped_max_force);
 		} else {
 			comfortZoneViolated=true;
 		}
 	}
 	if (feelers.t_left < _PPRParams.ped_comfort_zone) {
 		if ((!feelers.object_right) && (!feelers.object_rside)) {
-			_finalSteeringCommand.scoot = min(1.0f / feelers.t_left, _PPRParams.ped_max_force);
+			_finalSteeringCommand.scoot = std::min<float>(1.0f / feelers.t_left, _PPRParams.ped_max_force);
 		} else {
 			comfortZoneViolated=true;
 		}
 	}
 /*	if (feelers.object_rside && !feelers.object_lside) {
-		_finalSteeringCommand.scoot = max(-1.0f / feelers.t_rside, -_PPRParams.ped_max_force);
+		_finalSteeringCommand.scoot = std::max<float>(-1.0f / feelers.t_rside, -_PPRParams.ped_max_force);
 	} else if (feelers.object_lside && !feelers.object_rside) {
-		_finalSteeringCommand.scoot = min(1.0f / feelers.t_lside, _PPRParams.ped_max_force);
+		_finalSteeringCommand.scoot = std::min<float>(1.0f / feelers.t_lside, _PPRParams.ped_max_force);
 	}
 */
 
@@ -1254,17 +1246,17 @@ void PPRAgent::runReactivePhase()
 			if ((feelers.object_left)&&(feelers.object_left->isAgent())) {
 				float tempVelocity = dot(forward(),(dynamic_cast<SteerLib::AgentInterface*>(feelers.object_left))->velocity());
 				//if (tempVelocity > -1.0f)
-					_finalSteeringCommand.targetSpeed = min(_finalSteeringCommand.targetSpeed,tempVelocity);
+					_finalSteeringCommand.targetSpeed = std::min<float>(_finalSteeringCommand.targetSpeed,tempVelocity);
 			}
 			if ((feelers.object_right)&&(feelers.object_right->isAgent())) {
 				float tempVelocity = dot(forward(),(dynamic_cast<SteerLib::AgentInterface*>(feelers.object_right))->velocity());
 				//if (tempVelocity > -1.0f)
-					_finalSteeringCommand.targetSpeed = min(_finalSteeringCommand.targetSpeed,tempVelocity);
+					_finalSteeringCommand.targetSpeed = std::min<float>(_finalSteeringCommand.targetSpeed,tempVelocity);
 			}
 			if ((feelers.object_front)&&(feelers.object_front->isAgent())) {
 				float tempVelocity = dot(forward(),(dynamic_cast<SteerLib::AgentInterface*>(feelers.object_front))->velocity());
 				//if (tempVelocity > -1.0f)
-					_finalSteeringCommand.targetSpeed = min(_finalSteeringCommand.targetSpeed,tempVelocity);
+					_finalSteeringCommand.targetSpeed = std::min<float>(_finalSteeringCommand.targetSpeed,tempVelocity);
 			}
 			//if (comfortZoneViolated) {
 				_finalSteeringCommand.targetSpeed = 0.7f * _finalSteeringCommand.targetSpeed;
@@ -1383,7 +1375,7 @@ void PPRAgent::runReactivePhase()
 					if (his_time < my_time) {
 						//if (isSelected()) cerr << "REACTION: one agent, he'll go in front of me, so I'll wait\n";
 						float tempVelocity = dot(forward(),p->velocity());
-						_finalSteeringCommand.targetSpeed = min(_finalSteeringCommand.targetSpeed, (float)_PPRParams.ped_slower_speed_factor * tempVelocity);
+						_finalSteeringCommand.targetSpeed = std::min<float>(_finalSteeringCommand.targetSpeed, (float)_PPRParams.ped_slower_speed_factor * tempVelocity);
 					}
 					else {
 						//if (isSelected()) cerr << "REACTION: one agent, I'm in front of him, so I'll go.\n";
@@ -1422,7 +1414,7 @@ void PPRAgent::runReactivePhase()
 					_finalSteeringCommand.aimForTargetDirection = false;
 					_finalSteeringCommand.turningAmount = (objRight == feelers.object_front) ? -_PPRParams.ped_typical_avoidance_turn_rate : -_PPRParams.ped_adjustment_turn_rate;
 					float tempVelocity = dot(forward(),pLeft->velocity());
-					_finalSteeringCommand.targetSpeed = min(_finalSteeringCommand.targetSpeed, tempVelocity);
+					_finalSteeringCommand.targetSpeed = std::min<float>(_finalSteeringCommand.targetSpeed, tempVelocity);
 					if (comfortZoneViolated) _finalSteeringCommand.targetSpeed = 0.7f * _finalSteeringCommand.targetSpeed;
 					if (_finalSteeringCommand.targetSpeed < 0.0f) _finalSteeringCommand.targetSpeed = 0.0f;
 				}
@@ -1431,15 +1423,15 @@ void PPRAgent::runReactivePhase()
 					_finalSteeringCommand.aimForTargetDirection = false;
 					_finalSteeringCommand.turningAmount = (objLeft == feelers.object_front) ? _PPRParams.ped_typical_avoidance_turn_rate : _PPRParams.ped_adjustment_turn_rate;
 					float tempVelocity = dot(forward(),pRight->velocity());
-					_finalSteeringCommand.targetSpeed = min(_finalSteeringCommand.targetSpeed, tempVelocity);
+					_finalSteeringCommand.targetSpeed = std::min<float>(_finalSteeringCommand.targetSpeed, tempVelocity);
 					if (comfortZoneViolated) _finalSteeringCommand.targetSpeed = 0.7f * _finalSteeringCommand.targetSpeed;
 					if (_finalSteeringCommand.targetSpeed < 0.0f) _finalSteeringCommand.targetSpeed = 0.0f;
 				}
 				else {
 					//if (isSelected()) cerr << "REACTION: two agents - I'll just match the speed they are going.\n";
 					float tempVelocity = dot(forward(),pLeft->velocity());
-					tempVelocity = min(tempVelocity, dot(forward(),pRight->velocity()));
-					_finalSteeringCommand.targetSpeed = min(_finalSteeringCommand.targetSpeed, tempVelocity);
+					tempVelocity = std::min<float>(tempVelocity, dot(forward(),pRight->velocity()));
+					_finalSteeringCommand.targetSpeed = std::min<float>(_finalSteeringCommand.targetSpeed, tempVelocity);
 					if (comfortZoneViolated) _finalSteeringCommand.targetSpeed = 0.7f * _finalSteeringCommand.targetSpeed;
 					if (_finalSteeringCommand.targetSpeed < 0.0f) _finalSteeringCommand.targetSpeed = 0.0f;
 				}
@@ -1522,7 +1514,7 @@ void PPRAgent::runReactivePhase()
 					else {
 						//if (isSelected()) cerr << "REACTION: a static obstacle and an non-oncoming agent, he'll go in front of me, so I'll wait\n";
 						float tempVelocity = dot(forward(),p->velocity());
-						_finalSteeringCommand.targetSpeed = min(_finalSteeringCommand.targetSpeed, _PPRParams.ped_slower_speed_factor * tempVelocity);
+						_finalSteeringCommand.targetSpeed = std::min<float>(_finalSteeringCommand.targetSpeed, _PPRParams.ped_slower_speed_factor * tempVelocity);
 					}
 					/*
 					// choose target direction to avoid the static obstacle.
@@ -1551,15 +1543,15 @@ void PPRAgent::runReactivePhase()
 				//if (isSelected()) cerr << "REACTION: three agents - I'll just match their speed and hope it doesnt get clogged?\n";
 				if ((feelers.object_left)&&(feelers.object_left->isAgent())) {
 					float tempVelocity = dot(forward(),(dynamic_cast<SteerLib::AgentInterface*>(feelers.object_left))->velocity());
-					_finalSteeringCommand.targetSpeed = min(_finalSteeringCommand.targetSpeed,tempVelocity);
+					_finalSteeringCommand.targetSpeed = std::min<float>(_finalSteeringCommand.targetSpeed,tempVelocity);
 				}
 				if ((feelers.object_right)&&(feelers.object_right->isAgent())) {
 					float tempVelocity = dot(forward(),(dynamic_cast<SteerLib::AgentInterface*>(feelers.object_right))->velocity());
-					_finalSteeringCommand.targetSpeed = min(_finalSteeringCommand.targetSpeed,tempVelocity);
+					_finalSteeringCommand.targetSpeed = std::min<float>(_finalSteeringCommand.targetSpeed,tempVelocity);
 				}
 				if ((feelers.object_front)&&(feelers.object_front->isAgent())) {
 					float tempVelocity = dot(forward(),(dynamic_cast<SteerLib::AgentInterface*>(feelers.object_front))->velocity());
-					_finalSteeringCommand.targetSpeed = min(_finalSteeringCommand.targetSpeed,tempVelocity);
+					_finalSteeringCommand.targetSpeed = std::min<float>(_finalSteeringCommand.targetSpeed,tempVelocity);
 				}
 				if (comfortZoneViolated) {
 					_finalSteeringCommand.targetSpeed = 0.7f * _finalSteeringCommand.targetSpeed;
@@ -1576,15 +1568,15 @@ void PPRAgent::runReactivePhase()
 
 				if ((feelers.object_left)&&(feelers.object_left->isAgent())) {
 					float tempVelocity = dot(forward(),(dynamic_cast<SteerLib::AgentInterface*>(feelers.object_left))->velocity());
-					_finalSteeringCommand.targetSpeed = min(_finalSteeringCommand.targetSpeed,tempVelocity);
+					_finalSteeringCommand.targetSpeed = std::min<float>(_finalSteeringCommand.targetSpeed,tempVelocity);
 				}
 				if ((feelers.object_right)&&(feelers.object_right->isAgent())) {
 					float tempVelocity = dot(forward(),(dynamic_cast<SteerLib::AgentInterface*>(feelers.object_right))->velocity());
-					_finalSteeringCommand.targetSpeed = min(_finalSteeringCommand.targetSpeed,tempVelocity);
+					_finalSteeringCommand.targetSpeed = std::min<float>(_finalSteeringCommand.targetSpeed,tempVelocity);
 				}
 				if ((feelers.object_front)&&(feelers.object_front->isAgent())) {
 					float tempVelocity = dot(forward(),(dynamic_cast<SteerLib::AgentInterface*>(feelers.object_front))->velocity());
-					_finalSteeringCommand.targetSpeed = min(_finalSteeringCommand.targetSpeed,tempVelocity);
+					_finalSteeringCommand.targetSpeed = std::min<float>(_finalSteeringCommand.targetSpeed,tempVelocity);
 				}
 				if (comfortZoneViolated) {
 					_finalSteeringCommand.targetSpeed = 0.7f * _finalSteeringCommand.targetSpeed;
