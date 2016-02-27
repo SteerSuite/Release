@@ -26,3 +26,7 @@
 *.exe
 *.out
 *.app
+
+# Documentation
+documentation/CodeReference
+documentation/doxygen-warnings.log

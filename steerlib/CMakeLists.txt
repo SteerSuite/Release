@@ -16,3 +16,4 @@ install(TARGETS steerlib
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib)
 install(DIRECTORY include/ DESTINATION include/steerlib)
+install(DIRECTORY ../external/mersenne DESTINATION include/steerlib)
