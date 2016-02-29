@@ -76,7 +76,7 @@ solution "steersuite"
 
 project "steersim"
 	language "C++"
-	kind "WindowedApp"
+	kind "ConsoleApp"
 	includedirs { 
 		"../steerlib/include",
 		"../steersim/include",
@@ -638,7 +638,7 @@ project "navmesh"
 	
 project "steerbench"
 	language "C++"
-	kind "WindowedApp"
+	kind "ConsoleApp"
 	includedirs { 
 		"../steerlib/include",
 		"../steerbench/include",
