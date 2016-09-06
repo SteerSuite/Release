@@ -1344,6 +1344,7 @@ void SimulationEngine::addAgent(SteerLib::AgentInterface * newAgent, SteerLib::M
 		throw GenericException("Cannot add agent, agent already exists.\n");
 	}
 
+	_spawned_agent_emitter_num.push_back(-1);// default = no emitter
 	_agents.push_back(newAgent);
 	_agentOwners[newAgent] = owner;
 }
