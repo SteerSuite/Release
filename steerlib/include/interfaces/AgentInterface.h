@@ -98,7 +98,7 @@ namespace SteerLib {
 		/// @brief Some defaults are given, but can be overridden if desired.
 		//@{
 		/// Returns true if the agent is finished, for simulations with staggered agent presence
-		virtual bool finished(void) { return enabled(); }
+		virtual bool finished(void) { return !enabled(); }
 		virtual bool isAgent() { return true; }
 		virtual bool blocksLineOfSight() { return false; }
 		virtual float getTraversalCost() { return 0; }
