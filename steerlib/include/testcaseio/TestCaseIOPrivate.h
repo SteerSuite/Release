@@ -77,12 +77,17 @@ namespace SteerLib {
 		virtual bool intersects(const Util::Ray &r, float &t) { return Util::rayIntersectsCircle2D(position, radius, r, t); }
 		virtual bool overlaps(const Util::Point & p, float r) { return Util::circleOverlapsCircle2D(position, radius, p, r); }
 		virtual float computePenetration(const Util::Point & p, float r) { return Util::computeCircleCirclePenetration2D(position, radius, p, r); }
+		//always active
+		bool enabled() const { return true; }
 		//@}
 	};
 
 	/// Temporary obstacle information used by the TestCaseReader internally during parsing and initialization.
 	class STEERLIB_API RawObstacleInfo : public SpatialDatabaseItem {
 	public:
+		//always active
+		bool enabled() const { return true; }
+
 		bool isObstacleRandom;
 		Util::AxisAlignedBox obstacleBounds;
 
