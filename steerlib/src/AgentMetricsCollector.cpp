@@ -226,7 +226,10 @@ void AgentMetricsCollector::_updateCollisionStats(SpatialDataBaseInterface * gri
 
 
 	for (neighbor = neighbors.begin(); neighbor != neighbors.end(); ++neighbor) {
-		
+		//dont include those items who are not active
+		if (!(*neighbor)->enabled())
+			continue;
+
 		// this way, collisionKey will be unique across all objects in the spatial database.
 
 		// MUBBASIR -- THIS CAUSES A COMPILE PROBLEM ON HAMMERHEAD

@@ -49,6 +49,9 @@ namespace SteerLib {
 		// virtual bool overlaps(const SteerLib::SpatialDatabaseItemPtr item) = 0;
 		/// Returns the amount of penetration that a circle has if it overlaps, or 0.0 if there is no overlap.
 		virtual float computePenetration(const Util::Point & p, float radius) = 0;
+
+		///Returns false if item should not be included in spatial database calculation
+		virtual bool enabled() const = 0;
 	};
 
 	typedef SpatialDatabaseItem* SpatialDatabaseItemPtr;
