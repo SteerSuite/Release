@@ -40,6 +40,8 @@ namespace SteerLib {
 		virtual float computePenetration(const Util::Point & p, float radius) = 0;
 		virtual std::pair<std::vector<Util::Point>,std::vector<size_t> > getStaticGeometry() = 0;
 		virtual std::vector<Util::Point> get2DStaticGeometry() = 0;
+		//always active
+		bool enabled() const { return true; }
 
 	public:
 		ObstacleInterface *nextObstacle_;
